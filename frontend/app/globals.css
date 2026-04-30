@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #1D1D1F;
+
+  /* Finmaster Academy Brend Rəngləri */
+  --primary-dark: #0A4D2C;
+  --primary-mid: #6AB04E;
+  --primary-light: #72B845;
+  --gray-dark: #1D1D1F;
+  --gray-light: #F5F5F7;
+}
+
+@theme inline {
+  /* Əsas rənglər */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Finmaster Academy brend rəngləri */
+  --color-primary-dark: var(--primary-dark);
+  --color-primary: var(--primary-mid);
+  --color-primary-light: var(--primary-light);
+  --color-accent: var(--primary-mid);
+  --color-gray-dark: var(--gray-dark);
+  --color-gray-light: var(--gray-light);
+
+  /* Şriftlər */
+  --font-sans: var(--font-inter);
+}
+
+/* Dark mode deaktiv - yalnız light mode */
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  scroll-behavior: smooth;
+}
+
+/* Apple-style smooth scrolling */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
