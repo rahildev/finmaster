@@ -25,6 +25,7 @@ export default function UsersAdminPage() {
 
   const [formData, setFormData] = useState({
     name: '',
+    username: '',
     email: '',
     password: '',
     selectedPermissions: [] as string[],
@@ -52,6 +53,7 @@ export default function UsersAdminPage() {
   const resetForm = () => {
     setFormData({
       name: '',
+      username: '',
       email: '',
       password: '',
       selectedPermissions: [],
@@ -63,6 +65,7 @@ export default function UsersAdminPage() {
   const handleEdit = (user: AdminUser) => {
     setFormData({
       name: user.name,
+      username: user.username || '',
       email: user.email,
       password: '',
       selectedPermissions: user.permissions || [],
@@ -82,6 +85,7 @@ export default function UsersAdminPage() {
     try {
       const data: any = {
         name: formData.name,
+        username: formData.username,
         email: formData.email,
         permissions: formData.selectedPermissions,
       };
@@ -198,17 +202,31 @@ export default function UsersAdminPage() {
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Email *
+                  İstifadəçi adı *
                 </label>
                 <input
-                  type="email"
+                  type="text"
                   required
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  value={formData.username}
+                  onChange={(e) => setFormData({ ...formData, username: e.target.value.toLowerCase().replace(/\s/g, '') })}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="ali@finmaster.az"
+                  placeholder="ali_memmedov"
                 />
               </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Email *
+              </label>
+              <input
+                type="email"
+                required
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="ali@finmaster.az"
+              />
             </div>
 
             <div>
@@ -304,7 +322,8 @@ export default function UsersAdminPage() {
             >
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="text-lg font-bold text-gray-dark">📧 {user.name}</h3>
+                  <h3 className="text-lg font-bold text-gray-dark">{user.name}</h3>
+                  <p className="text-sm text-gray-500 font-mono">@{user.username}</p>
                   <p className="text-sm text-gray-600">{user.email}</p>
                 </div>
                 <button

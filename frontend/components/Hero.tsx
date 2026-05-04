@@ -25,26 +25,31 @@ export default function Hero({ data }: HeroProps) {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-green-600 via-green-500 to-green-400"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(74,222,128,0.5),transparent_50%)]"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(34,197,94,0.5),transparent_50%)]"></div>
+      {/* Background image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: "url('/hero-bg.png')" }}
+      />
+      {/* Dark overlay so text stays readable */}
+      <div className="absolute inset-0 bg-black/40" />
 
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12 py-20 text-center">
+      <div className="relative z-10 max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12 py-20 w-full">
         <motion.div
+          className="max-w-xl"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          {/* Ana başlıq - Apple stil böyük tipografiya */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-semibold text-white leading-tight tracking-tight mb-6">
+          {/* Ana başlıq */}
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight tracking-tight mb-4 uppercase">
             {language === 'en' ? (hero as any).title_en || hero.title : hero.title}
           </h1>
 
           {/* Alt başlıq */}
           {(language === 'en' ? (hero as any).subtitle_en || hero.subtitle : hero.subtitle) && (
-            <p className="text-xl sm:text-2xl lg:text-3xl text-white/90 max-w-3xl mx-auto mb-12 font-light">
+            <p className="text-sm sm:text-base lg:text-lg text-white/90 mb-8 font-semibold uppercase tracking-wide">
               {language === 'en' ? (hero as any).subtitle_en || hero.subtitle : hero.subtitle}
             </p>
           )}

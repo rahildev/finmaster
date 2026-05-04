@@ -25,6 +25,7 @@ class UserController extends Controller
                 return [
                     'id' => $user->id,
                     'name' => $user->name,
+                    'username' => $user->username,
                     'email' => $user->email,
                     'role' => $user->role,
                     'permissions' => $user->getPermissionNames(),
@@ -42,6 +43,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'username' => 'required|string|max:50|unique:users,username|alpha_dash',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
             'permissions' => 'nullable|array',
@@ -54,6 +56,7 @@ class UserController extends Controller
 
         $user = User::create([
             'name' => $request->name,
+            'username' => $request->username,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => 'admin',
@@ -85,6 +88,7 @@ class UserController extends Controller
         return response()->json([
             'id' => $user->id,
             'name' => $user->name,
+            'username' => $user->username,
             'email' => $user->email,
             'role' => $user->role,
             'permissions' => $user->getPermissionNames(),
@@ -105,6 +109,7 @@ class UserController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|string|max:255',
+            'username' => 'sometimes|string|max:50|unique:users,username,' . $id . '|alpha_dash',
             'email' => 'sometimes|email|unique:users,email,' . $id,
             'password' => 'nullable|string|min:6',
             'permissions' => 'nullable|array',
@@ -118,6 +123,9 @@ class UserController extends Controller
         // Update basic info
         if ($request->has('name')) {
             $user->name = $request->name;
+        }
+        if ($request->has('username')) {
+            $user->username = $request->username;
         }
         if ($request->has('email')) {
             $user->email = $request->email;

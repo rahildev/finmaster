@@ -3,21 +3,11 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { getCourses, getVideos, getFaqs, getContacts } from '@/lib/admin-api';
-
-/**
- * Admin Dashboard
- * Statistika və sürətli keçidlər
- */
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-  permissions: string[];
-}
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function AdminDashboard() {
+  const { isSuperAdmin, hasPermission } = useAuth();
+
   const [stats, setStats] = useState({
     courses: 0,
     videos: 0,
@@ -26,18 +16,6 @@ export default function AdminDashboard() {
   });
 
   const [loading, setLoading] = useState(true);
-  const [userPermissions, setUserPermissions] = useState<string[]>([]);
-  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
-
-  useEffect(() => {
-    // Get user permissions from localStorage
-    const userStr = localStorage.getItem('user');
-    if (userStr) {
-      const user: User = JSON.parse(userStr);
-      setUserPermissions(user.permissions || []);
-      setIsSuperAdmin(user.role === 'super_admin');
-    }
-  }, []);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -64,10 +42,6 @@ export default function AdminDashboard() {
 
     fetchStats();
   }, []);
-
-  const hasPermission = (permission: string) => {
-    return isSuperAdmin || userPermissions.includes(permission);
-  };
 
   const allCards = [
     { title: 'Kurslar', count: stats.courses, icon: '📚', href: '/admin/courses', color: 'bg-blue-500', permission: 'manage_courses' },

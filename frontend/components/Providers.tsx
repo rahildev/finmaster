@@ -1,11 +1,11 @@
 'use client';
 
 import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
+import { AuthProvider } from '@/contexts/AuthContext';
 import { ReactNode, useEffect } from 'react';
 
 function ScrollToTop() {
   useEffect(() => {
-    // Səhifə yüklənəndə həmişə yuxarıdan başlasın
     window.scrollTo(0, 0);
   }, []);
 
@@ -27,11 +27,13 @@ function LanguageTransition({ children }: { children: ReactNode }) {
 
 export function Providers({ children }: { children: ReactNode }) {
   return (
-    <LanguageProvider>
-      <ScrollToTop />
-      <LanguageTransition>
-        {children}
-      </LanguageTransition>
-    </LanguageProvider>
+    <AuthProvider>
+      <LanguageProvider>
+        <ScrollToTop />
+        <LanguageTransition>
+          {children}
+        </LanguageTransition>
+      </LanguageProvider>
+    </AuthProvider>
   );
 }

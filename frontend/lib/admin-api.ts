@@ -14,17 +14,28 @@ const adminClient = axios.create({
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   },
-  withCredentials: true,
 });
 
-// Şəkil yükləmə üçün multipart client
 const uploadClient = axios.create({
   baseURL: `${API_BASE_URL}/api/admin`,
   headers: {
     'Content-Type': 'multipart/form-data',
   },
-  withCredentials: true,
 });
+
+function attachToken(config: any) {
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('admin_token');
+    if (token) {
+      config.headers = config.headers || {};
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+  }
+  return config;
+}
+
+adminClient.interceptors.request.use(attachToken);
+uploadClient.interceptors.request.use(attachToken);
 
 // ==================== HERO SECTIONS ====================
 
@@ -185,6 +196,7 @@ export const deleteContact = async (id: number): Promise<void> => {
 export interface AdminUser {
   id: number;
   name: string;
+  username: string;
   email: string;
   role: string;
   permissions: string[];
@@ -209,6 +221,7 @@ export const getUser = async (id: number): Promise<AdminUser> => {
 
 export const createUser = async (data: {
   name: string;
+  username: string;
   email: string;
   password: string;
   permissions?: string[];
@@ -221,6 +234,7 @@ export const updateUser = async (
   id: number,
   data: {
     name?: string;
+    username?: string;
     email?: string;
     password?: string;
     permissions?: string[];

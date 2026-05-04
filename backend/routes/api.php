@@ -30,8 +30,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
 });
 
-// Admin routes
-Route::prefix('admin')->group(function () {
+// Admin routes (auth required)
+Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
 
     // Site Settings
     Route::apiResource('settings', SettingsController::class);
