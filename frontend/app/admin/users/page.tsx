@@ -110,7 +110,10 @@ export default function UsersAdminPage() {
       resetForm();
       await fetchData();
     } catch (error: any) {
-      const errorMessage = error?.response?.data?.message || error?.message || 'Xəta baş verdi!';
+      const errors = error?.response?.data?.errors;
+      const errorMessage = errors
+        ? Object.values(errors).flat().join(' | ')
+        : error?.response?.data?.message || error?.message || 'Xəta baş verdi!';
       setMessage({ type: 'error', text: errorMessage });
     } finally {
       setSaving(false);
