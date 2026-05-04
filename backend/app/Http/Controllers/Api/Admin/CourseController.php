@@ -29,8 +29,11 @@ class CourseController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'name_en' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'description_en' => 'nullable|string',
             'duration' => 'nullable|string|max:255',
+            'duration_en' => 'nullable|string|max:255',
             'price' => 'nullable|numeric|min:0',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'sort_order' => 'nullable|integer',
@@ -71,8 +74,11 @@ class CourseController extends Controller
 
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|string|max:255',
+            'name_en' => 'sometimes|string|max:255',
             'description' => 'nullable|string',
+            'description_en' => 'nullable|string',
             'duration' => 'nullable|string|max:255',
+            'duration_en' => 'nullable|string|max:255',
             'price' => 'nullable|numeric|min:0',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'sort_order' => 'nullable|integer',
@@ -89,6 +95,10 @@ class CourseController extends Controller
             $this->deleteImage($course->image_url);
             $data['image_url'] = $this->uploadImage($request->file('image'), 'courses');
             unset($data['image']);
+        } elseif ($request->has('delete_image') && $request->input('delete_image') === '1') {
+            // Şəkili sil
+            $this->deleteImage($course->image_url);
+            $data['image_url'] = null;
         }
 
         $course->update($data);

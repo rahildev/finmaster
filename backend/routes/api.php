@@ -4,9 +4,12 @@ use App\Http\Controllers\Api\Admin\ContactController;
 use App\Http\Controllers\Api\Admin\CourseController;
 use App\Http\Controllers\Api\Admin\FaqController;
 use App\Http\Controllers\Api\Admin\HeroController;
+use App\Http\Controllers\Api\Admin\SectionSettingController;
 use App\Http\Controllers\Api\Admin\SettingsController;
 use App\Http\Controllers\Api\Admin\TeacherController;
+use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Admin\VideoController;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\LandingPageController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,7 +22,15 @@ use Illuminate\Support\Facades\Route;
 // Public Landing Page endpoint
 Route::get('/landing', [LandingPageController::class, 'index']);
 
-// Admin routes (hal-hazırda authentication yoxdur, gələcəkdə əlavə ediləcək)
+// Authentication routes
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/me', [AuthController::class, 'me']);
+});
+
+// Admin routes
 Route::prefix('admin')->group(function () {
 
     // Site Settings
@@ -42,4 +53,13 @@ Route::prefix('admin')->group(function () {
 
     // FAQs
     Route::apiResource('faqs', FaqController::class);
+
+    // Users (Super Admin only)
+    Route::apiResource('users', UserController::class);
+    Route::get('permissions/available', [UserController::class, 'availablePermissions']);
+
+    // Section Visibility Settings
+    Route::get('sections', [SectionSettingController::class, 'index']);
+    Route::put('sections/{id}', [SectionSettingController::class, 'update']);
+    Route::post('sections/{id}/toggle', [SectionSettingController::class, 'toggleVisibility']);
 });

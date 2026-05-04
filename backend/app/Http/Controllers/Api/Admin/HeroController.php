@@ -29,9 +29,12 @@ class HeroController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
+            'title_en' => 'nullable|string|max:255',
             'subtitle' => 'nullable|string',
+            'subtitle_en' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'btn_text' => 'nullable|string|max:255',
+            'btn_text_en' => 'nullable|string|max:255',
             'btn_link' => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer',
             'is_active' => 'nullable|boolean',
@@ -71,9 +74,12 @@ class HeroController extends Controller
 
         $validator = Validator::make($request->all(), [
             'title' => 'sometimes|string|max:255',
+            'title_en' => 'nullable|string|max:255',
             'subtitle' => 'nullable|string',
+            'subtitle_en' => 'nullable|string',
             'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'btn_text' => 'nullable|string|max:255',
+            'btn_text_en' => 'nullable|string|max:255',
             'btn_link' => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer',
             'is_active' => 'nullable|boolean',

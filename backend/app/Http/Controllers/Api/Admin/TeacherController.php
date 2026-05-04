@@ -14,12 +14,12 @@ class TeacherController extends Controller
     use HandlesImageUpload;
 
     /**
-     * Müəllim məlumatını göstər (adətən 1 ədəd olur)
+     * Bütün müəllimləri göstər
      */
     public function index(): JsonResponse
     {
-        $teacher = TeacherInfo::first();
-        return response()->json($teacher);
+        $teachers = TeacherInfo::orderBy('created_at', 'desc')->get();
+        return response()->json($teachers);
     }
 
     /**
@@ -30,10 +30,14 @@ class TeacherController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'title' => 'nullable|string|max:255',
+            'title_en' => 'nullable|string|max:255',
             'bio' => 'nullable|string',
+            'bio_en' => 'nullable|string',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'experience' => 'nullable|string',
+            'experience_en' => 'nullable|string',
             'achievements' => 'nullable|string',
+            'achievements_en' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -71,10 +75,14 @@ class TeacherController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|string|max:255',
             'title' => 'nullable|string|max:255',
+            'title_en' => 'nullable|string|max:255',
             'bio' => 'nullable|string',
+            'bio_en' => 'nullable|string',
             'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'experience' => 'nullable|string',
+            'experience_en' => 'nullable|string',
             'achievements' => 'nullable|string',
+            'achievements_en' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -87,6 +95,10 @@ class TeacherController extends Controller
             $this->deleteImage($teacher->photo_url);
             $data['photo_url'] = $this->uploadImage($request->file('photo'), 'teacher');
             unset($data['photo']);
+        } elseif ($request->has('delete_photo') && $request->input('delete_photo') === '1') {
+            // Şəkili sil
+            $this->deleteImage($teacher->photo_url);
+            $data['photo_url'] = null;
         }
 
         $teacher->update($data);

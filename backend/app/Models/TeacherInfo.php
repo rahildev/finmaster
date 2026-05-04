@@ -11,10 +11,14 @@ class TeacherInfo extends Model
     protected $fillable = [
         'name',
         'title',
+        'title_en',
         'bio',
+        'bio_en',
         'photo_url',
         'experience',
+        'experience_en',
         'achievements',
+        'achievements_en',
     ];
 
     protected $casts = [

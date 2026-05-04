@@ -46,6 +46,7 @@ export interface Video {
   title: string;
   description: string | null;
   video_url: string;
+  video_type: 'video' | 'short';
   thumbnail_url: string | null;
   course_id: number | null;
   sort_order: number;
@@ -91,4 +92,7 @@ export interface LandingPageData {
   faqs: Faq[];
   contacts: Contact[];
   settings: SiteSettings;
+  section_visibility: {
+    [key: string]: boolean;
+  };
 }

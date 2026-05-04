@@ -26,7 +26,9 @@ class FaqController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'question' => 'required|string|max:255',
+            'question_en' => 'nullable|string|max:255',
             'answer' => 'required|string',
+            'answer_en' => 'nullable|string',
             'sort_order' => 'nullable|integer',
             'is_active' => 'nullable|boolean',
         ]);
@@ -58,7 +60,9 @@ class FaqController extends Controller
 
         $validator = Validator::make($request->all(), [
             'question' => 'sometimes|string|max:255',
+            'question_en' => 'nullable|string|max:255',
             'answer' => 'sometimes|string',
+            'answer_en' => 'nullable|string',
             'sort_order' => 'nullable|integer',
             'is_active' => 'nullable|boolean',
         ]);

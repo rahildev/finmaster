@@ -29,8 +29,11 @@ class VideoController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
+            'title_en' => 'nullable|string|max:255',
             'description' => 'nullable|string',
+            'description_en' => 'nullable|string',
             'video_url' => 'required|string|max:255',
+            'video_type' => 'nullable|string|in:video,short',
             'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'course_id' => 'nullable|exists:courses,id',
             'sort_order' => 'nullable|integer',
@@ -71,8 +74,11 @@ class VideoController extends Controller
 
         $validator = Validator::make($request->all(), [
             'title' => 'sometimes|string|max:255',
+            'title_en' => 'nullable|string|max:255',
             'description' => 'nullable|string',
+            'description_en' => 'nullable|string',
             'video_url' => 'sometimes|string|max:255',
+            'video_type' => 'nullable|string|in:video,short',
             'thumbnail' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'course_id' => 'nullable|exists:courses,id',
             'sort_order' => 'nullable|integer',

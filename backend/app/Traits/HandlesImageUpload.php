@@ -17,9 +17,9 @@ trait HandlesImageUpload
     protected function uploadImage(UploadedFile $file, string $directory = 'uploads'): string
     {
         $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs('public/' . $directory, $filename);
+        $path = $file->storeAs($directory, $filename, 'public');
 
-        return Storage::url($path);
+        return '/storage/' . $path;
     }
 
     /**
@@ -34,7 +34,7 @@ trait HandlesImageUpload
             return;
         }
 
-        $path = str_replace('/storage/', 'public/', $imageUrl);
-        Storage::delete($path);
+        $path = str_replace('/storage/', '', $imageUrl);
+        Storage::disk('public')->delete($path);
     }
 }

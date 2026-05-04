@@ -13,12 +13,18 @@ import Footer from '@/components/Footer';
  * Backend API-dən data çəkir və komponentləri render edir
  */
 
+// Cache deaktiv - hər dəfə yeni data çək
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function Home() {
   let data;
+  let sectionVisibility: Record<string, boolean> = {};
 
   try {
     // Backend API-dən bütün landing page datasını çək
     data = await getLandingPageData();
+    sectionVisibility = data.section_visibility || {};
   } catch (error) {
     console.error('Landing page data yüklənə bilmədi:', error);
 
@@ -45,6 +51,10 @@ export default async function Home() {
     );
   }
 
+  // Videoları növə görə ayır
+  const regularVideos = data.videos.filter(v => v.video_type === 'video');
+  const shorts = data.videos.filter(v => v.video_type === 'short');
+
   return (
     <div className="min-h-screen">
       {/* Sticky Navbar */}
@@ -52,12 +62,12 @@ export default async function Home() {
 
       {/* Landing Page Sections */}
       <main>
-        <Hero data={data.hero} />
-        <Teacher data={data.teacher} />
-        <Courses data={data.courses} />
-        <Videos data={data.videos} />
-        <FAQ data={data.faqs} />
-        <Contact data={data.contacts} />
+        {sectionVisibility.hero !== false && <Hero data={data.hero} />}
+        {sectionVisibility.teacher !== false && <Teacher data={data.teacher} />}
+        {sectionVisibility.courses !== false && <Courses data={data.courses} />}
+        {sectionVisibility.videos !== false && <Videos shorts={shorts} videos={regularVideos} />}
+        {sectionVisibility.faq !== false && <FAQ data={data.faqs} />}
+        {sectionVisibility.contact !== false && <Contact data={data.contacts} />}
       </main>
 
       {/* Footer */}

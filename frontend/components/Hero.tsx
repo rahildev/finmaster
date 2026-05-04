@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { useLanguage } from '@/contexts/LanguageContext';
 import type { HeroSection as HeroType } from '@/types/landing';
 
 /**
@@ -14,6 +15,8 @@ interface HeroProps {
 }
 
 export default function Hero({ data }: HeroProps) {
+  const { language } = useLanguage();
+
   if (!data || data.length === 0) return null;
 
   // İlk aktiv hero-nu göstər
@@ -22,11 +25,11 @@ export default function Hero({ data }: HeroProps) {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary-dark via-primary to-primary-light"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-green-600 via-green-500 to-green-400"
     >
       {/* Animated gradient background */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(106,176,78,0.3),transparent_50%)]"></div>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(10,77,44,0.3),transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(74,222,128,0.5),transparent_50%)]"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(34,197,94,0.5),transparent_50%)]"></div>
 
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12 py-20 text-center">
         <motion.div
@@ -35,19 +38,19 @@ export default function Hero({ data }: HeroProps) {
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           {/* Ana başlıq - Apple stil böyük tipografiya */}
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-tight tracking-tight mb-6">
-            {hero.title}
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-semibold text-white leading-tight tracking-tight mb-6">
+            {language === 'en' ? (hero as any).title_en || hero.title : hero.title}
           </h1>
 
           {/* Alt başlıq */}
-          {hero.subtitle && (
+          {(language === 'en' ? (hero as any).subtitle_en || hero.subtitle : hero.subtitle) && (
             <p className="text-xl sm:text-2xl lg:text-3xl text-white/90 max-w-3xl mx-auto mb-12 font-light">
-              {hero.subtitle}
+              {language === 'en' ? (hero as any).subtitle_en || hero.subtitle : hero.subtitle}
             </p>
           )}
 
           {/* CTA Button */}
-          {hero.btn_text && hero.btn_link && (
+          {(language === 'en' ? (hero as any).btn_text_en || hero.btn_text : hero.btn_text) && hero.btn_link && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -57,7 +60,7 @@ export default function Hero({ data }: HeroProps) {
                 href={hero.btn_link}
                 className="inline-flex items-center px-8 py-4 bg-white text-primary-dark text-lg font-semibold rounded-full hover:bg-gray-light transition-all hover:scale-105 shadow-xl hover:shadow-2xl"
               >
-                {hero.btn_text}
+                {language === 'en' ? (hero as any).btn_text_en || hero.btn_text : hero.btn_text}
                 <svg
                   className="ml-2 w-5 h-5"
                   fill="none"

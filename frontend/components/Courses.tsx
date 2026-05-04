@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { getImageUrl } from '@/lib/api';
+import { useLanguage } from '@/contexts/LanguageContext';
 import type { Course } from '@/types/landing';
 
 /**
@@ -18,21 +19,23 @@ const fadeInUp = {
   initial: { opacity: 0, y: 60 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-100px' },
-  transition: { duration: 0.8, ease: 'easeOut' },
+  transition: { duration: 0.8 },
 };
 
 export default function Courses({ data }: CoursesProps) {
+  const { language, t } = useLanguage();
+
   if (!data || data.length === 0) return null;
 
   return (
     <section id="courses" className="py-20 sm:py-32 bg-white">
       <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
         <motion.div {...fadeInUp} className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-dark mb-4">
-            Kurslarımız
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-green-900 mb-4">
+            {t.courses.title}
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Peşəkar mühasib olmaq üçün strukturlaşdırılmış təhsil proqramı
+          <p className="text-xl text-green-800 max-w-2xl mx-auto">
+            {t.courses.subtitle}
           </p>
         </motion.div>
 
@@ -52,7 +55,7 @@ export default function Courses({ data }: CoursesProps) {
                 <div className="relative h-48 bg-gradient-to-br from-primary-light to-primary overflow-hidden">
                   {getImageUrl(course.image_url) ? (
                     <Image
-                      src={getImageUrl(course.image_url)!}
+                      src={getImageUrl(course.image_url) || ''}
                       alt={course.name}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-500"
@@ -79,19 +82,19 @@ export default function Courses({ data }: CoursesProps) {
 
                 {/* Məlumat */}
                 <div className="p-6 flex-1 flex flex-col">
-                  <h3 className="text-xl font-bold text-gray-dark mb-2 group-hover:text-primary transition-colors">
-                    {course.name}
+                  <h3 className="text-xl font-semibold text-green-900 mb-2 group-hover:text-green-600 transition-colors duration-300">
+                    {language === 'en' && (course as any).name_en ? (course as any).name_en : course.name}
                   </h3>
 
-                  {course.description && (
-                    <p className="text-gray-600 text-sm leading-relaxed mb-4 flex-1 line-clamp-3">
-                      {course.description}
+                  {(language === 'en' ? (course as any).description_en || course.description : course.description) && (
+                    <p className="text-green-800 text-sm leading-relaxed mb-4 flex-1 line-clamp-3">
+                      {language === 'en' ? (course as any).description_en || course.description : course.description}
                     </p>
                   )}
 
                   <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                     {course.duration && (
-                      <span className="text-sm text-gray-500 flex items-center">
+                      <span className="text-sm text-green-700 flex items-center">
                         <svg
                           className="w-4 h-4 mr-1"
                           fill="none"
@@ -105,14 +108,14 @@ export default function Courses({ data }: CoursesProps) {
                             d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                           />
                         </svg>
-                        {course.duration}
+                        {language === 'en' ? (course as any).duration_en || course.duration : course.duration}
                       </span>
                     )}
 
-                    <span className="text-lg font-bold text-primary">
+                    <span className="text-lg font-bold text-green-700">
                       {parseFloat(course.price) > 0
                         ? `${parseFloat(course.price)} ₼`
-                        : 'Pulsuz'}
+                        : t.courses.free}
                     </span>
                   </div>
                 </div>

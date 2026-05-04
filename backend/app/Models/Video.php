@@ -8,8 +8,11 @@ class Video extends Model
 {
     protected $fillable = [
         'title',
+        'title_en',
         'description',
+        'description_en',
         'video_url',
+        'video_type',
         'thumbnail_url',
         'course_id',
         'sort_order',

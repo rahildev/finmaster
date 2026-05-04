@@ -7,6 +7,7 @@ use App\Models\Contact;
 use App\Models\Course;
 use App\Models\Faq;
 use App\Models\HeroSection;
+use App\Models\SectionSetting;
 use App\Models\SiteSetting;
 use App\Models\TeacherInfo;
 use App\Models\Video;
@@ -20,32 +21,62 @@ class LandingPageController extends Controller
      */
     public function index(): JsonResponse
     {
+        // Get section visibility settings
+        $sectionSettings = SectionSetting::pluck('is_visible', 'section_key')->toArray();
+
         $data = [
-            'hero' => HeroSection::where('is_active', true)
-                ->orderBy('sort_order')
-                ->get(),
+            'hero' => $this->getSectionData('hero', $sectionSettings, function() {
+                return HeroSection::where('is_active', true)
+                    ->orderBy('sort_order')
+                    ->get();
+            }),
 
-            'teacher' => TeacherInfo::first(),
+            'teacher' => $this->getSectionData('teacher', $sectionSettings, function() {
+                return TeacherInfo::first();
+            }),
 
-            'courses' => Course::where('is_active', true)
-                ->orderBy('sort_order')
-                ->get(),
+            'courses' => $this->getSectionData('courses', $sectionSettings, function() {
+                return Course::where('is_active', true)
+                    ->orderBy('sort_order')
+                    ->get();
+            }),
 
-            'videos' => Video::where('is_active', true)
-                ->orderBy('sort_order')
-                ->with('course:id,name')
-                ->get(),
+            'videos' => $this->getSectionData('videos', $sectionSettings, function() {
+                return Video::where('is_active', true)
+                    ->orderBy('sort_order')
+                    ->with('course:id,name')
+                    ->get();
+            }),
 
-            'faqs' => Faq::where('is_active', true)
-                ->orderBy('sort_order')
-                ->get(),
+            'faqs' => $this->getSectionData('faq', $sectionSettings, function() {
+                return Faq::where('is_active', true)
+                    ->orderBy('sort_order')
+                    ->get();
+            }),
 
-            'contacts' => Contact::orderBy('sort_order')->get(),
+            'contacts' => $this->getSectionData('contact', $sectionSettings, function() {
+                return Contact::orderBy('sort_order')->get();
+            }),
 
             'settings' => $this->formatSettings(),
+            'section_visibility' => $sectionSettings,
         ];
 
         return response()->json($data);
+    }
+
+    /**
+     * Get section data only if section is visible
+     */
+    private function getSectionData(string $sectionKey, array $sectionSettings, callable $callback)
+    {
+        // If section is not visible, return appropriate empty data
+        if (!isset($sectionSettings[$sectionKey]) || !$sectionSettings[$sectionKey]) {
+            // Return null for teacher (single record), empty array for others
+            return $sectionKey === 'teacher' ? null : [];
+        }
+
+        return $callback();
     }
 
     /**

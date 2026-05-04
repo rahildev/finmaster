@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -8,16 +9,47 @@ import Link from 'next/link';
  * Logo + copyright, minimalist
  */
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
+interface QuickLink {
+  name: string;
+  href: string;
+  sectionKey?: string;
+}
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [sectionVisibility, setSectionVisibility] = useState<Record<string, boolean> | null>(null);
 
-  const quickLinks = [
-    { name: 'Haqqımızda', href: '#teacher' },
-    { name: 'Kurslar', href: '#courses' },
-    { name: 'Videolar', href: '#videos' },
-    { name: 'FAQ', href: '#faq' },
-    { name: 'Əlaqə', href: '#contact' },
+  // Fetch section visibility settings
+  useEffect(() => {
+    const fetchSectionVisibility = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/landing`);
+        const data = await response.json();
+        setSectionVisibility(data.section_visibility || {});
+      } catch (error) {
+        console.error('Error fetching section visibility:', error);
+        setSectionVisibility({});
+      }
+    };
+
+    fetchSectionVisibility();
+  }, []);
+
+  const allQuickLinks: QuickLink[] = [
+    { name: 'Haqqımızda', href: '#teacher', sectionKey: 'teacher' },
+    { name: 'Kurslar', href: '#courses', sectionKey: 'courses' },
+    { name: 'Videolar', href: '#videos', sectionKey: 'videos' },
+    { name: 'FAQ', href: '#faq', sectionKey: 'faq' },
+    { name: 'Əlaqə', href: '#contact', sectionKey: 'contact' },
   ];
+
+  // Filter links based on section visibility
+  const quickLinks = sectionVisibility === null ? [] : allQuickLinks.filter(link => {
+    if (!link.sectionKey) return true;
+    return sectionVisibility[link.sectionKey] !== false;
+  });
 
   return (
     <footer className="bg-gray-dark text-white py-12 sm:py-16">
@@ -25,14 +57,28 @@ export default function Footer() {
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           {/* Logo və təsvir */}
           <div className="space-y-4">
-            <Link href="/" className="inline-block">
-              <div className="relative w-40 h-12">
-                <Image
-                  src="/brand/finmaster-logo.png"
-                  alt="Finmaster Academy"
-                  fill
-                  className="object-contain brightness-0 invert"
+            <Link
+              href="/"
+              className="flex items-center group"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              <div className="relative">
+                <img
+                  src="/brand/finmaster-icon.png"
+                  alt="Finmaster Icon"
+                  className="h-20 w-auto object-contain transition-transform group-hover:scale-105"
                 />
+              </div>
+              <div className="flex flex-col -ml-3">
+                <span className="text-white font-bold text-xl leading-tight tracking-tight">
+                  FinMaster
+                </span>
+                <span className="text-green-400 font-semibold text-sm leading-tight tracking-[0.2em]">
+                  ACADEMY
+                </span>
+                <span className="text-gray-300 font-medium text-[7px] leading-tight tracking-wider">
+                  ACCOUNTING & FINANCE TRAINING
+                </span>
               </div>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
@@ -41,21 +87,23 @@ export default function Footer() {
           </div>
 
           {/* Sürətli linklər */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Sürətli Keçidlər</h3>
-            <ul className="space-y-2">
-              {quickLinks.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-gray-400 hover:text-primary-light transition-colors text-sm"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {quickLinks.length > 0 && (
+            <div>
+              <h3 className="text-white font-semibold mb-4">Sürətli Keçidlər</h3>
+              <ul className="space-y-2">
+                {quickLinks.map((link) => (
+                  <li key={link.name}>
+                    <Link
+                      href={link.href}
+                      className="text-gray-400 hover:text-green-400 transition-colors duration-300 text-sm"
+                    >
+                      {link.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {/* Əlaqə */}
           <div>
@@ -75,10 +123,10 @@ export default function Footer() {
               © {currentYear} Finmaster Academy. Bütün hüquqlar qorunur.
             </p>
             <div className="flex items-center space-x-6 text-xs text-gray-500">
-              <Link href="#" className="hover:text-gray-300 transition-colors">
+              <Link href="#" className="hover:text-green-400 transition-colors duration-300">
                 Gizlilik Siyasəti
               </Link>
-              <Link href="#" className="hover:text-gray-300 transition-colors">
+              <Link href="#" className="hover:text-green-400 transition-colors duration-300">
                 İstifadə Şərtləri
               </Link>
             </div>

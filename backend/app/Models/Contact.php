@@ -9,6 +9,7 @@ class Contact extends Model
     protected $fillable = [
         'type',
         'label',
+        'label_en',
         'value',
         'icon',
         'sort_order',

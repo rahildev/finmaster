@@ -27,6 +27,7 @@ class ContactController extends Controller
         $validator = Validator::make($request->all(), [
             'type' => 'required|string|max:255',
             'label' => 'required|string|max:255',
+            'label_en' => 'nullable|string|max:255',
             'value' => 'required|string|max:255',
             'icon' => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer',
@@ -60,6 +61,7 @@ class ContactController extends Controller
         $validator = Validator::make($request->all(), [
             'type' => 'sometimes|string|max:255',
             'label' => 'sometimes|string|max:255',
+            'label_en' => 'nullable|string|max:255',
             'value' => 'sometimes|string|max:255',
             'icon' => 'nullable|string|max:255',
             'sort_order' => 'nullable|integer',

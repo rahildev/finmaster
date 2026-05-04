@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useLanguage } from '@/contexts/LanguageContext';
 import type { Contact as ContactType } from '@/types/landing';
 
 /**
@@ -16,10 +17,12 @@ const fadeInUp = {
   initial: { opacity: 0, y: 60 },
   whileInView: { opacity: 1, y: 0 },
   viewport: { once: true, margin: '-100px' },
-  transition: { duration: 0.8, ease: 'easeOut' },
+  transition: { duration: 0.8 },
 };
 
 export default function Contact({ data }: ContactProps) {
+  const { language, t } = useLanguage();
+
   if (!data || data.length === 0) return null;
 
   const getIcon = (type: string) => {
@@ -75,11 +78,11 @@ export default function Contact({ data }: ContactProps) {
     <section id="contact" className="py-20 sm:py-32 bg-gray-light">
       <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
         <motion.div {...fadeInUp} className="text-center mb-16">
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-dark mb-4">
-            Bizimlə Əlaqə
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-green-900 mb-4">
+            {t.contact.title}
           </h2>
-          <p className="text-xl text-gray-600">
-            Suallarınız üçün bizə müraciət edə bilərsiniz
+          <p className="text-xl text-green-800">
+            {t.contact.subtitle}
           </p>
         </motion.div>
 
@@ -97,14 +100,14 @@ export default function Contact({ data }: ContactProps) {
               whileHover={{ y: -4, transition: { duration: 0.2 } }}
               className="group"
             >
-              <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:border-primary/30 transition-all hover:shadow-xl text-center h-full flex flex-col items-center justify-center">
-                <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:bg-primary group-hover:text-white transition-all">
+              <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:border-green-400 transition-all duration-300 hover:shadow-xl text-center h-full flex flex-col items-center justify-center">
+                <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center text-green-700 mb-4 group-hover:bg-green-600 group-hover:text-white transition-all duration-300">
                   {getIcon(contact.type)}
                 </div>
-                <h3 className="text-lg font-semibold text-gray-dark mb-2">
-                  {contact.label}
+                <h3 className="text-lg font-semibold text-green-900 mb-2">
+                  {language === 'en' ? (contact as any).label_en || contact.label : contact.label}
                 </h3>
-                <p className="text-gray-600 text-sm break-all">
+                <p className="text-green-800 text-sm break-all">
                   {contact.value}
                 </p>
               </div>
