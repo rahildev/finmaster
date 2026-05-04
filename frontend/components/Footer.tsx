@@ -17,24 +17,32 @@ interface QuickLink {
   sectionKey?: string;
 }
 
+interface Contact {
+  id: number;
+  type: string;
+  label: string;
+  value: string;
+}
+
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const [sectionVisibility, setSectionVisibility] = useState<Record<string, boolean> | null>(null);
+  const [contacts, setContacts] = useState<Contact[]>([]);
 
-  // Fetch section visibility settings
   useEffect(() => {
-    const fetchSectionVisibility = async () => {
+    const fetchData = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/api/landing`);
         const data = await response.json();
         setSectionVisibility(data.section_visibility || {});
+        setContacts(data.contacts || []);
       } catch (error) {
-        console.error('Error fetching section visibility:', error);
+        console.error('Error fetching footer data:', error);
         setSectionVisibility({});
       }
     };
 
-    fetchSectionVisibility();
+    fetchData();
   }, []);
 
   const allQuickLinks: QuickLink[] = [
@@ -106,14 +114,18 @@ export default function Footer() {
           )}
 
           {/* Əlaqə */}
-          <div>
-            <h3 className="text-white font-semibold mb-4">Əlaqə</h3>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li>Tel: +994 50 123 45 67</li>
-              <li>Email: info@finmaster.academy</li>
-              <li>Instagram: @finmaster.academy</li>
-            </ul>
-          </div>
+          {contacts.length > 0 && (
+            <div>
+              <h3 className="text-white font-semibold mb-4">Əlaqə</h3>
+              <ul className="space-y-2 text-sm text-gray-400">
+                {contacts.map((contact) => (
+                  <li key={contact.id}>
+                    {contact.label}: {contact.value}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         {/* Divider */}
