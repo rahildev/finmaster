@@ -10,7 +10,7 @@ interface AdminLayoutProps {
 }
 
 const menuItems = [
-  { name: 'Dashboard', href: '/admin', icon: '📊', permission: null },
+  { name: 'Dashboard', href: '/admin', icon: '📊', permission: '' },
   { name: 'Səhifə Bölmələri', href: '/admin/sections', icon: '⚙️', superAdminOnly: true },
   { name: 'Hero Section', href: '/admin/hero', icon: '🎯', permission: 'manage_hero' },
   { name: 'Müəllim', href: '/admin/teacher', icon: '👨‍🏫', permission: 'manage_teachers' },
@@ -44,7 +44,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   const visibleMenu = menuItems.filter((item) => {
     if (item.superAdminOnly) return isSuperAdmin();
-    if (item.permission === null) return true;
+    if (!item.permission) return true;
     return hasPermission(item.permission);
   });
 
