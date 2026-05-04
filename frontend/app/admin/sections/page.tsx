@@ -25,7 +25,7 @@ export default function SectionsPage() {
   const fetchSections = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('admin_token');
       const response = await axios.get(`${API_BASE_URL}/api/admin/sections`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -40,7 +40,7 @@ export default function SectionsPage() {
 
   const toggleVisibility = async (id: number) => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('admin_token');
       const response = await axios.post(
         `${API_BASE_URL}/api/admin/sections/${id}/toggle`,
         {},
