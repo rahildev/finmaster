@@ -27,29 +27,34 @@ export default function Hero({ data }: HeroProps) {
       id="hero"
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      {/* Background image */}
+      {/* Background image — desktop */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat hidden sm:block"
         style={{ backgroundImage: "url('/hero-bg.png')" }}
+      />
+      {/* Background image — mobile */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat block sm:hidden"
+        style={{ backgroundImage: "url('/hero-mobile.png')" }}
       />
       {/* Dark overlay so text stays readable */}
       <div className="absolute inset-0 bg-black/40" />
 
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12 py-20 w-full">
         <motion.div
-          className="max-w-xl"
+          className="max-w-xl -mt-24 sm:mt-0"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           {/* Ana başlıq */}
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight tracking-tight mb-4 uppercase">
+          <h1 className="text-lg sm:text-3xl lg:text-4xl font-bold text-white leading-tight tracking-tight mb-4 uppercase">
             {language === 'en' ? (hero as any).title_en || hero.title : hero.title}
           </h1>
 
           {/* Alt başlıq */}
           {(language === 'en' ? (hero as any).subtitle_en || hero.subtitle : hero.subtitle) && (
-            <p className="text-sm sm:text-base lg:text-lg text-white/90 mb-8 font-semibold uppercase tracking-wide">
+            <p className="text-xs sm:text-base lg:text-lg text-white/90 mb-8 font-semibold uppercase tracking-wide">
               {language === 'en' ? (hero as any).subtitle_en || hero.subtitle : hero.subtitle}
             </p>
           )}

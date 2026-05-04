@@ -86,7 +86,7 @@ export interface SiteSettings {
 
 export interface LandingPageData {
   hero: HeroSection[];
-  teacher: TeacherInfo | null;
+  teacher: TeacherInfo[];
   courses: Course[];
   videos: Video[];
   faqs: Faq[];

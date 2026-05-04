@@ -87,7 +87,7 @@ export default function Videos({ shorts, videos }: VideosProps) {
         {/* Long-form Videos - Grid */}
         {hasVideos && (
           <>
-            <div className="grid md:grid-cols-2 gap-8 lg:gap-10">
+            <div className="flex flex-wrap justify-center gap-8 lg:gap-10">
               {displayedVideos.map((video, index) => (
                 <motion.div
                   key={video.id}
@@ -95,7 +95,7 @@ export default function Videos({ shorts, videos }: VideosProps) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-100px' }}
                   transition={{ duration: 0.6, delay: index * 0.1 }}
-                  className="group"
+                  className="group w-full md:w-[calc(50%-1rem)]"
                 >
                   <div className="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-primary/30 transition-all hover:shadow-xl">
                     {/* Video player - 16:9 aspect ratio */}

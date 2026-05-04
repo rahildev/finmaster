@@ -39,7 +39,7 @@ export default function Courses({ data }: CoursesProps) {
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+        <div className="flex flex-wrap justify-center gap-6 lg:gap-8">
           {data.map((course, index) => (
             <motion.div
               key={course.id}
@@ -48,7 +48,7 @@ export default function Courses({ data }: CoursesProps) {
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               whileHover={{ y: -8, transition: { duration: 0.3 } }}
-              className="group"
+              className="group w-72"
             >
               <div className="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-primary/30 transition-all hover:shadow-2xl h-full flex flex-col">
                 {/* Şəkil və ya gradient placeholder */}

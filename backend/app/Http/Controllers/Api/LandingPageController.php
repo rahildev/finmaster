@@ -32,7 +32,7 @@ class LandingPageController extends Controller
             }),
 
             'teacher' => $this->getSectionData('teacher', $sectionSettings, function() {
-                return TeacherInfo::first();
+                return TeacherInfo::orderBy('created_at')->get();
             }),
 
             'courses' => $this->getSectionData('courses', $sectionSettings, function() {
@@ -72,8 +72,7 @@ class LandingPageController extends Controller
     {
         // If section is not visible, return appropriate empty data
         if (!isset($sectionSettings[$sectionKey]) || !$sectionSettings[$sectionKey]) {
-            // Return null for teacher (single record), empty array for others
-            return $sectionKey === 'teacher' ? null : [];
+            return [];
         }
 
         return $callback();
