@@ -100,19 +100,19 @@ export default function Navbar() {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-14">
           {/* Logo */}
           <Link
             href="/"
             className="flex items-center group"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <div className="relative w-16 h-16 flex-shrink-0">
+            <div className="relative w-24 h-24 flex-shrink-0 -my-5">
               <img
                 src="/brand/finmaster-icon.png"
                 alt="Finmaster Icon"
-                width={64}
-                height={64}
+                width={96}
+                height={96}
                 className="h-full w-auto object-contain transition-transform group-hover:scale-105"
               />
             </div>
