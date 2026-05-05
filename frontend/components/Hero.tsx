@@ -30,12 +30,12 @@ export default function Hero({ data }: HeroProps) {
       {/* Background image — desktop */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat hidden sm:block"
-        style={{ backgroundImage: "url('/hero-bg.png')" }}
+        style={{ backgroundImage: "url('/hero-bg.jpg')" }}
       />
       {/* Background image — mobile */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat block sm:hidden"
-        style={{ backgroundImage: "url('/hero-mobile.png')" }}
+        style={{ backgroundImage: "url('/hero-mobile.jpg')" }}
       />
       {/* Dark overlay so text stays readable */}
       <div className="absolute inset-0 bg-black/40" />

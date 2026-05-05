@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 /**
@@ -108,11 +109,12 @@ export default function Navbar() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
             <div className="relative w-24 h-24 flex-shrink-0 -my-5">
-              <img
+              <Image
                 src="/brand/finmaster-icon.png"
                 alt="Finmaster Icon"
                 width={96}
                 height={96}
+                priority
                 className="h-full w-auto object-contain transition-transform group-hover:scale-105"
               />
             </div>
