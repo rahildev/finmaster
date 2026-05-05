@@ -41,14 +41,14 @@ export default function Hero({ data }: HeroProps) {
         />
       </div>
       {/* Background image — mobile */}
-      <div className="absolute inset-0 block sm:hidden">
+      <div className="absolute inset-0 block sm:hidden bg-[#0a1628]">
         <Image
           src="/hero-mobile.jpg"
           alt=""
           fill
           priority
           unoptimized
-          className="object-cover object-center"
+          className="object-contain object-center"
           sizes="100vw"
         />
       </div>
