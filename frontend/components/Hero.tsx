@@ -26,7 +26,7 @@ export default function Hero({ data }: HeroProps) {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-[80vh] flex items-center justify-center overflow-hidden"
     >
       {/* Background image — desktop */}
       <div className="absolute inset-0 hidden sm:block">
