@@ -87,7 +87,7 @@ export default function LoginPage() {
           </form>
         </div>
 
-        <p className="text-center text-sm text-gray-500 mt-8">
+        <p className="text-center text-sm text-gray-500 mt-8" suppressHydrationWarning>
           © {new Date().getFullYear()} FinMaster Academy. Bütün hüquqlar qorunur.
         </p>
       </div>

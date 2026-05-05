@@ -131,7 +131,7 @@ export default function Footer() {
         {/* Divider */}
         <div className="border-t border-gray-700 pt-8">
           <div className="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-            <p className="text-gray-400 text-sm">
+            <p className="text-gray-400 text-sm" suppressHydrationWarning>
               © {currentYear} Finmaster Academy. Bütün hüquqlar qorunur.
             </p>
             <div className="flex items-center space-x-6 text-xs text-gray-500">
