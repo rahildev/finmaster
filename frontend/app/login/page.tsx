@@ -88,7 +88,7 @@ export default function LoginPage() {
         </div>
 
         <p className="text-center text-sm text-gray-500 mt-8">
-          © 2024 FinMaster Academy. Bütün hüquqlar qorunur.
+          © {new Date().getFullYear()} FinMaster Academy. Bütün hüquqlar qorunur.
         </p>
       </div>
     </div>
