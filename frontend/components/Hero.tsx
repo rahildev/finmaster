@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 import type { HeroSection as HeroType } from '@/types/landing';
 
@@ -28,17 +29,29 @@ export default function Hero({ data }: HeroProps) {
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
       {/* Background image — desktop */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat hidden sm:block"
-        style={{ backgroundImage: "url('/hero-bg.jpg')" }}
-      />
+      <div className="absolute inset-0 hidden sm:block">
+        <Image
+          src="/hero-bg.jpg"
+          alt=""
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+      </div>
       {/* Background image — mobile */}
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat block sm:hidden"
-        style={{ backgroundImage: "url('/hero-mobile.jpg')" }}
-      />
+      <div className="absolute inset-0 block sm:hidden">
+        <Image
+          src="/hero-mobile.jpg"
+          alt=""
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+      </div>
       {/* Dark overlay so text stays readable */}
-      <div className="absolute inset-0 bg-black/40" />
+      <div className="absolute inset-0 bg-black/40 z-[1]" />
 
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12 py-20 w-full">
         <motion.div
