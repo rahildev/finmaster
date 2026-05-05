@@ -10,20 +10,21 @@ import { useLanguage } from '@/contexts/LanguageContext';
  * Sticky navbar, blur backdrop, scroll edəndə arxa plan effekti
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-
 interface MenuItem {
   name: string;
   href: string;
   sectionKey?: string;
 }
 
-export default function Navbar() {
+interface NavbarProps {
+  sectionVisibility?: Record<string, boolean>;
+}
+
+export default function Navbar({ sectionVisibility = {} }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [sectionVisibility, setSectionVisibility] = useState<Record<string, boolean> | null>(null);
   const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
@@ -49,23 +50,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
-  // Fetch section visibility settings
-  useEffect(() => {
-    const fetchSectionVisibility = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/landing`);
-        const data = await response.json();
-        setSectionVisibility(data.section_visibility || {});
-      } catch (error) {
-        console.error('Error fetching section visibility:', error);
-        // Set to empty object on error so menu still shows
-        setSectionVisibility({});
-      }
-    };
-
-    fetchSectionVisibility();
-  }, []);
-
   const allMenuItems: MenuItem[] = [
     { name: t.nav.about, href: '#teacher', sectionKey: 'teacher' },
     { name: t.nav.courses, href: '#courses', sectionKey: 'courses' },
@@ -74,9 +58,7 @@ export default function Navbar() {
     { name: t.nav.contact, href: '#contact', sectionKey: 'contact' },
   ];
 
-  // Filter menu items based on section visibility
-  // Only render menu when visibility data is loaded
-  const menuItems = sectionVisibility === null ? [] : allMenuItems.filter(item => {
+  const menuItems = allMenuItems.filter(item => {
     if (!item.sectionKey) return true;
     return sectionVisibility[item.sectionKey] !== false;
   });

@@ -13,9 +13,8 @@ import Footer from '@/components/Footer';
  * Backend API-dən data çəkir və komponentləri render edir
  */
 
-// Cache deaktiv - hər dəfə yeni data çək
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+// 60 saniyəlik ISR keş — backend yükünü azaldır
+export const revalidate = 60;
 
 export default async function Home() {
   let data;
@@ -58,7 +57,7 @@ export default async function Home() {
   return (
     <div className="min-h-screen">
       {/* Sticky Navbar */}
-      <Navbar />
+      <Navbar sectionVisibility={sectionVisibility} />
 
       {/* Landing Page Sections */}
       <main>
