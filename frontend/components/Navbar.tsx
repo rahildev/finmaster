@@ -97,6 +97,7 @@ export default function Navbar({ sectionVisibility = {} }: NavbarProps) {
                 width={96}
                 height={96}
                 priority
+                unoptimized
                 className="h-full w-auto object-contain transition-transform group-hover:scale-105"
               />
             </div>

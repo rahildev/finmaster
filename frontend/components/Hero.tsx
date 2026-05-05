@@ -35,6 +35,7 @@ export default function Hero({ data }: HeroProps) {
           alt=""
           fill
           priority
+          unoptimized
           className="object-cover object-center"
           sizes="100vw"
         />
@@ -46,6 +47,7 @@ export default function Hero({ data }: HeroProps) {
           alt=""
           fill
           priority
+          unoptimized
           className="object-cover object-center"
           sizes="100vw"
         />
