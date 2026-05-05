@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\Admin\CacheController;
 use App\Http\Controllers\Api\Admin\ContactController;
 use App\Http\Controllers\Api\Admin\CourseController;
 use App\Http\Controllers\Api\Admin\FaqController;
@@ -62,4 +63,7 @@ Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
     Route::get('sections', [SectionSettingController::class, 'index']);
     Route::put('sections/{id}', [SectionSettingController::class, 'update']);
     Route::post('sections/{id}/toggle', [SectionSettingController::class, 'toggleVisibility']);
+
+    // Cloudflare Cache Purge
+    Route::post('purge-cache', [CacheController::class, 'purge']);
 });

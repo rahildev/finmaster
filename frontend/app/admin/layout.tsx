@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface AdminLayoutProps {
@@ -25,6 +25,27 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { user, loading, logout, isSuperAdmin, hasPermission } = useAuth();
+  const [purging, setPurging] = useState(false);
+  const [purgeMsg, setPurgeMsg] = useState('');
+
+  const handlePurgeCache = async () => {
+    setPurging(true);
+    setPurgeMsg('');
+    try {
+      const token = localStorage.getItem('admin_token');
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/admin/purge-cache`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      const data = await res.json();
+      setPurgeMsg(res.ok ? '✓ Keş təmizləndi' : '✗ Xəta baş verdi');
+    } catch {
+      setPurgeMsg('✗ Xəta baş verdi');
+    } finally {
+      setPurging(false);
+      setTimeout(() => setPurgeMsg(''), 3000);
+    }
+  };
 
   useEffect(() => {
     if (!loading && !user) {
@@ -112,6 +133,16 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-semibold text-gray-dark">Admin Panel</h2>
             <div className="flex items-center space-x-3">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handlePurgeCache}
+                  disabled={purging}
+                  className="px-3 py-1.5 text-xs font-medium bg-orange-50 text-orange-700 border border-orange-200 rounded-lg hover:bg-orange-100 transition-colors disabled:opacity-50"
+                >
+                  {purging ? 'Təmizlənir...' : '🗑 Keşi Təmizlə'}
+                </button>
+                {purgeMsg && <span className="text-xs font-medium text-green-600">{purgeMsg}</span>}
+              </div>
               <div className="text-right">
                 <p className="text-sm font-medium text-gray-dark">{user.name}</p>
                 <p className="text-xs text-gray-500">
