@@ -52,10 +52,8 @@ export default function Hero({ data }: HeroProps) {
           sizes="100vw"
         />
       </div>
-      {/* Dark overlay so text stays readable */}
-      <div className="absolute inset-0 bg-black/40 z-[1]" />
 
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12 py-20 w-full">
+      <div className="relative z-[2] max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12 py-20 w-full">
         <motion.div
           className="max-w-xl -mt-24 sm:mt-0"
           initial={{ opacity: 0, y: 30 }}
