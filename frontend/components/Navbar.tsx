@@ -107,11 +107,13 @@ export default function Navbar() {
             className="flex items-center group"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           >
-            <div className="relative">
+            <div className="relative w-16 h-16 flex-shrink-0">
               <img
                 src="/brand/finmaster-icon.png"
                 alt="Finmaster Icon"
-                className="h-29 w-auto object-contain transition-transform group-hover:scale-105"
+                width={64}
+                height={64}
+                className="h-full w-auto object-contain transition-transform group-hover:scale-105"
               />
             </div>
             <div className="flex flex-col -ml-4">
