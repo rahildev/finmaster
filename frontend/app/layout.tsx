@@ -32,7 +32,7 @@ export default function RootLayout({
       lang="az"
       className={`${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-white text-gray-dark">
+      <body className="min-h-full flex flex-col bg-white text-gray-dark" suppressHydrationWarning>
         <Providers>{children}</Providers>
       </body>
     </html>
