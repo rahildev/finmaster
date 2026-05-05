@@ -198,7 +198,7 @@ export default function Navbar({ sectionVisibility = {} }: NavbarProps) {
               {/* Language Switcher Mobile */}
               <div className="pt-2">
                 <button
-                  onClick={() => setLanguage(language === 'az' ? 'en' : 'az')}
+                  onClick={() => { setLanguage(language === 'az' ? 'en' : 'az'); setMobileMenuOpen(false); }}
                   className="w-full px-4 py-2 text-sm font-semibold text-green-800 border border-green-800 rounded-lg transition-all flex items-center justify-center gap-1.5"
                 >
                   {language === 'az' ? (
