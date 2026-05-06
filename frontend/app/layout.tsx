@@ -35,10 +35,10 @@ export default async function RootLayout({
   return (
     <html
       lang={initialLanguage}
-      className={`${inter.variable} h-full antialiased`}
+      className={`${inter.variable} h-full antialiased overflow-x-hidden`}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-background text-gray-dark" suppressHydrationWarning>
+      <body className="min-h-full flex flex-col bg-background text-gray-dark overflow-x-hidden" suppressHydrationWarning>
         <Providers initialLanguage={initialLanguage}>{children}</Providers>
       </body>
     </html>
