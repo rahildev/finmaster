@@ -60,7 +60,7 @@ export default function Teacher({ data, contacts = [] }: TeacherProps) {
             className="flex flex-col justify-center px-10 py-16 lg:px-16"
           >
             {/* Label */}
-            <p className="text-[11px] font-bold tracking-[0.2em] text-[#C07A2E] uppercase mb-4">
+            <p className="text-[11px] font-bold tracking-[0.2em] text-[#0A4D2C] uppercase mb-4">
               {language === 'en' ? 'About Us' : 'Haqqımızda'}
             </p>
 

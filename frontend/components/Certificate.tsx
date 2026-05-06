@@ -19,7 +19,7 @@ export default function Certificate() {
 
           {/* Sol — mətn */}
           <div>
-            <p className="text-[11px] font-bold tracking-[0.2em] text-[#C07A2E] uppercase mb-4">
+            <p className="text-[11px] font-bold tracking-[0.2em] text-[#0A4D2C] uppercase mb-4">
               {language === 'en' ? 'Verifiable Certificate' : 'Doğrulana Bilən Sertifikat'}
             </p>
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight mb-4">

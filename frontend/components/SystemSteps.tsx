@@ -35,8 +35,8 @@ export default function SystemSteps() {
             transition={{ duration: 0.7 }}
           >
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-5 h-px bg-[#C07A2E]" />
-              <span className="text-[11px] font-bold tracking-[0.2em] text-[#C07A2E] uppercase">
+              <div className="w-5 h-px bg-[#0A4D2C]" />
+              <span className="text-[11px] font-bold tracking-[0.2em] text-[#0A4D2C] uppercase">
                 {language === 'en' ? '33-Step System' : '33 Addımlıq Sistem'}
               </span>
             </div>

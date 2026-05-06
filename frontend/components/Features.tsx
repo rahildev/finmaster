@@ -116,11 +116,11 @@ export default function Features() {
           className="text-center mb-14"
         >
           <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="w-5 h-px bg-[#C07A2E]" />
-            <span className="text-[11px] font-bold tracking-[0.2em] text-[#C07A2E] uppercase">
+            <div className="w-5 h-px bg-[#0A4D2C]" />
+            <span className="text-[11px] font-bold tracking-[0.2em] text-[#0A4D2C] uppercase">
               {language === 'en' ? 'Why FinMaster?' : 'Niyə FinMaster?'}
             </span>
-            <div className="w-5 h-px bg-[#C07A2E]" />
+            <div className="w-5 h-px bg-[#0A4D2C]" />
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
             {language === 'en'
