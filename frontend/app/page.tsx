@@ -1,76 +1,52 @@
 import { getLandingPageData } from '@/lib/api';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
-import Teacher from '@/components/Teacher';
+import Features from '@/components/Features';
+import SystemSteps from '@/components/SystemSteps';
 import Courses from '@/components/Courses';
-import Videos from '@/components/Videos';
-import FAQ from '@/components/FAQ';
-import Contact from '@/components/Contact';
+import Teacher from '@/components/Teacher';
+import Certificate from '@/components/Certificate';
 import Footer from '@/components/Footer';
 
-/**
- * Finmaster Academy - Landing Page
- * Backend API-dən data çəkir və komponentləri render edir
- */
-
-// 60 saniyəlik ISR keş — backend yükünü azaldır
 export const revalidate = 60;
 
 export default async function Home() {
   let data;
-  let sectionVisibility: Record<string, boolean> = {};
 
   try {
-    // Backend API-dən bütün landing page datasını çək
     data = await getLandingPageData();
-    sectionVisibility = data.section_visibility || {};
   } catch (error) {
     console.error('Landing page data yüklənə bilmədi:', error);
-
-    // Əgər backend işləmirsə, xəta mesajı göstər
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-light px-6">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-6">
         <div className="text-center max-w-md">
-          <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <svg className="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            </svg>
-          </div>
-          <h1 className="text-2xl font-bold text-gray-dark mb-2">
-            Xəta baş verdi
-          </h1>
-          <p className="text-gray-600 mb-4">
-            Backend API-yə qoşulmaq mümkün olmadı. Zəhmət olmasa Laravel server-in işlədiyindən əmin olun.
-          </p>
-          <code className="text-sm bg-gray-200 px-3 py-1 rounded text-gray-700">
-            php artisan serve
-          </code>
+          <h1 className="text-xl font-bold text-gray-900 mb-2">Xəta baş verdi</h1>
+          <p className="text-gray-500 text-sm">Backend API-yə qoşulmaq mümkün olmadı.</p>
         </div>
       </div>
     );
   }
 
-  // Videoları növə görə ayır
-  const regularVideos = data.videos.filter(v => v.video_type === 'video');
-  const shorts = data.videos.filter(v => v.video_type === 'short');
+  const sectionVisibility = data.section_visibility || {};
 
   return (
     <div className="min-h-screen">
-      {/* Sticky Navbar */}
       <Navbar sectionVisibility={sectionVisibility} />
-
-      {/* Landing Page Sections */}
       <main>
-        {sectionVisibility.hero !== false && <Hero data={data.hero} />}
-        {sectionVisibility.teacher !== false && <Teacher data={data.teacher} />}
-        {sectionVisibility.courses !== false && <Courses data={data.courses} />}
-        {sectionVisibility.videos !== false && <Videos shorts={shorts} videos={regularVideos} />}
-        {sectionVisibility.faq !== false && <FAQ data={data.faqs} />}
-        {sectionVisibility.contact !== false && <Contact data={data.contacts} />}
+        {sectionVisibility.hero !== false && (
+          <Hero data={data.hero} contacts={data.contacts} />
+        )}
+        <Features />
+        <SystemSteps />
+        {sectionVisibility.courses !== false && (
+          <Courses data={data.courses} contacts={data.contacts} />
+        )}
+        {sectionVisibility.teacher !== false && (
+          <Teacher data={data.teacher} contacts={data.contacts} />
+        )}
+        <Certificate />
       </main>
-
-      {/* Footer */}
-      <Footer />
+      <Footer contacts={data.contacts} courses={data.courses} />
     </div>
   );
 }

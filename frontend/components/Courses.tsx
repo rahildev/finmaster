@@ -1,127 +1,149 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { getImageUrl } from '@/lib/api';
 import { useLanguage } from '@/contexts/LanguageContext';
-import type { Course } from '@/types/landing';
-
-/**
- * Courses Section - Apple stil
- * Kart grid, hover lift effekti, minimalist dizayn
- */
+import type { Course, Contact } from '@/types/landing';
 
 interface CoursesProps {
   data: Course[];
+  contacts?: Contact[];
 }
 
-const fadeInUp = {
-  initial: { opacity: 0, y: 60 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, margin: '-100px' },
-  transition: { duration: 0.8 },
-};
+const courseIcons = [
+  // Calculator — display + button grid
+  <svg key="calc" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.4} className="w-7 h-7 text-gray-500">
+    <rect x="4" y="2" width="16" height="20" rx="2" />
+    <rect x="7" y="5" width="10" height="3.5" rx="0.5" />
+    <rect x="7" y="11" width="2.5" height="2" rx="0.4" fill="currentColor" stroke="none" />
+    <rect x="10.75" y="11" width="2.5" height="2" rx="0.4" fill="currentColor" stroke="none" />
+    <rect x="14.5" y="11" width="2.5" height="2" rx="0.4" fill="currentColor" stroke="none" />
+    <rect x="7" y="14.5" width="2.5" height="2" rx="0.4" fill="currentColor" stroke="none" />
+    <rect x="10.75" y="14.5" width="2.5" height="2" rx="0.4" fill="currentColor" stroke="none" />
+    <rect x="14.5" y="14.5" width="2.5" height="2" rx="0.4" fill="currentColor" stroke="none" />
+    <rect x="7" y="18" width="5.75" height="2" rx="0.4" fill="currentColor" stroke="none" />
+    <rect x="14.5" y="18" width="2.5" height="2" rx="0.4" fill="currentColor" stroke="none" />
+  </svg>,
+  // Bar chart — ascending bars with dot at top
+  <svg key="chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.4} className="w-7 h-7 text-gray-500">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3 19h18" />
+    <rect x="4" y="12" width="3.5" height="7" rx="0.5" />
+    <rect x="10.25" y="7" width="3.5" height="12" rx="0.5" />
+    <rect x="16.5" y="4" width="3.5" height="15" rx="0.5" />
+    <circle cx="18.25" cy="3" r="1" fill="currentColor" stroke="none" />
+  </svg>,
+  // Document with horizontal lines (spreadsheet)
+  <svg key="doc" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.4} className="w-7 h-7 text-gray-500">
+    <path strokeLinecap="round" strokeLinejoin="round" d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M14 2v6h6" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M8 13h8M8 17h5" />
+  </svg>,
+];
 
-export default function Courses({ data }: CoursesProps) {
-  const { language, t } = useLanguage();
+export default function Courses({ data, contacts = [] }: CoursesProps) {
+  const { language } = useLanguage();
 
   if (!data || data.length === 0) return null;
 
+  const whatsapp = contacts.find(c => c.type === 'whatsapp');
+  const whatsappHref = whatsapp
+    ? `https://wa.me/${whatsapp.value.replace(/\D/g, '')}`
+    : '#contact';
+
   return (
-    <section id="courses" className="py-20 sm:py-32 bg-white">
-      <div className="max-w-[1400px] mx-auto px-6 sm:px-8 lg:px-12">
-        <motion.div {...fadeInUp} className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-green-900 mb-4">
-            {t.courses.title}
+    <section id="courses" className="py-20 bg-background border-t border-gray-100">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+
+        {/* Section label */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-14"
+        >
+          <div className="flex items-center justify-center gap-2 mb-4">
+            <div className="w-5 h-px bg-[#C07A2E]" />
+            <span className="text-[11px] font-bold tracking-[0.2em] text-[#C07A2E] uppercase">
+              {language === 'en' ? 'Programs' : 'Proqramlar'}
+            </span>
+            <div className="w-5 h-px bg-[#C07A2E]" />
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
+            {language === 'en'
+              ? 'The right choice for professional development.'
+              : 'Peşəkar inkişaf üçün doğru seçim.'}
           </h2>
-          <p className="text-xl text-green-800 max-w-2xl mx-auto">
-            {t.courses.subtitle}
-          </p>
         </motion.div>
 
-        <div className="flex flex-wrap justify-center gap-6 lg:gap-8">
-          {data.map((course, index) => (
-            <motion.div
-              key={course.id}
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ y: -8, transition: { duration: 0.3 } }}
-              className="group w-72"
-            >
-              <div className="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:border-primary/30 transition-all hover:shadow-2xl h-full flex flex-col">
-                {/* Şəkil və ya gradient placeholder */}
-                <div className="relative h-48 bg-gradient-to-br from-primary-light to-primary overflow-hidden">
-                  {getImageUrl(course.image_url) ? (
-                    <Image
-                      src={getImageUrl(course.image_url) || ''}
-                      alt={course.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <svg
-                        className="w-16 h-16 text-white/50"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={1.5}
-                          d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-                        />
-                      </svg>
-                    </div>
-                  )}
-                </div>
+        {/* Course cards */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {data.map((course, i) => {
+            const name = language === 'en' && (course as any).name_en ? (course as any).name_en : course.name;
+            const desc = language === 'en' ? (course as any).description_en || course.description : course.description;
+            const duration = language === 'en' ? (course as any).duration_en || course.duration : course.duration;
 
-                {/* Məlumat */}
-                <div className="p-6 flex-1 flex flex-col">
-                  <h3 className="text-xl font-semibold text-green-900 mb-2 group-hover:text-green-600 transition-colors duration-300">
-                    {language === 'en' && (course as any).name_en ? (course as any).name_en : course.name}
-                  </h3>
+            const icon = courseIcons[i % courseIcons.length];
 
-                  {(language === 'en' ? (course as any).description_en || course.description : course.description) && (
-                    <p className="text-green-800 text-sm leading-relaxed mb-4 flex-1 line-clamp-3">
-                      {language === 'en' ? (course as any).description_en || course.description : course.description}
-                    </p>
-                  )}
-
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    {course.duration && (
-                      <span className="text-sm text-green-700 flex items-center">
-                        <svg
-                          className="w-4 h-4 mr-1"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                          />
-                        </svg>
-                        {language === 'en' ? (course as any).duration_en || course.duration : course.duration}
-                      </span>
-                    )}
-
-                    <span className="text-lg font-bold text-green-700">
-                      {parseFloat(course.price) > 0
-                        ? `${parseFloat(course.price)} ₼`
-                        : t.courses.free}
-                    </span>
+            return (
+              <motion.div
+                key={course.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+                className="border border-gray-200 rounded-2xl p-8 hover:shadow-lg transition-all duration-300 bg-white flex flex-col"
+              >
+                {/* Icon */}
+                <div className="mb-6">
+                  <div className="w-14 h-14 rounded-2xl bg-gray-100 flex items-center justify-center">
+                    {icon}
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+
+                {/* Name */}
+                <h3 className="font-bold text-gray-900 text-xl mb-3 leading-snug">{name}</h3>
+
+                {/* Description */}
+                {desc && (
+                  <p className="text-gray-400 text-sm leading-relaxed flex-1 mb-8 line-clamp-3">{desc}</p>
+                )}
+
+                {/* Footer row */}
+                <div className="flex items-center justify-between mt-auto pt-5 border-t border-gray-100">
+                  <span className="text-xs text-gray-400">
+                    {duration || (parseFloat(course.price) > 0 ? `${parseFloat(course.price)} ₼` : '')}
+                  </span>
+                  <a
+                    href={whatsappHref}
+                    target={whatsapp ? '_blank' : undefined}
+                    rel={whatsapp ? 'noopener noreferrer' : undefined}
+                    onClick={!whatsapp ? (e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); } : undefined}
+                    className="flex items-center gap-1.5 text-sm font-semibold text-gray-800 hover:text-[#0A4D2C] transition-colors group"
+                  >
+                    {language === 'en' ? 'Learn more' : 'Ətraflı məlumat'}
+                    <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </a>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* "Bütün proqramlara bax" link */}
+        <div className="text-center mt-10">
+          <a
+            href="#contact"
+            onClick={(e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}
+            className="inline-flex items-center gap-2 text-sm font-semibold text-gray-700 hover:text-[#0A4D2C] transition-colors"
+          >
+            {language === 'en' ? 'View all programs' : 'Bütün proqramlara bax'}
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </a>
         </div>
       </div>
     </section>

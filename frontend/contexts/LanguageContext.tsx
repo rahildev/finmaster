@@ -16,17 +16,9 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>('az');
+export function LanguageProvider({ children, initialLanguage = 'az' }: { children: ReactNode; initialLanguage?: Language }) {
+  const [language, setLanguageState] = useState<Language>(initialLanguage);
   const [isTransitioning, setIsTransitioning] = useState(false);
-
-  useEffect(() => {
-    // Load saved language from localStorage
-    const saved = localStorage.getItem('language') as Language;
-    if (saved && (saved === 'az' || saved === 'en')) {
-      setLanguageState(saved);
-    }
-  }, []);
 
   const setLanguage = (lang: Language) => {
     if (lang === language) return; // Don't transition if same language
@@ -37,6 +29,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     setTimeout(() => {
       setLanguageState(lang);
       localStorage.setItem('language', lang);
+      document.cookie = `language=${lang};path=/;max-age=31536000`;
 
       // Wait a bit then fade back in
       setTimeout(() => {

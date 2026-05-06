@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { cookies } from "next/headers";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 
@@ -22,18 +23,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = await cookies();
+  const lang = cookieStore.get('language')?.value;
+  const initialLanguage: 'az' | 'en' = lang === 'en' ? 'en' : 'az';
+
   return (
     <html
-      lang="az"
+      lang={initialLanguage}
       className={`${inter.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-white text-gray-dark" suppressHydrationWarning>
-        <Providers>{children}</Providers>
+      <body className="min-h-full flex flex-col bg-background text-gray-dark" suppressHydrationWarning>
+        <Providers initialLanguage={initialLanguage}>{children}</Providers>
       </body>
     </html>
   );

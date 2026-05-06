@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  --background: #f6f6f5;
   --foreground: #1D1D1F;
 
   /* Finmaster Academy Brend Rəngləri */
   --primary-dark: #0A4D2C;
   --primary-mid: #6AB04E;
   --primary-light: #72B845;
+  --gold: #C07A2E;
   --gray-dark: #1D1D1F;
   --gray-light: #F5F5F7;
 }
@@ -21,6 +22,7 @@
   --color-primary-dark: var(--primary-dark);
   --color-primary: var(--primary-mid);
   --color-primary-light: var(--primary-light);
+  --color-gold: var(--gold);
   --color-accent: var(--primary-mid);
   --color-gray-dark: var(--gray-dark);
   --color-gray-light: var(--gray-light);

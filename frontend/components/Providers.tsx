@@ -25,10 +25,10 @@ function LanguageTransition({ children }: { children: ReactNode }) {
   );
 }
 
-export function Providers({ children }: { children: ReactNode }) {
+export function Providers({ children, initialLanguage = 'az' }: { children: ReactNode; initialLanguage?: 'az' | 'en' }) {
   return (
     <AuthProvider>
-      <LanguageProvider>
+      <LanguageProvider initialLanguage={initialLanguage}>
         <ScrollToTop />
         <LanguageTransition>
           {children}
