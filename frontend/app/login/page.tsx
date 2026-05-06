@@ -56,7 +56,7 @@ export default function LoginPage() {
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
-                placeholder="superadmin"
+                placeholder="İstifadəçi adınızı daxil edin"
                 disabled={loading}
               />
             </div>
@@ -72,7 +72,7 @@ export default function LoginPage() {
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
-                placeholder="••••••••"
+                placeholder="Şifrənizi daxil edin"
                 disabled={loading}
               />
             </div>
