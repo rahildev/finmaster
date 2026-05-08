@@ -68,15 +68,17 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
             <p className="text-gray-600 leading-relaxed mb-10">{course.description}</p>
           )}
 
-          <Link
-            href={`/videos#course-${course.id}`}
-            className="inline-flex items-center gap-2 border border-[#0A4D2C] text-[#0A4D2C] font-semibold px-6 py-4 rounded-xl hover:bg-[#0A4D2C] hover:text-white transition-colors"
-          >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M8 5v14l11-7z" />
-            </svg>
-            Videolara keçid
-          </Link>
+          <div className="flex justify-end">
+            <Link
+              href={`/videos#course-${course.id}`}
+              className="inline-flex items-center gap-2 border border-[#0A4D2C] text-[#0A4D2C] font-semibold px-6 py-4 rounded-xl hover:bg-[#0A4D2C] hover:text-white transition-colors"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              Videolara keçid
+            </Link>
+          </div>
 
         </div>
       </section>
