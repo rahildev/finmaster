@@ -55,7 +55,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
           <div className="hidden lg:flex items-center gap-1">
 
             {/* Ana Səhifə */}
-            <Link href="/" className="px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors">
+            <Link href="/" className="px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-[#0A4D2C] hover:text-white rounded-md transition-colors">
               {language === 'en' ? 'Home' : 'Ana Səhifə'}
             </Link>
 
@@ -65,7 +65,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               onMouseEnter={() => setOpenDropdown('programs')}
               onMouseLeave={() => setOpenDropdown(null)}
             >
-              <button className="flex items-center gap-1 px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors">
+              <button className="flex items-center gap-1 px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-[#0A4D2C] hover:text-white rounded-md transition-colors">
                 {language === 'en' ? 'Programs' : 'Proqramlar'}
                 <svg className={`w-3 h-3 transition-transform duration-200 ${openDropdown === 'programs' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -107,12 +107,12 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
             </div>
 
             {/* Haqqımızda */}
-            <Link href="/#footer" className="px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors">
+            <Link href="/#footer" className="px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-[#0A4D2C] hover:text-white rounded-md transition-colors">
               {language === 'en' ? 'About' : 'Haqqımızda'}
             </Link>
 
             {/* Sertifikat */}
-            <Link href="/#certificate" className="px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors">
+            <Link href="/#certificate" className="px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-[#0A4D2C] hover:text-white rounded-md transition-colors">
               {language === 'en' ? 'Certificate' : 'Sertifikat'}
             </Link>
 
@@ -122,7 +122,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               onMouseEnter={() => setOpenDropdown('contact')}
               onMouseLeave={() => setOpenDropdown(null)}
             >
-              <button className="flex items-center gap-1 px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors">
+              <button className="flex items-center gap-1 px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-[#0A4D2C] hover:text-white rounded-md transition-colors">
                 {language === 'en' ? 'Contact' : 'Əlaqə'}
                 <svg className={`w-3 h-3 transition-transform duration-200 ${openDropdown === 'contact' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -142,7 +142,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
                         }
                         target={c.type === 'whatsapp' ? '_blank' : undefined}
                         rel={c.type === 'whatsapp' ? 'noopener noreferrer' : undefined}
-                        className="flex items-center gap-2 py-2.5 text-sm text-gray-700 hover:text-[#0A4D2C] transition-colors border-b border-gray-50 last:border-0"
+                        className="flex items-center gap-2 py-2.5 text-sm text-gray-700 hover:bg-[#0A4D2C] hover:text-white rounded-md transition-colors border-b border-gray-50 last:border-0"
                       >
                         <span className="text-xs text-gray-400 w-16 capitalize shrink-0">{c.type}</span>
                         <span className="truncate">{c.value}</span>
@@ -156,7 +156,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
             {/* FAQ — sağda ayrı */}
             <Link
               href="/faq"
-              className="ml-2 px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors border-l border-gray-200"
+              className="ml-2 px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-[#0A4D2C] hover:text-white rounded-md transition-colors border-l border-gray-200"
             >
               FAQ
             </Link>
