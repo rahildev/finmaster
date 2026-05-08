@@ -15,6 +15,8 @@ class Course extends Model
         'duration_en',
         'price',
         'image_url',
+        'page_content',
+        'page_content_en',
         'sort_order',
         'is_active',
     ];
@@ -23,6 +25,8 @@ class Course extends Model
         'price' => 'decimal:2',
         'sort_order' => 'integer',
         'is_active' => 'boolean',
+        'page_content' => 'array',
+        'page_content_en' => 'array',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

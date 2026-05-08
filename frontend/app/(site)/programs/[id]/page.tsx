@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import SystemSteps from '@/components/SystemSteps';
+import Program33Section from '@/components/Program33Section';
 
 export const revalidate = 60;
 
@@ -23,73 +24,11 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
     <div className="bg-background min-h-screen pt-16">
 
       {is33Step ? (
-        <section className="py-16 bg-[#f6f6f5]">
-          <div className="max-w-7xl mx-auto px-6 lg:px-10">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-
-              {/* Sol — mətn */}
-              <div className="space-y-6">
-                <h2 className="font-[family-name:var(--font-cormorant)] text-3xl sm:text-4xl font-bold text-gray-900 leading-snug">
-                  Güclü karyera, doğru sistemlə başlayır.
-                </h2>
-                <p className="text-gray-600 leading-relaxed">
-                  <span className="font-semibold text-gray-800">"33 addımda mühasibat uçotu"</span> ilə peşəkar inkişaf yolunuza bu gün başlaya bilmək imkanınız vardır..
-                </p>
-                <p className="text-gray-600 leading-relaxed">
-                  Finmaster Academiyasının akademik və sistemli tədris yanaşması ilə hazırlamış olduğu bu proqram, karyerasında güclü təməl qurmaq və peşəkar səviyyəyə yüksəlmək istəyənlər üçün nəzərdə tutulmuşdur.
-                </p>
-
-                <div>
-                  <p className="font-semibold text-gray-800 mb-3">"33 Addımda Mühasibat uçotu" proqramı müddətində siz :</p>
-                  <ul className="space-y-2">
-                    {[
-                      'Mühasibatın uçotunun əsas strukturunu öyrənəcək ,',
-                      'Maliyyə hesabatlarını analiz etmə bacarığınızı inkişaf etdirəcək ,',
-                      'Real tətbiqlər üzərindən praktiki təcrübə qazanacaq ,',
-                      'Müasir maliyyə sistemlərinə dair peşəkar baxış əldə edəcəksiniz.',
-                    ].map((item, i) => (
-                      <li key={i} className="flex items-start gap-2 text-gray-600">
-                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#0A4D2C] shrink-0" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <p className="text-gray-600 leading-relaxed">
-                  <span className="font-semibold text-gray-800">33 (otuz üç) dərs günündən</span>, yəni <span className="font-semibold text-gray-800">66 (altmış altı) saatdan</span> ibarət proqram müddətində tələbələr məxsusi olaraq hazırlanmış dərs materialları və mənimsəmə dərəcəsini yüksəltmək məqsədilə seçilmiş yoxlama suallar ilə (düzgün cavablar daxil olmaqla) təmin olunmaqdadır.
-                </p>
-              </div>
-
-              {/* Sağ — şəkil + düymə */}
-              <div className="flex flex-col gap-4 pt-44">
-                <div className="relative rounded-2xl overflow-hidden shadow-xl">
-                  <Image
-                    src="/programs-33.png"
-                    alt="33 Addımda Mühasibat uçotu"
-                    width={0}
-                    height={0}
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    unoptimized
-                    className="w-full h-auto"
-                  />
-                </div>
-                <div className="flex justify-end">
-                  <Link
-                    href={`/videos#course-${course.id}`}
-                    className="font-inter inline-flex items-center gap-1.5 text-sm border border-[#0A4D2C] text-[#0A4D2C] font-semibold px-4 py-2 rounded-lg hover:bg-[#0A4D2C] hover:text-white transition-colors"
-                  >
-                    <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                    Videolara keçid
-                  </Link>
-                </div>
-              </div>
-
-            </div>
-          </div>
-        </section>
+        <Program33Section
+          courseId={course.id}
+          contentAz={(course as any).page_content ?? null}
+          contentEn={(course as any).page_content_en ?? null}
+        />
       ) : (
         <section className="pt-10 pb-20">
           <div className="max-w-3xl mx-auto px-6 lg:px-10">

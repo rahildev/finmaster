@@ -28,6 +28,10 @@ export default function CoursesAdminPage() {
     is_active: true,
   });
 
+  const emptyContent = { heading: '', intro: '', about: '', list_heading: '', bullets: ['', '', '', ''], outro: '' };
+  const [pageContent, setPageContent] = useState(emptyContent);
+  const [pageContentEn, setPageContentEn] = useState(emptyContent);
+
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [originalImageUrl, setOriginalImageUrl] = useState<string | null>(null);
@@ -60,6 +64,8 @@ export default function CoursesAdminPage() {
       sort_order: 0,
       is_active: true,
     });
+    setPageContent(emptyContent);
+    setPageContentEn(emptyContent);
     setImageFile(null);
     setImagePreview(null);
     setOriginalImageUrl(null);
@@ -85,6 +91,10 @@ export default function CoursesAdminPage() {
       sort_order: course.sort_order || 0,
       is_active: course.is_active ?? true,
     });
+    const pc = (course as any).page_content;
+    const pce = (course as any).page_content_en;
+    setPageContent(pc && Object.keys(pc).length > 0 ? { ...emptyContent, ...pc, bullets: pc.bullets?.length ? pc.bullets : ['', '', '', ''] } : emptyContent);
+    setPageContentEn(pce && Object.keys(pce).length > 0 ? { ...emptyContent, ...pce, bullets: pce.bullets?.length ? pce.bullets : ['', '', '', ''] } : emptyContent);
     setImagePreview(imgUrl);
     setOriginalImageUrl(imgUrl);
     setShouldDeleteImage(false);
@@ -116,6 +126,14 @@ export default function CoursesAdminPage() {
         data.append('image', imageFile);
       } else if (shouldDeleteImage) {
         data.append('delete_image', '1');
+      }
+
+      if (formData.name.includes('33')) {
+        const cleanBullets = (bullets: string[]) => bullets.filter(b => b.trim() !== '');
+        const pcAz = { ...pageContent, bullets: cleanBullets(pageContent.bullets) };
+        const pcEn = { ...pageContentEn, bullets: cleanBullets(pageContentEn.bullets) };
+        data.append('page_content', JSON.stringify(pcAz));
+        data.append('page_content_en', JSON.stringify(pcEn));
       }
 
       if (editingId) {
@@ -388,6 +406,55 @@ export default function CoursesAdminPage() {
                 </div>
               </div>
             </div>
+
+            {/* 33-step page content — only shown for 33-step course */}
+            {formData.name.includes('33') && (
+              <div className="border-t border-gray-200 pt-6 space-y-6">
+                <h3 className="text-lg font-bold text-gray-800">Səhifə Məzmunu (33 Addım)</h3>
+
+                {/* AZ */}
+                <div className="space-y-3 bg-gray-50 rounded-lg p-4">
+                  <p className="text-sm font-semibold text-gray-600 uppercase tracking-wider">AZ</p>
+                  {(['heading', 'intro', 'about', 'list_heading', 'outro'] as const).map(field => (
+                    <div key={field}>
+                      <label className="block text-xs font-semibold text-gray-500 mb-1 capitalize">{field.replace('_', ' ')}</label>
+                      <textarea rows={2} value={pageContent[field]} onChange={e => setPageContent({ ...pageContent, [field]: e.target.value })}
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" />
+                    </div>
+                  ))}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 mb-1">Siyahı (hər sətir ayrıca)</label>
+                    {pageContent.bullets.map((b, i) => (
+                      <input key={i} type="text" value={b}
+                        onChange={e => { const arr = [...pageContent.bullets]; arr[i] = e.target.value; setPageContent({ ...pageContent, bullets: arr }); }}
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg mb-1 focus:ring-2 focus:ring-primary focus:border-transparent"
+                        placeholder={`Maddə ${i + 1}`} />
+                    ))}
+                  </div>
+                </div>
+
+                {/* EN */}
+                <div className="space-y-3 bg-green-50 rounded-lg p-4">
+                  <p className="text-sm font-semibold text-green-700 uppercase tracking-wider">EN</p>
+                  {(['heading', 'intro', 'about', 'list_heading', 'outro'] as const).map(field => (
+                    <div key={field}>
+                      <label className="block text-xs font-semibold text-gray-500 mb-1 capitalize">{field.replace('_', ' ')}</label>
+                      <textarea rows={2} value={pageContentEn[field]} onChange={e => setPageContentEn({ ...pageContentEn, [field]: e.target.value })}
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" />
+                    </div>
+                  ))}
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 mb-1">Bullets (each on a line)</label>
+                    {pageContentEn.bullets.map((b, i) => (
+                      <input key={i} type="text" value={b}
+                        onChange={e => { const arr = [...pageContentEn.bullets]; arr[i] = e.target.value; setPageContentEn({ ...pageContentEn, bullets: arr }); }}
+                        className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg mb-1 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                        placeholder={`Item ${i + 1}`} />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="flex justify-between items-center">
               <div className="flex gap-4">

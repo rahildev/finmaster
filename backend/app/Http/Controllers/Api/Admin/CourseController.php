@@ -51,6 +51,13 @@ class CourseController extends Controller
             unset($data['image']);
         }
 
+        if ($request->has('page_content')) {
+            $data['page_content'] = json_decode($request->input('page_content'), true);
+        }
+        if ($request->has('page_content_en')) {
+            $data['page_content_en'] = json_decode($request->input('page_content_en'), true);
+        }
+
         $course = Course::create($data);
 
         return response()->json($course, 201);
@@ -96,9 +103,15 @@ class CourseController extends Controller
             $data['image_url'] = $this->uploadImage($request->file('image'), 'courses');
             unset($data['image']);
         } elseif ($request->has('delete_image') && $request->input('delete_image') === '1') {
-            // Şəkili sil
             $this->deleteImage($course->image_url);
             $data['image_url'] = null;
+        }
+
+        if ($request->has('page_content')) {
+            $data['page_content'] = json_decode($request->input('page_content'), true);
+        }
+        if ($request->has('page_content_en')) {
+            $data['page_content_en'] = json_decode($request->input('page_content_en'), true);
         }
 
         $course->update($data);
