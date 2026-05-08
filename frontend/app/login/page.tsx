@@ -27,9 +27,9 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-white to-primary/5 flex items-center justify-center p-4">
       <div className="w-full max-w-md mx-auto">
-        <div className="flex justify-center relative z-10 -mb-16 mt-8">
+        <div className="flex justify-center relative z-10 -mb-16 mt-8 overflow-hidden">
           <Link href="/" onClick={() => window.scrollTo({ top: 0 })}>
-            <img src="/brand/finmaster-logo.png" alt="FinMaster Academy" className="h-60 w-auto -translate-x-6 cursor-pointer" />
+            <img src="/brand/finmaster-logo.png" alt="FinMaster Academy" className="h-60 max-w-full w-auto -translate-x-6 cursor-pointer" />
           </Link>
         </div>
 
