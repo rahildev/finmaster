@@ -78,11 +78,11 @@ export default function Footer({ contacts }: FooterProps) {
   const whatsappHref = whatsapp ? `https://wa.me/${whatsapp.value.replace(/\D/g, '')}` : '#footer';
 
   return (
-    <footer id="footer" className="bg-[#f6f6f5] text-gray-800">
+    <footer id="footer" className="bg-[#f6f6f5] text-gray-800 border-t border-gray-900/[0.06]">
 
 
       <div className="max-w-7xl mx-auto px-6 lg:px-10 pt-12 pb-8">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12 divide-y divide-gray-900/[0.05] sm:divide-y-0">
 
           {/* Brand */}
           <div className="-ml-4">
