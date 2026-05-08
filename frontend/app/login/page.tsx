@@ -27,8 +27,8 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-white to-primary/5 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <img src="/brand/finmaster-logo.png" alt="FinMaster Academy" className="h-36 w-auto" />
+          <div className="flex justify-center mb-4 mt-8">
+            <img src="/brand/finmaster-logo.png" alt="FinMaster Academy" className="h-60 w-auto" />
           </div>
           <h2 className="text-xl font-semibold text-gray-dark">Admin Panel</h2>
         </div>
