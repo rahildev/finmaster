@@ -19,8 +19,8 @@ export default function FaqAccordion({ faqs }: { faqs: Faq[] }) {
   return (
     <div className="space-y-3">
       {faqs.map(faq => {
-        const question = language === 'en' && (faq as any).question_en ? (faq as any).question_en : faq.question;
-        const answer   = language === 'en' && (faq as any).answer_en   ? (faq as any).answer_en   : faq.answer;
+        const question = language === 'en' && faq.question_en ? faq.question_en : faq.question;
+        const answer   = language === 'en' && faq.answer_en   ? faq.answer_en   : faq.answer;
         const isOpen   = open === faq.id;
 
         return (

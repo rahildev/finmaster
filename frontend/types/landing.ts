@@ -65,7 +65,9 @@ export interface Video {
 export interface Faq {
   id: number;
   question: string;
+  question_en: string | null;
   answer: string;
+  answer_en: string | null;
   sort_order: number;
   is_active: boolean;
   created_at: string;
