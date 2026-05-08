@@ -107,7 +107,7 @@ export default function Footer({ contacts }: FooterProps) {
             <ul className="space-y-2.5">
               {infoContacts.map(c => (
                 <li key={c.id}>
-                  <a href={getInfoHref(c)} className="text-sm text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2">
+                  <a href={getInfoHref(c)} className="text-sm text-gray-600 hover:text-[#0A4D2C] transition-colors flex items-center gap-2">
                     {getInfoIcon(c.type)}
                     <span className="font-inter">{c.value}</span>
                   </a>
