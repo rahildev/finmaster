@@ -83,7 +83,14 @@ export default function LoginPage() {
           </form>
         </div>
 
-        <p className="text-center text-sm text-gray-500 mt-8" suppressHydrationWarning>
+        <p className="text-center text-sm text-gray-500 mt-6">
+          Hesabınız yoxdur?{' '}
+          <Link href="/register" className="text-[#0A4D2C] font-semibold hover:underline">
+            Qeydiyyatdan keçin
+          </Link>
+        </p>
+
+        <p className="text-center text-sm text-gray-500 mt-4" suppressHydrationWarning>
           © {new Date().getFullYear()} FinMaster Academy. Bütün hüquqlar qorunur.
         </p>
       </div>
