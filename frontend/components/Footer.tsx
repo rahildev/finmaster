@@ -1,13 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
-import type { Contact, Course } from '@/types/landing';
+import type { Contact } from '@/types/landing';
 
 interface FooterProps {
   contacts: Contact[];
-  courses?: Course[];
 }
 
 const SocialIcon = ({ type }: { type: string }) => {
@@ -34,21 +34,13 @@ const SocialIcon = ({ type }: { type: string }) => {
   return null;
 };
 
-export default function Footer({ contacts, courses = [] }: FooterProps) {
+export default function Footer({ contacts }: FooterProps) {
   const { language } = useLanguage();
   const currentYear = new Date().getFullYear();
+  const [certId, setCertId] = useState('');
 
-  const navLinks = [
-    { label: language === 'en' ? 'Home' : 'Ana Səhifə', href: '#hero' },
-    { label: language === 'en' ? 'Programs' : 'Proqramlar', href: '#courses' },
-    { label: language === 'en' ? 'About' : 'Haqqımızda', href: '#teacher' },
-    { label: language === 'en' ? 'Certificate' : 'Sertifikat', href: '#certificate' },
-    { label: language === 'en' ? 'Contact' : 'Əlaqə', href: '#footer' },
-  ];
-
-  const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  const handleVerify = (e: React.FormEvent) => {
     e.preventDefault();
-    document.getElementById(href.replace('#', ''))?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const socialContacts = contacts.filter(c => ['instagram', 'linkedin', 'youtube', 'tiktok'].includes(c.type));
@@ -75,28 +67,20 @@ export default function Footer({ contacts, courses = [] }: FooterProps) {
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
       </svg>
     );
-    if (type === 'phone' || type === 'whatsapp') return (
-      <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-      </svg>
-    );
     return (
       <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
       </svg>
     );
   };
 
   const whatsapp = contacts.find(c => c.type === 'whatsapp');
-  const whatsappHref = whatsapp
-    ? `https://wa.me/${whatsapp.value.replace(/\D/g, '')}`
-    : '#contact';
+  const whatsappHref = whatsapp ? `https://wa.me/${whatsapp.value.replace(/\D/g, '')}` : '#footer';
 
   return (
     <footer id="footer" className="bg-[#f6f6f5] text-gray-800">
 
-      {/* CTA Banner — footer-in üstündə */}
+      {/* CTA Banner */}
       <div className="bg-[#0A4D2C] py-10">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div>
@@ -113,7 +97,6 @@ export default function Footer({ contacts, courses = [] }: FooterProps) {
             href={whatsappHref}
             target={whatsapp ? '_blank' : undefined}
             rel={whatsapp ? 'noopener noreferrer' : undefined}
-            onClick={!whatsapp ? (e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); } : undefined}
             className="shrink-0 inline-flex items-center gap-2 bg-white text-[#0A4D2C] font-bold px-7 py-3 rounded-md hover:bg-gray-100 transition-colors text-sm whitespace-nowrap"
           >
             {language === 'en' ? 'Apply' : 'Müraciət Et'}
@@ -125,10 +108,10 @@ export default function Footer({ contacts, courses = [] }: FooterProps) {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-10 pt-12 pb-8">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
 
-          {/* Brand column */}
-          <div className="lg:col-span-1 -ml-4">
+          {/* Brand */}
+          <div className="-ml-4">
             <Link href="/" className="flex items-center gap-0 mb-3 group" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
               <div className="w-20 h-20 -my-1 flex-shrink-0 transition-transform duration-200 group-hover:scale-110">
                 <Image src="/brand/finmaster-icon.png" alt="FinMaster" width={80} height={80} unoptimized className="h-full w-auto object-contain" />
@@ -144,36 +127,31 @@ export default function Footer({ contacts, courses = [] }: FooterProps) {
             </p>
           </div>
 
-          {/* Keçidlər */}
-          <div className="lg:ml-16">
+          {/* Sertifikat Doğrulama */}
+          <div id="certificate" className="sm:col-span-2 lg:col-span-1">
             <h4 className="text-[11px] font-bold tracking-[0.15em] uppercase text-gray-400 mb-4">
-              {language === 'en' ? 'Links' : 'Keçidlər'}
+              {language === 'en' ? 'Verify Certificate' : 'Sertifikatı Doğrulayın'}
             </h4>
-            <ul className="space-y-2.5">
-              {navLinks.map(l => (
-                <li key={l.label}>
-                  <a href={l.href} onClick={(e) => scrollTo(e, l.href)} className="text-sm text-gray-600 hover:text-gray-900 transition-colors cursor-pointer">
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Proqramlar */}
-          <div>
-            <h4 className="text-[11px] font-bold tracking-[0.15em] uppercase text-gray-400 mb-4">
-              {language === 'en' ? 'Programs' : 'Proqramlar'}
-            </h4>
-            <ul className="space-y-2.5">
-              {courses.slice(0, 4).map(c => (
-                <li key={c.id}>
-                  <a href="#courses" onClick={(e) => { e.preventDefault(); document.getElementById('courses')?.scrollIntoView({ behavior: 'smooth' }); }} className="text-sm text-gray-600 hover:text-gray-900 transition-colors cursor-pointer">
-                    {language === 'en' && (c as any).name_en ? (c as any).name_en : c.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <p className="text-sm text-gray-500 mb-3">
+              {language === 'en'
+                ? 'Enter your certificate ID to verify.'
+                : 'Sertifikatınızı yoxlamaq üçün ID daxil edin.'}
+            </p>
+            <form onSubmit={handleVerify} className="flex gap-2">
+              <input
+                type="text"
+                value={certId}
+                onChange={e => setCertId(e.target.value)}
+                placeholder="Certificate ID"
+                className="flex-1 min-w-0 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#0A4D2C] focus:ring-1 focus:ring-[#0A4D2C] bg-white"
+              />
+              <button
+                type="submit"
+                className="shrink-0 bg-[#0A4D2C] text-white font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#0c5e35] transition-colors"
+              >
+                {language === 'en' ? 'Verify' : 'Doğrula'}
+              </button>
+            </form>
           </div>
 
           {/* Əlaqə */}

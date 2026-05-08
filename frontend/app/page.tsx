@@ -1,11 +1,6 @@
 import { getLandingPageData } from '@/lib/api';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
-import Features from '@/components/Features';
-import SystemSteps from '@/components/SystemSteps';
-import Courses from '@/components/Courses';
-import Teacher from '@/components/Teacher';
-import Certificate from '@/components/Certificate';
 import Footer from '@/components/Footer';
 
 export const revalidate = 60;
@@ -31,22 +26,17 @@ export default async function Home() {
 
   return (
     <div className="min-h-screen">
-      <Navbar sectionVisibility={sectionVisibility} />
+      <Navbar
+        sectionVisibility={sectionVisibility}
+        courses={data.courses}
+        contacts={data.contacts}
+      />
       <main>
         {sectionVisibility.hero !== false && (
           <Hero data={data.hero} contacts={data.contacts} />
         )}
-        <Features />
-        <SystemSteps />
-        {sectionVisibility.courses !== false && (
-          <Courses data={data.courses} contacts={data.contacts} />
-        )}
-        {sectionVisibility.teacher !== false && (
-          <Teacher data={data.teacher} contacts={data.contacts} />
-        )}
-        <Certificate />
       </main>
-      <Footer contacts={data.contacts} courses={data.courses} />
+      <Footer contacts={data.contacts} />
     </div>
   );
 }

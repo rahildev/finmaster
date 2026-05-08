@@ -1,18 +1,24 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
+import type { Course, Contact } from '@/types/landing';
 
 interface NavbarProps {
   sectionVisibility?: Record<string, boolean>;
+  courses?: Course[];
+  contacts?: Contact[];
 }
 
-export default function Navbar({ sectionVisibility = {} }: NavbarProps) {
+export default function Navbar({ sectionVisibility = {}, courses = [], contacts = [] }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [mobileAccordion, setMobileAccordion] = useState<string | null>(null);
   const { language, setLanguage } = useLanguage();
+  const navRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -20,38 +26,48 @@ export default function Navbar({ sectionVisibility = {} }: NavbarProps) {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setOpenDropdown(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const infoContacts = contacts.filter(c => ['phone', 'whatsapp', 'email'].includes(c.type));
+  const whatsapp = contacts.find(c => c.type === 'whatsapp');
+  const whatsappHref = whatsapp ? `https://wa.me/${whatsapp.value.replace(/\D/g, '')}` : '#footer';
+
   const navItems = [
-    { label: language === 'en' ? 'Home' : 'Ana Səhifə', href: '#hero' },
-    { label: language === 'en' ? 'Programs' : 'Proqramlar', href: '#courses' },
-    { label: language === 'en' ? 'About' : 'Haqqımızda', href: '#teacher' },
-    { label: language === 'en' ? 'Certificate' : 'Sertifikat', href: '#certificate' },
-    { label: language === 'en' ? 'Contact' : 'Əlaqə', href: '#footer' },
+    { key: 'home',        label: language === 'en' ? 'Home'        : 'Ana Səhifə',  href: '#hero',   dropdown: false },
+    { key: 'programs',    label: language === 'en' ? 'Programs'    : 'Proqramlar',  href: null,      dropdown: true  },
+    { key: 'about',       label: language === 'en' ? 'About'       : 'Haqqımızda', href: '#footer', dropdown: false },
+    { key: 'certificate', label: language === 'en' ? 'Certificate' : 'Sertifikat', href: '#footer', dropdown: false },
+    { key: 'contact',     label: language === 'en' ? 'Contact'     : 'Əlaqə',      href: null,      dropdown: true  },
   ];
 
-  const scrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    e.preventDefault();
+  const scrollTo = (href: string) => {
     const id = href.replace('#', '');
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
     setMobileMenuOpen(false);
+    setOpenDropdown(null);
+  };
+
+  const toggleDropdown = (key: string) => {
+    setOpenDropdown(prev => prev === key ? null : key);
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 bg-background transition-shadow duration-300 ${scrolled ? 'shadow-md' : 'border-b border-gray-100'}`}>
+    <nav ref={navRef} className={`fixed top-0 left-0 right-0 z-50 bg-background transition-shadow duration-300 ${scrolled ? 'shadow-md' : 'border-b border-gray-100'}`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-0 group" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <div className="relative w-20 h-20 flex-shrink-0 -my-4 -ml-2 transition-transform duration-200 group-hover:scale-110">
-              <Image
-                src="/brand/finmaster-icon.png"
-                alt="FinMaster"
-                width={80}
-                height={80}
-                priority
-                unoptimized
-                className="h-full w-auto object-contain"
-              />
+              <Image src="/brand/finmaster-icon.png" alt="FinMaster" width={80} height={80} priority unoptimized className="h-full w-auto object-contain" />
             </div>
             <div className="flex flex-col -ml-5">
               <span className="font-bold text-[16px] leading-tight tracking-tight text-[#0A4D2C]">FinMaster</span>
@@ -63,35 +79,92 @@ export default function Navbar({ sectionVisibility = {} }: NavbarProps) {
           {/* Desktop Nav */}
           <div className="hidden lg:flex items-center gap-1">
             {navItems.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                onClick={(e) => scrollTo(e, item.href)}
-                className="px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-gray-900 transition-colors"
-              >
-                {item.label}
-              </Link>
+              <div key={item.key} className="relative">
+                {item.dropdown ? (
+                  <button
+                    onClick={() => toggleDropdown(item.key)}
+                    className="flex items-center gap-1 px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-gray-900 transition-colors"
+                  >
+                    {item.label}
+                    <svg className={`w-3 h-3 transition-transform duration-200 ${openDropdown === item.key ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => item.href && scrollTo(item.href)}
+                    className="px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-gray-900 transition-colors"
+                  >
+                    {item.label}
+                  </button>
+                )}
+
+                {/* Proqramlar dropdown */}
+                {item.key === 'programs' && openDropdown === 'programs' && (
+                  <div className="absolute top-full left-0 mt-2 w-72 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
+                    {courses.length > 0 ? courses.map(c => (
+                      <div key={c.id} className="px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0">
+                        <div className="text-sm font-medium text-gray-800">
+                          {language === 'en' && (c as any).name_en ? (c as any).name_en : c.name}
+                        </div>
+                        <div className="flex gap-3 mt-1">
+                          {c.duration && <span className="text-xs text-gray-400">{c.duration}</span>}
+                          {parseFloat(c.price) > 0 && (
+                            <span className="text-xs font-semibold text-[#0A4D2C]">{parseFloat(c.price).toFixed(0)} ₼</span>
+                          )}
+                        </div>
+                      </div>
+                    )) : (
+                      <div className="px-4 py-4 text-sm text-gray-400">
+                        {language === 'en' ? 'No programs yet' : 'Proqram tapılmadı'}
+                      </div>
+                    )}
+                    <div className="px-4 py-3 bg-gray-50 border-t border-gray-100">
+                      <a href={whatsappHref} target="_blank" rel="noopener noreferrer"
+                        className="text-xs font-semibold text-[#0A4D2C] hover:underline"
+                        onClick={() => setOpenDropdown(null)}
+                      >
+                        {language === 'en' ? 'Apply via WhatsApp →' : 'WhatsApp ilə müraciət et →'}
+                      </a>
+                    </div>
+                  </div>
+                )}
+
+                {/* Əlaqə dropdown */}
+                {item.key === 'contact' && openDropdown === 'contact' && (
+                  <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
+                    <div className="px-4 py-3">
+                      {infoContacts.map(c => (
+                        <a
+                          key={c.id}
+                          href={
+                            c.type === 'whatsapp' ? `https://wa.me/${c.value.replace(/\D/g, '')}`
+                            : c.type === 'email' ? `mailto:${c.value}`
+                            : `tel:${c.value.replace(/\s/g, '')}`
+                          }
+                          target={c.type === 'whatsapp' ? '_blank' : undefined}
+                          rel={c.type === 'whatsapp' ? 'noopener noreferrer' : undefined}
+                          onClick={() => setOpenDropdown(null)}
+                          className="flex items-center gap-2 py-2 text-sm text-gray-700 hover:text-gray-900 transition-colors border-b border-gray-50 last:border-0"
+                        >
+                          <span className="text-xs text-gray-400 w-16 capitalize shrink-0">{c.type}</span>
+                          <span className="truncate">{c.value}</span>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
 
-          {/* Language + Mobile */}
+          {/* Language + Hamburger */}
           <div className="flex items-center gap-3">
             <div className="hidden lg:flex items-center gap-2 text-[13px] font-semibold text-gray-700">
-              <button
-                onClick={() => setLanguage('az')}
-                className={language === 'az' ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600 transition-colors'}
-              >
-                AZ
-              </button>
+              <button onClick={() => setLanguage('az')} className={language === 'az' ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600 transition-colors'}>AZ</button>
               <span className="text-gray-300">|</span>
-              <button
-                onClick={() => setLanguage('en')}
-                className={language === 'en' ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600 transition-colors'}
-              >
-                EN
-              </button>
+              <button onClick={() => setLanguage('en')} className={language === 'en' ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600 transition-colors'}>EN</button>
             </div>
-
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden p-2 text-gray-600 hover:text-gray-900 rounded-lg transition-colors"
@@ -107,17 +180,74 @@ export default function Navbar({ sectionVisibility = {} }: NavbarProps) {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-gray-100 py-3">
+          <div className="lg:hidden border-t border-gray-100 py-2">
             {navItems.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                onClick={(e) => scrollTo(e, item.href)}
-                className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-gray-900 rounded-lg"
-              >
-                {item.label}
-              </Link>
+              <div key={item.key}>
+                {item.dropdown ? (
+                  <>
+                    <button
+                      onClick={() => setMobileAccordion(prev => prev === item.key ? null : item.key)}
+                      className="w-full flex items-center justify-between px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-gray-900 rounded-lg"
+                    >
+                      {item.label}
+                      <svg className={`w-4 h-4 transition-transform duration-200 ${mobileAccordion === item.key ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+
+                    {mobileAccordion === item.key && (
+                      <div className="ml-2 mb-2 border-l-2 border-gray-100 pl-4">
+                        {item.key === 'programs' && (
+                          courses.length > 0 ? courses.map(c => (
+                            <div key={c.id} className="py-2 border-b border-gray-50 last:border-0">
+                              <div className="text-sm text-gray-700">
+                                {language === 'en' && (c as any).name_en ? (c as any).name_en : c.name}
+                              </div>
+                              <div className="flex gap-3 mt-0.5">
+                                {c.duration && <span className="text-xs text-gray-400">{c.duration}</span>}
+                                {parseFloat(c.price) > 0 && (
+                                  <span className="text-xs font-semibold text-[#0A4D2C]">{parseFloat(c.price).toFixed(0)} ₼</span>
+                                )}
+                              </div>
+                            </div>
+                          )) : (
+                            <p className="py-2 text-sm text-gray-400">
+                              {language === 'en' ? 'No programs yet' : 'Proqram tapılmadı'}
+                            </p>
+                          )
+                        )}
+                        {item.key === 'contact' && (
+                          <div className="space-y-1 py-1">
+                            {infoContacts.map(c => (
+                              <a
+                                key={c.id}
+                                href={
+                                  c.type === 'whatsapp' ? `https://wa.me/${c.value.replace(/\D/g, '')}`
+                                  : c.type === 'email' ? `mailto:${c.value}`
+                                  : `tel:${c.value.replace(/\s/g, '')}`
+                                }
+                                className="block py-1.5 text-sm text-gray-700 hover:text-gray-900"
+                              >
+                                <span className="text-xs text-gray-400 capitalize">{c.type}: </span>
+                                {c.value}
+                              </a>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <button
+                    onClick={() => { item.href && scrollTo(item.href); }}
+                    className="w-full text-left px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-gray-900 rounded-lg"
+                  >
+                    {item.label}
+                  </button>
+                )}
+              </div>
             ))}
+
             <div className="flex items-center gap-3 px-2 pt-3 border-t border-gray-100 mt-2">
               <button onClick={() => { setLanguage('az'); setMobileMenuOpen(false); }} className={`text-sm font-semibold ${language === 'az' ? 'text-gray-900' : 'text-gray-400'}`}>AZ</button>
               <span className="text-gray-300">|</span>
