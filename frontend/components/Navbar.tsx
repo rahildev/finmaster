@@ -16,6 +16,7 @@ interface NavbarProps {
 export default function Navbar({ sectionVisibility = {}, courses = [], contacts = [] }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileAccordion, setMobileAccordion] = useState<string | null>(null);
   const { language, setLanguage } = useLanguage();
@@ -35,7 +36,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
-      if (mobileMenuOpen) setMobileMenuOpen(false);
+      if (mobileMenuOpen) closeMobileMenu();
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -43,8 +44,18 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
 
   const infoContacts = contacts.filter(c => ['phone', 'whatsapp', 'email'].includes(c.type));
 
-  const scrollToHero = () => {
+  const openMobileMenu = () => {
+    setMobileMenuVisible(true);
+    requestAnimationFrame(() => setMobileMenuOpen(true));
+  };
+
+  const closeMobileMenu = () => {
     setMobileMenuOpen(false);
+    setTimeout(() => setMobileMenuVisible(false), 250);
+  };
+
+  const scrollToHero = () => {
+    closeMobileMenu();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -189,7 +200,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               <button onClick={() => setLanguage('en')} className={`transition-colors ${language === 'en' ? 'text-[#0A4D2C]' : 'text-gray-400 hover:text-[#0A4D2C]'}`}>EN</button>
             </div>
             <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              onClick={() => mobileMenuOpen ? closeMobileMenu() : openMobileMenu()}
               className="lg:hidden p-2 text-gray-600 hover:text-gray-900 rounded-lg transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -202,18 +213,18 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
         </div>
 
         {/* Overlay — kənara vuranda menyu bağlanır */}
-        {mobileMenuOpen && (
+        {mobileMenuVisible && (
           <div
             className="fixed inset-0 z-40 lg:hidden"
-            onClick={() => setMobileMenuOpen(false)}
+            onClick={closeMobileMenu}
           />
         )}
 
         {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-gray-100 py-2">
+        {mobileMenuVisible && (
+          <div className={`lg:hidden border-t border-gray-100 py-2 transition-all duration-250 ease-in-out origin-top ${mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}`}>
 
-            <Link href="/" onClick={() => setMobileMenuOpen(false)} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
+            <Link href="/" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
               {language === 'en' ? 'Home' : 'Ana Səhifə'}
             </Link>
 
@@ -234,7 +245,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
                     <Link
                       key={c.id}
                       href={`/programs/${c.id}`}
-                      onClick={() => setMobileMenuOpen(false)}
+                      onClick={closeMobileMenu}
                       className="block py-2 border-b border-gray-50 last:border-0"
                     >
                       <div className="text-sm text-gray-700">
@@ -254,11 +265,11 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               )}
             </div>
 
-            <Link href="/about" onClick={() => setMobileMenuOpen(false)} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
+            <Link href="/about" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
               {language === 'en' ? 'About' : 'Haqqımızda'}
             </Link>
 
-            <Link href="/videos" onClick={() => setMobileMenuOpen(false)} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
+            <Link href="/videos" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
               {language === 'en' ? 'Videos' : 'Video'}
             </Link>
 
@@ -310,14 +321,14 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               )}
             </div>
 
-            <Link href="/faq" onClick={() => setMobileMenuOpen(false)} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg border-t border-gray-100 mt-1 pt-3">
+            <Link href="/faq" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg border-t border-gray-100 mt-1 pt-3">
               FAQ
             </Link>
 
             <div className="flex items-center gap-3 px-2 pt-3 border-t border-gray-100 mt-2">
-              <button onClick={() => { setLanguage('az'); setMobileMenuOpen(false); }} className={`text-sm font-semibold transition-colors ${language === 'az' ? 'text-[#0A4D2C]' : 'text-gray-400 hover:text-[#0A4D2C]'}`}>AZ</button>
+              <button onClick={() => { setLanguage('az'); closeMobileMenu(); }} className={`text-sm font-semibold transition-colors ${language === 'az' ? 'text-[#0A4D2C]' : 'text-gray-400 hover:text-[#0A4D2C]'}`}>AZ</button>
               <span className="text-gray-300">|</span>
-              <button onClick={() => { setLanguage('en'); setMobileMenuOpen(false); }} className={`text-sm font-semibold transition-colors ${language === 'en' ? 'text-[#0A4D2C]' : 'text-gray-400 hover:text-[#0A4D2C]'}`}>EN</button>
+              <button onClick={() => { setLanguage('en'); closeMobileMenu(); }} className={`text-sm font-semibold transition-colors ${language === 'en' ? 'text-[#0A4D2C]' : 'text-gray-400 hover:text-[#0A4D2C]'}`}>EN</button>
             </div>
           </div>
         )}
