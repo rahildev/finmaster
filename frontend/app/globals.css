@@ -69,7 +69,7 @@ label,
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
-/* Dropdown / footer contact items — içinə nə əlavə olunsa avtomatik hover effekti alır */
+/* Navbar dropdown — rəng + cüzi böyümə */
 .hover-items > * {
   transition: color 0.3s ease, transform 0.3s ease;
   transform-origin: left;
@@ -78,6 +78,16 @@ label,
 .hover-items > *:hover a {
   color: #0A4D2C;
   transform: scale(1.03);
+}
+
+/* Footer contact — yalnız rəng dəyişir, hərəkət yoxdur */
+.hover-color > *,
+.hover-color > * a {
+  transition: color 0.3s ease;
+}
+.hover-color > *:hover,
+.hover-color > *:hover a {
+  color: #0A4D2C;
 }
 
 /* Apple-style smooth scrolling */
