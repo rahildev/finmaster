@@ -39,8 +39,6 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
   }, []);
 
   const infoContacts = contacts.filter(c => ['phone', 'whatsapp', 'email'].includes(c.type));
-  const whatsapp = contacts.find(c => c.type === 'whatsapp');
-  const whatsappHref = whatsapp ? `https://wa.me/${whatsapp.value.replace(/\D/g, '')}` : '#footer';
 
   const scrollToHero = () => {
     setMobileMenuOpen(false);
@@ -161,15 +159,6 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               FAQ
             </Link>
 
-            {/* Müraciət Et */}
-            <a
-              href={whatsappHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ml-8 px-4 py-1.5 text-[13px] font-semibold text-gray-800 border border-gray-400 rounded-md hover:bg-[#0A4D2C] hover:text-white hover:border-[#0A4D2C] transition-colors"
-            >
-              {language === 'en' ? 'Apply' : 'Müraciət Et'}
-            </a>
           </div>
 
           {/* Language + Hamburger */}
