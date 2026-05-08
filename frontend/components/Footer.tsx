@@ -80,32 +80,6 @@ export default function Footer({ contacts }: FooterProps) {
   return (
     <footer id="footer" className="bg-[#f6f6f5] text-gray-800">
 
-      {/* CTA Banner */}
-      <div className="bg-[#0A4D2C] py-10">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">
-              {language === 'en' ? 'Your next step begins with us.' : 'Növbəti addım sizinlə başlayır.'}
-            </h2>
-            <p className="text-white/60 text-sm">
-              {language === 'en'
-                ? 'Apply today and enter the path of professional development.'
-                : 'Bugün müraciət edin və peşəkar inkişaf yoluna daxil olun.'}
-            </p>
-          </div>
-          <a
-            href={whatsappHref}
-            target={whatsapp ? '_blank' : undefined}
-            rel={whatsapp ? 'noopener noreferrer' : undefined}
-            className="shrink-0 inline-flex items-center gap-2 bg-white text-[#0A4D2C] font-bold px-7 py-3 rounded-md hover:bg-gray-100 transition-colors text-sm whitespace-nowrap"
-          >
-            {language === 'en' ? 'Apply' : 'Müraciət Et'}
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-            </svg>
-          </a>
-        </div>
-      </div>
 
       <div className="max-w-7xl mx-auto px-6 lg:px-10 pt-12 pb-8">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
