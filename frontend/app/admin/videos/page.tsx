@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { getVideos, createVideo, updateVideo, deleteVideo } from '@/lib/admin-api';
-import type { Video } from '@/types/landing';
+import { getVideos, createVideo, updateVideo, deleteVideo, getCourses } from '@/lib/admin-api';
+import type { Video, Course } from '@/types/landing';
 
 export default function VideosAdminPage() {
   const [videos, setVideos] = useState<Video[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -21,6 +22,7 @@ export default function VideosAdminPage() {
     description_en: '',
     video_url: '',
     video_type: 'video' as 'video' | 'short',
+    course_id: '',
     is_active: true,
     sort_order: 0,
   });
@@ -29,6 +31,7 @@ export default function VideosAdminPage() {
 
   useEffect(() => {
     fetchVideos();
+    getCourses().then(setCourses).catch(() => {});
   }, []);
 
   const fetchVideos = async () => {
@@ -50,6 +53,7 @@ export default function VideosAdminPage() {
       description_en: '',
       video_url: '',
       video_type: 'video',
+      course_id: '',
       is_active: true,
       sort_order: 0,
     });
@@ -66,6 +70,7 @@ export default function VideosAdminPage() {
       description_en: (video as any).description_en || '',
       video_url: video.video_url || '',
       video_type: video.video_type || 'video',
+      course_id: video.course_id ? String(video.course_id) : '',
       is_active: video.is_active ?? true,
       sort_order: video.sort_order || 0,
     });
@@ -121,6 +126,7 @@ export default function VideosAdminPage() {
       data.append('description_en', formData.description_en);
       data.append('video_url', videoUrl);
       data.append('video_type', videoType);
+      if (formData.course_id) data.append('course_id', formData.course_id);
       data.append('is_active', formData.is_active ? '1' : '0');
       data.append('sort_order', formData.sort_order.toString());
 
@@ -276,6 +282,22 @@ export default function VideosAdminPage() {
               <p className="text-xs text-gray-500 mt-1">
                 İstənilən YouTube linki qəbul olunur - avtomatik növü tanıyacaq və embed formatına çevriləcək
               </p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                Kurs
+              </label>
+              <select
+                value={formData.course_id}
+                onChange={(e) => setFormData({ ...formData, course_id: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+              >
+                <option value="">— Kurs seçin —</option>
+                {courses.map(c => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
             </div>
 
             <div>
