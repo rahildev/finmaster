@@ -128,7 +128,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
                 {language === 'en' ? 'Programs' : 'Proqramlar'}
               </button>
               <div className="absolute top-full left-0 right-0 h-4" onMouseEnter={() => openDrop('programs')} />
-              <div onMouseEnter={() => openDrop('programs')} onMouseLeave={closeDrop} className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-72 bg-white rounded-xl shadow-xl border border-gray-100 overflow-visible z-50 transition-all duration-300 origin-top ${openDropdown === 'programs' ? 'opacity-100 scale-y-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-y-95 -translate-y-2 pointer-events-none'}`}>
+              <div onMouseEnter={() => openDrop('programs')} onMouseLeave={closeDrop} className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-72 bg-white rounded-xl shadow-xl border border-gray-100 overflow-visible z-50 transition-all duration-500 ease-in-out origin-top ${openDropdown === 'programs' ? 'opacity-100 scale-y-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-y-95 -translate-y-2 pointer-events-none'}`}>
                 <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-2 overflow-hidden">
                   <div className="w-3 h-3 bg-white border-l border-t border-gray-100 rotate-45 translate-y-1 mx-auto shadow-sm" />
                 </div>
@@ -162,7 +162,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
                 {language === 'en' ? 'Contact' : 'Əlaqə'}
               </button>
               <div className="absolute top-full left-0 right-0 h-4" onMouseEnter={() => openDrop('contact')} />
-              <div onMouseEnter={() => openDrop('contact')} onMouseLeave={closeDrop} className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 bg-white rounded-xl shadow-xl border border-gray-100 overflow-visible z-50 transition-all duration-300 origin-top ${openDropdown === 'contact' ? 'opacity-100 scale-y-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-y-95 -translate-y-2 pointer-events-none'}`}>
+              <div onMouseEnter={() => openDrop('contact')} onMouseLeave={closeDrop} className={`absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 bg-white rounded-xl shadow-xl border border-gray-100 overflow-visible z-50 transition-all duration-500 ease-in-out origin-top ${openDropdown === 'contact' ? 'opacity-100 scale-y-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-y-95 -translate-y-2 pointer-events-none'}`}>
                 <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-2 overflow-hidden">
                   <div className="w-3 h-3 bg-white border-l border-t border-gray-100 rotate-45 translate-y-1 mx-auto shadow-sm" />
                 </div>
