@@ -1,4 +1,5 @@
 import { getLandingPageData } from '@/lib/api';
+import Features from '@/components/Features';
 import Teacher from '@/components/Teacher';
 
 export const revalidate = 60;
@@ -17,6 +18,7 @@ export default async function AboutPage() {
 
   return (
     <div className="pt-16">
+      <Features />
       <Teacher data={data.teacher} contacts={data.contacts} />
     </div>
   );
