@@ -30,7 +30,7 @@ export default function LoginPage() {
         <div className="bg-white rounded-2xl shadow-xl border border-gray-200 px-8 pb-8 pt-8">
           <div className="flex justify-center mb-6">
             <Link href="/" onClick={() => window.scrollTo({ top: 0 })}>
-              <img src="/brand/finmaster-logo.png" alt="FinMaster Academy" className="h-32 w-auto cursor-pointer" />
+              <img src="/brand/finmaster-logo.png" alt="FinMaster Academy" className="h-48 w-auto cursor-pointer" />
             </Link>
           </div>
           <form onSubmit={handleSubmit} className="space-y-6">
