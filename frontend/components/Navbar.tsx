@@ -198,6 +198,14 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
           </div>
         </div>
 
+        {/* Overlay — kənara vuranda menyu bağlanır */}
+        {mobileMenuOpen && (
+          <div
+            className="fixed inset-0 z-40 lg:hidden"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+        )}
+
         {/* Mobile Menu */}
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-gray-100 py-2">
