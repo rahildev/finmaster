@@ -104,10 +104,10 @@ export default function Footer({ contacts }: FooterProps) {
             <h4 className="text-[11px] font-bold tracking-[0.15em] uppercase text-gray-400 mb-4">
               {language === 'en' ? 'Contact' : 'Əlaqə'}
             </h4>
-            <ul className="space-y-2.5">
+            <ul className="hover-items space-y-2.5">
               {infoContacts.map(c => (
                 <li key={c.id}>
-                  <a href={getInfoHref(c)} className="text-sm text-gray-600 hover:text-[#0A4D2C] transition-colors flex items-center gap-2">
+                  <a href={getInfoHref(c)} className="text-sm text-gray-600 flex items-center gap-2">
                     {getInfoIcon(c.type)}
                     <span className="font-inter">{c.value}</span>
                   </a>

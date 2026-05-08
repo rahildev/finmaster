@@ -69,6 +69,16 @@ label,
   font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
+/* Dropdown / footer contact items — içinə nə əlavə olunsa avtomatik hover effekti alır */
+.hover-items > * {
+  transition: color 0.3s ease, transform 0.3s ease;
+  transform-origin: left;
+}
+.hover-items > *:hover {
+  color: #0A4D2C;
+  transform: scale(1.03);
+}
+
 /* Apple-style smooth scrolling */
 * {
   -webkit-font-smoothing: antialiased;
