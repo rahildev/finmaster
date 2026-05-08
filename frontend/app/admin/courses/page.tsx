@@ -19,6 +19,8 @@ export default function CoursesAdminPage() {
   const [formData, setFormData] = useState({
     name: '',
     name_en: '',
+    heading: '',
+    heading_en: '',
     description: '',
     description_en: '',
     duration: '',
@@ -53,6 +55,8 @@ export default function CoursesAdminPage() {
     setFormData({
       name: '',
       name_en: '',
+      heading: '',
+      heading_en: '',
       description: '',
       description_en: '',
       duration: '',
@@ -75,11 +79,39 @@ export default function CoursesAdminPage() {
 
   const handleEdit = (course: Course) => {
     const imgUrl = course.image_url ? getImageUrl(course.image_url) : null;
+    const is33 = (course.name || '').includes('33');
+    const defaultHeadingAz = 'Güclü karyera, doğru sistemlə başlayır.';
+    const defaultHeadingEn = 'A strong career begins with the right system.';
+    const defaultDescAz = `"33 addımda mühasibat uçotu" ilə peşəkar inkişaf yolunuza bu gün başlaya bilmək imkanınız vardır.
+
+Finmaster Academiyasının akademik və sistemli tədris yanaşması ilə hazırlamış olduğu bu proqram, karyerasında güclü təməl qurmaq və peşəkar səviyyəyə yüksəlmək istəyənlər üçün nəzərdə tutulmuşdur.
+
+"33 Addımda Mühasibat uçotu" proqramı müddətində siz :
+• Mühasibatın uçotunun əsas strukturunu öyrənəcək ,
+• Maliyyə hesabatlarını analiz etmə bacarığınızı inkişaf etdirəcək ,
+• Real tətbiqlər üzərindən praktiki təcrübə qazanacaq ,
+• Müasir maliyyə sistemlərinə dair peşəkar baxış əldə edəcəksiniz.
+
+33 (otuz üç) dərs günündən, yəni 66 (altmış altı) saatdan ibarət proqram müddətində tələbələr məxsusi olaraq hazırlanmış dərs materialları və mənimsəmə dərəcəsini yüksəltmək məqsədilə seçilmiş yoxlama suallar ilə (düzgün cavablar daxil olmaqla) təmin olunmaqdadır.`;
+    const defaultDescEn = `With "Accounting in 33 Steps", you can start your professional development journey today.
+
+This program, developed with the academic and systematic teaching approach of Finmaster Academy, is designed for those who want to build a strong foundation in their career and advance to a professional level.
+
+During the "Accounting in 33 Steps" program, you will:
+• Learn the fundamental structure of accounting,
+• Develop your skills in analyzing financial statements,
+• Gain practical experience through real-world applications,
+• Obtain a professional perspective on modern financial systems.
+
+Throughout the program consisting of 33 (thirty-three) lesson days, i.e. 66 (sixty-six) hours, students are provided with specially prepared lesson materials and selected review questions (including correct answers) to enhance their level of comprehension.`;
+
     setFormData({
       name: course.name || '',
       name_en: (course as any).name_en || '',
-      description: course.description || '',
-      description_en: (course as any).description_en || '',
+      heading: (course as any).heading || (is33 ? defaultHeadingAz : ''),
+      heading_en: (course as any).heading_en || (is33 ? defaultHeadingEn : ''),
+      description: course.description || (is33 ? defaultDescAz : ''),
+      description_en: (course as any).description_en || (is33 ? defaultDescEn : ''),
       duration: course.duration || '',
       duration_en: (course as any).duration_en || '',
       price: course.price || '',
@@ -105,6 +137,8 @@ export default function CoursesAdminPage() {
       const data = new FormData();
       data.append('name', formData.name);
       data.append('name_en', formData.name_en);
+      data.append('heading', formData.heading);
+      data.append('heading_en', formData.heading_en);
       data.append('description', formData.description);
       data.append('description_en', formData.description_en);
       data.append('duration', formData.duration);
@@ -302,14 +336,40 @@ export default function CoursesAdminPage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Başlıq (AZ)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.heading}
+                    onChange={(e) => setFormData({ ...formData, heading: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="Güclü karyera, doğru sistemlə başlayır."
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Başlıq (EN)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.heading_en}
+                    onChange={(e) => setFormData({ ...formData, heading_en: e.target.value })}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="A strong career begins with the right system."
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Təsvir (AZ)
                   </label>
                   <textarea
-                    rows={3}
+                    rows={8}
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="Kurs haqqında qısa məlumat..."
+                    placeholder="Kurs haqqında məlumat..."
                   />
                 </div>
 
@@ -318,11 +378,11 @@ export default function CoursesAdminPage() {
                     Təsvir (EN)
                   </label>
                   <textarea
-                    rows={3}
+                    rows={8}
                     value={formData.description_en}
                     onChange={(e) => setFormData({ ...formData, description_en: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    placeholder="Brief description about the course..."
+                    placeholder="Course description..."
                   />
                 </div>
 

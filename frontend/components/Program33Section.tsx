@@ -6,16 +6,18 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Program33SectionProps {
   courseId: number;
+  headingAz: string | null;
+  headingEn: string | null;
   descriptionAz: string | null;
   descriptionEn: string | null;
 }
 
-export default function Program33Section({ courseId, descriptionAz, descriptionEn }: Program33SectionProps) {
+export default function Program33Section({ courseId, headingAz, headingEn, descriptionAz, descriptionEn }: Program33SectionProps) {
   const { language } = useLanguage();
 
   const heading = language === 'en'
-    ? 'A strong career begins with the right system.'
-    : 'Güclü karyera, doğru sistemlə başlayır.';
+    ? (headingEn || headingAz || 'A strong career begins with the right system.')
+    : (headingAz || 'Güclü karyera, doğru sistemlə başlayır.');
 
   const body = language === 'en'
     ? (descriptionEn || descriptionAz || '')
