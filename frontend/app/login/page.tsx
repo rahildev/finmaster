@@ -30,7 +30,6 @@ export default function LoginPage() {
           <div className="flex justify-center mb-4 mt-8">
             <img src="/brand/finmaster-logo.png" alt="FinMaster Academy" className="h-60 w-auto" />
           </div>
-          <h2 className="text-xl font-semibold text-gray-dark">Admin Panel</h2>
         </div>
 
         <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
