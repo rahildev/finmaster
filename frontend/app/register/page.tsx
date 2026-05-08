@@ -216,16 +216,14 @@ export default function RegisterPage() {
             >
               {loading ? 'Qeydiyyat aparılır...' : 'Qeydiyyatdan keç'}
             </button>
-          </form>
 
-          <div className="mt-6 pt-6 border-t border-gray-200 text-center">
-            <p className="text-sm text-gray-600">
+            <p className="font-inter text-center text-sm text-gray-500 mt-4">
               Artıq hesabınız var?{' '}
-              <Link href="/login" className="text-primary font-semibold hover:text-primary-dark">
+              <Link href="/login" className="text-[#0A4D2C] font-semibold hover:underline">
                 Daxil ol
               </Link>
             </p>
-          </div>
+          </form>
         </div>
 
         {/* Footer */}
