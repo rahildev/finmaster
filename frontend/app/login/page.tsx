@@ -28,7 +28,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-3 mb-4">
-            <img src="/brand/finmaster-icon.png" alt="Finmaster" className="h-16 w-auto" />
+            <img src="/brand/finmaster-icon.png" alt="Finmaster" className="h-24 w-auto" />
             <div className="text-left">
               <h1 className="text-2xl font-bold text-primary-dark">FinMaster</h1>
               <p className="text-sm text-primary font-semibold tracking-wider">ACADEMY</p>
