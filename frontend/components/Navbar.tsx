@@ -26,6 +26,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
     if (key === 'programs') return pathname.startsWith('/programs');
     if (key === 'about')    return pathname === '/about';
     if (key === 'faq')      return pathname === '/faq';
+    if (key === 'videos')   return pathname === '/videos';
     return false;
   };
 
@@ -113,9 +114,9 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               {language === 'en' ? 'About' : 'Haqqımızda'}
             </Link>
 
-            {/* Sertifikat */}
-            <Link href="/#certificate" className="px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors">
-              {language === 'en' ? 'Certificate' : 'Sertifikat'}
+            {/* Video */}
+            <Link href="/videos" className={`px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('videos') ? activeClass : ''}`}>
+              {language === 'en' ? 'Videos' : 'Video'}
             </Link>
 
             {/* Əlaqə — hover dropdown */}
@@ -240,8 +241,8 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               {language === 'en' ? 'About' : 'Haqqımızda'}
             </Link>
 
-            <Link href="/#certificate" onClick={() => setMobileMenuOpen(false)} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
-              {language === 'en' ? 'Certificate' : 'Sertifikat'}
+            <Link href="/videos" onClick={() => setMobileMenuOpen(false)} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
+              {language === 'en' ? 'Videos' : 'Video'}
             </Link>
 
             {/* Əlaqə accordion */}
