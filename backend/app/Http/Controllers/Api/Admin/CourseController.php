@@ -84,6 +84,8 @@ class CourseController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|string|max:255',
             'name_en' => 'sometimes|string|max:255',
+            'heading' => 'nullable|string|max:500',
+            'heading_en' => 'nullable|string|max:500',
             'description' => 'nullable|string',
             'description_en' => 'nullable|string',
             'duration' => 'nullable|string|max:255',

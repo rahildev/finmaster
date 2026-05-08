@@ -32,6 +32,8 @@ export interface Course {
   id: number;
   name: string;
   name_en: string | null;
+  heading: string | null;
+  heading_en: string | null;
   description: string | null;
   description_en: string | null;
   duration: string | null;
