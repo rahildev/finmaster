@@ -1,6 +1,6 @@
 import { getLandingPageData } from '@/lib/api';
 import type { Video } from '@/types/landing';
-import VideoCard from '@/components/VideoCard';
+import { VideoGrid } from '@/components/VideoCard';
 
 export const revalidate = 60;
 
@@ -43,11 +43,7 @@ export default async function VideosPage() {
               <div className="mt-2 mx-auto w-10 h-px bg-[#0A4D2C]" />
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              {group.videos.map(video => (
-                <VideoCard key={video.id} video={video} />
-              ))}
-            </div>
+            <VideoGrid videos={group.videos} />
           </div>
         ))}
 

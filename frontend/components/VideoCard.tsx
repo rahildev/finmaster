@@ -14,24 +14,25 @@ function getThumbnail(video: Video): string | null {
   return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
 }
 
-function getEmbedUrl(video: Video): string | null {
-  const id = getYoutubeId(video.video_url);
-  return id ? `https://www.youtube.com/embed/${id}?autoplay=1&rel=0` : null;
+interface VideoCardProps {
+  video: Video;
+  isActive: boolean;
+  onPlay: () => void;
 }
 
-export default function VideoCard({ video }: { video: Video }) {
-  const [playing, setPlaying] = useState(false);
+export function VideoCard({ video, isActive, onPlay }: VideoCardProps) {
+  const id = getYoutubeId(video.video_url);
   const thumb = getThumbnail(video);
-  const embedUrl = getEmbedUrl(video);
 
   return (
-    <div className="group rounded-xl overflow-hidden border border-gray-100 hover:border-[#0A4D2C]/30 hover:shadow-md transition-all">
+    <div className="rounded-xl overflow-hidden border border-gray-100 hover:border-[#0A4D2C]/30 hover:shadow-md transition-all">
       <div className="relative aspect-[9/16] bg-gray-100 overflow-hidden">
-        {playing && embedUrl ? (
+        {isActive && id ? (
           <iframe
-            src={embedUrl}
-            className="absolute inset-0 w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            src={`https://www.youtube.com/embed/${id}?autoplay=1&rel=0`}
+            className="absolute inset-0 w-full h-full border-0"
+            title={video.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           />
         ) : (
@@ -40,17 +41,13 @@ export default function VideoCard({ video }: { video: Video }) {
               <img
                 src={thumb}
                 alt={video.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-200">
-                <svg className="w-10 h-10 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </div>
+              <div className="w-full h-full bg-gray-200" />
             )}
             <button
-              onClick={() => setPlaying(true)}
+              onClick={onPlay}
               className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition-colors"
               aria-label={`Play ${video.title}`}
             >
@@ -64,10 +61,25 @@ export default function VideoCard({ video }: { video: Video }) {
         )}
       </div>
       <div className="px-4 py-3">
-        <p className="text-sm font-medium text-gray-800 line-clamp-2 group-hover:text-[#0A4D2C] transition-colors">
-          {video.title}
-        </p>
+        <p className="text-sm font-medium text-gray-800 line-clamp-2">{video.title}</p>
       </div>
+    </div>
+  );
+}
+
+export function VideoGrid({ videos }: { videos: Video[] }) {
+  const [activeId, setActiveId] = useState<number | null>(null);
+
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+      {videos.map(video => (
+        <VideoCard
+          key={video.id}
+          video={video}
+          isActive={activeId === video.id}
+          onPlay={() => setActiveId(video.id)}
+        />
+      ))}
     </div>
   );
 }
