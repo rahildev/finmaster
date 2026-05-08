@@ -94,7 +94,7 @@ export default function Footer({ contacts }: FooterProps) {
                 ? ['Simple.', 'Systematic.', 'Logical.']
                 : ['Sistemli.', 'Sadə.', 'Lojik.']
               ).map(word => (
-                <span key={word} className="font-inter text-[13px] font-semibold text-gray-600 leading-snug">— {word}</span>
+                <span key={word} className="font-inter text-[13px] font-semibold text-gray-600 leading-snug">– {word}</span>
               ))}
             </div>
           </div>
