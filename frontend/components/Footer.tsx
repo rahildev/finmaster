@@ -179,10 +179,10 @@ export default function Footer({ contacts }: FooterProps) {
 
         {/* Bottom bar */}
         <div className="border-t border-gray-200 pt-6 flex flex-col items-center gap-2">
-          <p className="font-inter text-gray-400 text-sm text-center" suppressHydrationWarning>
+          <p className="font-inter text-gray-400 text-xs text-center" suppressHydrationWarning>
             © {currentYear} Finmaster Academy. {language === 'en' ? 'All rights reserved.' : 'Bütün hüquqlar qorunur.'}
           </p>
-          <div className="font-inter flex gap-5 text-sm text-gray-400">
+          <div className="font-inter flex gap-5 text-xs text-gray-400">
             <span className="hover:text-gray-700 cursor-pointer transition-colors">Privacy Policy</span>
             <span className="hover:text-gray-700 cursor-pointer transition-colors">Terms of Use</span>
           </div>

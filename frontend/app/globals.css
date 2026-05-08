@@ -36,8 +36,14 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-cormorant), Georgia, serif;
-  font-size: 18px;
+  font-size: 20px;
   scroll-behavior: smooth;
+}
+
+/* Footer və nav öz ölçülərini saxlasın */
+footer,
+nav {
+  font-size: 1rem;
 }
 
 .font-inter {

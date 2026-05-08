@@ -56,7 +56,7 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
                   </ul>
                 </div>
 
-                <p className="text-gray-600 leading-relaxed text-sm">
+                <p className="text-gray-600 leading-relaxed">
                   <span className="font-semibold text-gray-800">33 (otuz üç) dərs günündən</span>, yəni <span className="font-semibold text-gray-800">66 (altmış altı) saatdan</span> ibarət proqram müddətində tələbələr məxsusi olaraq hazırlanmış dərs materialları və mənimsəmə dərəcəsini yüksəltmək məqsədilə seçilmiş yoxlama suallar ilə (düzgün cavablar daxil olmaqla) təmin olunmaqdadır.
                 </p>
               </div>
@@ -77,9 +77,9 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
                 <div className="flex justify-end">
                   <Link
                     href={`/videos#course-${course.id}`}
-                    className="font-inter inline-flex items-center gap-2 border border-[#0A4D2C] text-[#0A4D2C] font-semibold px-6 py-3 rounded-xl hover:bg-[#0A4D2C] hover:text-white transition-colors"
+                    className="font-inter inline-flex items-center gap-1.5 text-sm border border-[#0A4D2C] text-[#0A4D2C] font-semibold px-4 py-2 rounded-lg hover:bg-[#0A4D2C] hover:text-white transition-colors"
                   >
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M8 5v14l11-7z" />
                     </svg>
                     Videolara keçid

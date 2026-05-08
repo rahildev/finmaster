@@ -65,7 +65,7 @@ export default function Teacher({ data, contacts = [] }: TeacherProps) {
             </p>
 
             {/* Name */}
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">{teacher.name}</h2>
+            <h2 className="font-[family-name:var(--font-cormorant)] text-3xl sm:text-4xl font-bold text-gray-900 mb-2">{teacher.name}</h2>
 
             {/* Title in green */}
             {title && (
@@ -74,31 +74,8 @@ export default function Teacher({ data, contacts = [] }: TeacherProps) {
 
             {/* Bio */}
             {bio && (
-              <p className="text-gray-500 text-base leading-relaxed mb-8">{bio}</p>
+              <p className="text-gray-500 text-lg leading-relaxed italic">{bio}</p>
             )}
-
-            {/* Signature */}
-            <div className="mb-8">
-              <span className="font-['Georgia',serif] italic text-2xl text-gray-700">
-                T. {teacher.name.split(' ').slice(-1)[0]}
-              </span>
-            </div>
-
-            {/* Button */}
-            <div>
-              <a
-                href={whatsappHref}
-                target={whatsapp ? '_blank' : undefined}
-                rel={whatsapp ? 'noopener noreferrer' : undefined}
-                onClick={!whatsapp ? (e) => { e.preventDefault(); document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); } : undefined}
-                className="inline-flex items-center gap-2 bg-[#0A4D2C] text-white font-semibold px-6 py-3.5 rounded-md hover:bg-[#0c5e35] transition-colors text-sm"
-              >
-                {language === 'en' ? 'Learn more' : 'Ətraflı məlumat'}
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                </svg>
-              </a>
-            </div>
           </motion.div>
 
         </div>

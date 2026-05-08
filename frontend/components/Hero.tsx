@@ -80,7 +80,7 @@ export default function Hero({ data, contacts = [] }: HeroProps) {
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.2 }}
-                className="text-lg text-gray-500 leading-relaxed"
+                className="text-xl text-gray-500 leading-relaxed"
               >
                 {subtitle}
               </motion.p>
@@ -120,7 +120,7 @@ export default function Hero({ data, contacts = [] }: HeroProps) {
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="text-base text-gray-500 leading-relaxed"
+              className="text-lg text-gray-500 leading-relaxed"
             >
               {subtitle}
             </motion.p>
