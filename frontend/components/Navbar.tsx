@@ -81,7 +81,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               </button>
 
               {openDropdown === 'programs' && (
-                <div className="absolute top-full left-0 mt-0 w-72 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-72 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
                   {courses.length > 0 ? courses.map(c => (
                     <Link
                       key={c.id}
@@ -128,7 +128,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               </button>
 
               {openDropdown === 'contact' && (
-                <div className="absolute top-full right-0 mt-0 w-64 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
+                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-64 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
                   <div className="px-4 py-2">
                     {infoContacts.map(c => (
                       <a
