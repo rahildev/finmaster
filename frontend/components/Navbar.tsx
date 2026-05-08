@@ -33,10 +33,13 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
   const activeClass = 'border-b-2 border-b-gray-900';
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 10);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+      if (mobileMenuOpen) setMobileMenuOpen(false);
+    };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [mobileMenuOpen]);
 
   const infoContacts = contacts.filter(c => ['phone', 'whatsapp', 'email'].includes(c.type));
 
