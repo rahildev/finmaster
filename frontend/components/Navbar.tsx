@@ -137,10 +137,6 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
                     <div className="text-sm font-medium text-gray-800">
                       {language === 'en' && (c as any).name_en ? (c as any).name_en : c.name}
                     </div>
-                    <div className="flex gap-3 mt-1">
-                      {c.duration && <span className="text-xs text-gray-400">{c.duration}</span>}
-                      {parseFloat(c.price) > 0 && <span className="text-xs font-semibold text-[#0A4D2C]">{parseFloat(c.price).toFixed(0)} ₼</span>}
-                    </div>
                   </Link>
                 )) : (
                   <div className="px-4 py-4 text-sm text-gray-400">{language === 'en' ? 'No programs yet' : 'Proqram tapılmadı'}</div>
