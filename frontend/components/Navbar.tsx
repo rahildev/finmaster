@@ -174,9 +174,9 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
           {/* Language + Hamburger */}
           <div className="flex items-center gap-3">
             <div className="hidden lg:flex items-center gap-2 text-[13px] font-semibold text-gray-700">
-              <button onClick={() => setLanguage('az')} className={language === 'az' ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600 transition-colors'}>AZ</button>
+              <button onClick={() => setLanguage('az')} className={`transition-colors ${language === 'az' ? 'text-[#0A4D2C]' : 'text-gray-400 hover:text-[#0A4D2C]'}`}>AZ</button>
               <span className="text-gray-300">|</span>
-              <button onClick={() => setLanguage('en')} className={language === 'en' ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600 transition-colors'}>EN</button>
+              <button onClick={() => setLanguage('en')} className={`transition-colors ${language === 'en' ? 'text-[#0A4D2C]' : 'text-gray-400 hover:text-[#0A4D2C]'}`}>EN</button>
             </div>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -280,9 +280,9 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
             </Link>
 
             <div className="flex items-center gap-3 px-2 pt-3 border-t border-gray-100 mt-2">
-              <button onClick={() => { setLanguage('az'); setMobileMenuOpen(false); }} className={`text-sm font-semibold ${language === 'az' ? 'text-gray-900' : 'text-gray-400'}`}>AZ</button>
+              <button onClick={() => { setLanguage('az'); setMobileMenuOpen(false); }} className={`text-sm font-semibold transition-colors ${language === 'az' ? 'text-[#0A4D2C]' : 'text-gray-400 hover:text-[#0A4D2C]'}`}>AZ</button>
               <span className="text-gray-300">|</span>
-              <button onClick={() => { setLanguage('en'); setMobileMenuOpen(false); }} className={`text-sm font-semibold ${language === 'en' ? 'text-gray-900' : 'text-gray-400'}`}>EN</button>
+              <button onClick={() => { setLanguage('en'); setMobileMenuOpen(false); }} className={`text-sm font-semibold transition-colors ${language === 'en' ? 'text-[#0A4D2C]' : 'text-gray-400 hover:text-[#0A4D2C]'}`}>EN</button>
             </div>
           </div>
         )}
