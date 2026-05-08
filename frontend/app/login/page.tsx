@@ -80,17 +80,17 @@ export default function LoginPage() {
             >
               {loading ? 'Giriş edilir...' : 'Daxil ol'}
             </button>
+
+            <p className="text-center text-sm text-gray-500 mt-4">
+              Hesabınız yoxdur?{' '}
+              <Link href="/register" className="text-[#0A4D2C] font-semibold hover:underline">
+                Qeydiyyatdan keçin
+              </Link>
+            </p>
           </form>
         </div>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
-          Hesabınız yoxdur?{' '}
-          <Link href="/register" className="text-[#0A4D2C] font-semibold hover:underline">
-            Qeydiyyatdan keçin
-          </Link>
-        </p>
-
-        <p className="text-center text-sm text-gray-500 mt-4" suppressHydrationWarning>
+        <p className="text-center text-sm text-gray-500 mt-6" suppressHydrationWarning>
           © {new Date().getFullYear()} FinMaster Academy. Bütün hüquqlar qorunur.
         </p>
       </div>
