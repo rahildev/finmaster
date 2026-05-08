@@ -18,15 +18,8 @@ export default async function VideosPage() {
 
   courses.forEach(course => {
     const courseVideos = videos.filter(v => v.course_id === course.id);
-    if (courseVideos.length > 0) {
-      grouped.push({ courseId: course.id, courseName: course.name, videos: courseVideos });
-    }
+    grouped.push({ courseId: course.id, courseName: course.name, videos: courseVideos });
   });
-
-  const uncategorized = videos.filter(v => !v.course_id);
-  if (uncategorized.length > 0) {
-    grouped.push({ courseId: null, courseName: 'Digər videolar', videos: uncategorized });
-  }
 
   return (
     <section className="pt-28 pb-20 bg-background min-h-screen">

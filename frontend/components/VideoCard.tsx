@@ -200,6 +200,10 @@ function ShortsViewer({
 export function VideoGrid({ videos }: { videos: Video[] }) {
   const [viewerIndex, setViewerIndex] = useState<number | null>(null);
 
+  if (videos.length === 0) {
+    return <p className="text-center text-gray-400 text-sm py-4">Videolar tezliklə əlavə ediləcək.</p>;
+  }
+
   return (
     <>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
