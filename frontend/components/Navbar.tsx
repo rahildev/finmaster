@@ -133,8 +133,8 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
                   <div className="w-3 h-3 bg-white border-l border-t border-gray-100 rotate-45 translate-y-1 mx-auto shadow-sm" />
                 </div>
                 {courses.length > 0 ? courses.map(c => (
-                  <Link key={c.id} href={`/programs/${c.id}`} className="block px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0">
-                    <div className="text-sm font-medium text-gray-800">
+                  <Link key={c.id} href={`/programs/${c.id}`} className="block px-4 py-3 transition-colors group">
+                    <div className="text-sm font-medium text-gray-800 group-hover:text-[#0A4D2C] transition-colors">
                       {language === 'en' && (c as any).name_en ? (c as any).name_en : c.name}
                     </div>
                   </Link>
