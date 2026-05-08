@@ -190,8 +190,12 @@ export default function Footer({ contacts }: FooterProps) {
             © {currentYear} Finmaster Academy. {language === 'en' ? 'All rights reserved.' : 'Bütün hüquqlar qorunur.'}
           </p>
           <div className="font-inter flex gap-5 text-xs text-gray-400">
-            <span className="hover:text-gray-700 cursor-pointer transition-colors">Privacy Policy</span>
-            <span className="hover:text-gray-700 cursor-pointer transition-colors">Terms of Use</span>
+            <Link href="/privacy" className="hover:text-[#0A4D2C] transition-colors">
+              {language === 'en' ? 'Privacy Policy' : 'Məxfilik Siyasəti'}
+            </Link>
+            <Link href="/terms" className="hover:text-[#0A4D2C] transition-colors">
+              {language === 'en' ? 'Terms of Use' : 'İstifadə Şərtləri'}
+            </Link>
           </div>
         </div>
       </div>
