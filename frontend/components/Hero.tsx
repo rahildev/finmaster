@@ -100,7 +100,7 @@ export default function Hero({ data, contacts = [] }: HeroProps) {
             transition={{ duration: 0.6 }}
             className="mb-4"
           >
-            <span className="text-[11px] font-bold tracking-[0.2em] text-gray-500">
+            <span className="font-inter text-[11px] font-bold tracking-[0.2em] text-gray-500">
               {language === 'en' ? 'Systematic. Simple. Logical.' : 'Sistemli. Sadə. Lojik.'}
             </span>
             <div className="w-7 h-px bg-gray-400 mt-2" />
