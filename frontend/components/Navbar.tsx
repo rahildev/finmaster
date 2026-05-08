@@ -60,6 +60,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
   };
 
   return (
+    <>
     <nav className={`fixed top-0 left-0 right-0 z-50 bg-background transition-shadow duration-300 ${scrolled ? 'shadow-md' : 'border-b border-gray-100'}`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="flex items-center justify-between h-16">
@@ -212,14 +213,6 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
           </div>
         </div>
 
-        {/* Overlay — kənara vuranda menyu bağlanır */}
-        {mobileMenuVisible && (
-          <div
-            className="fixed inset-0 z-40 lg:hidden"
-            onClick={closeMobileMenu}
-          />
-        )}
-
         {/* Mobile Menu */}
         {mobileMenuVisible && (
           <div className={`lg:hidden border-t border-gray-100 overflow-hidden transition-[max-height,opacity] ease-in-out ${mobileMenuOpen ? 'max-h-[600px] opacity-100 duration-300' : 'max-h-0 opacity-0 duration-300'}`}>
@@ -336,5 +329,14 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
         )}
       </div>
     </nav>
+
+    {/* Overlay — nav-dan kənarda, z-40 menyu linklərinə mane olmur */}
+    {mobileMenuVisible && (
+      <div
+        className="fixed inset-0 z-40 lg:hidden"
+        onClick={closeMobileMenu}
+      />
+    )}
+    </>
   );
 }
