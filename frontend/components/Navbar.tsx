@@ -159,7 +159,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
             {/* Giriş / Qeydiyyat */}
             <div className="flex items-center gap-2 ml-3 pl-3 border-l border-gray-200">
               <Link href="/login" className={`px-3 py-1.5 text-[13px] font-medium border border-gray-300 rounded-md text-gray-700 hover:border-[#0A4D2C] hover:text-[#0A4D2C] transition-colors ${isActive('login') ? 'border-[#0A4D2C] text-[#0A4D2C]' : ''}`}>
-                {language === 'en' ? 'Login' : 'Giriş'}
+                {language === 'en' ? 'Login' : 'Daxil ol'}
               </Link>
               <Link href="/register" className={`px-3 py-1.5 text-[13px] font-semibold bg-[#0A4D2C] text-white rounded-md hover:bg-[#0c5e35] transition-colors`}>
                 {language === 'en' ? 'Register' : 'Qeydiyyat'}
@@ -301,7 +301,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
             {/* Giriş / Qeydiyyat */}
             <div className="flex gap-2 px-2 pt-3 mt-1 border-t border-gray-100">
               <Link href="/login" onClick={closeMobileMenu} className="flex-1 text-center py-2 text-sm font-medium border border-gray-300 rounded-md text-gray-700 hover:border-[#0A4D2C] hover:text-[#0A4D2C] transition-colors">
-                {language === 'en' ? 'Login' : 'Giriş'}
+                {language === 'en' ? 'Login' : 'Daxil ol'}
               </Link>
               <Link href="/register" onClick={closeMobileMenu} className="flex-1 text-center py-2 text-sm font-semibold bg-[#0A4D2C] text-white rounded-md hover:bg-[#0c5e35] transition-colors">
                 {language === 'en' ? 'Register' : 'Qeydiyyat'}
