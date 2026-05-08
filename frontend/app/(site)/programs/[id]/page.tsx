@@ -9,19 +9,13 @@ export const revalidate = 60;
 export default async function ProgramPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   let course;
-  let whatsapp;
 
   try {
     const data = await getLandingPageData();
     course = data.courses.find(c => c.id === Number(id));
-    whatsapp = data.contacts.find((c: any) => c.type === 'whatsapp');
   } catch {}
 
   if (!course) return notFound();
-
-  const whatsappHref = whatsapp
-    ? `https://wa.me/${whatsapp.value.replace(/\D/g, '')}`
-    : '#footer';
 
   const is33Step = course.name.includes('33');
 
@@ -74,29 +68,15 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
             <p className="text-gray-600 leading-relaxed mb-10">{course.description}</p>
           )}
 
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <a
-              href={whatsappHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-[#0A4D2C] text-white font-semibold px-8 py-4 rounded-xl hover:bg-[#0c5e35] transition-colors"
-            >
-              WhatsApp ilə müraciət et
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-              </svg>
-            </a>
-
-            <Link
-              href={`/videos#course-${course.id}`}
-              className="inline-flex items-center gap-2 border border-[#0A4D2C] text-[#0A4D2C] font-semibold px-6 py-4 rounded-xl hover:bg-[#0A4D2C] hover:text-white transition-colors"
-            >
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-              Videolara keçid
-            </Link>
-          </div>
+          <Link
+            href={`/videos#course-${course.id}`}
+            className="inline-flex items-center gap-2 border border-[#0A4D2C] text-[#0A4D2C] font-semibold px-6 py-4 rounded-xl hover:bg-[#0A4D2C] hover:text-white transition-colors"
+          >
+            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            Videolara keçid
+          </Link>
 
         </div>
       </section>
