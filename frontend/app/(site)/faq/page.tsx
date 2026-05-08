@@ -1,11 +1,12 @@
 import { getLandingPageData } from '@/lib/api';
+import type { Faq } from '@/types/landing';
 import FaqAccordion from '@/components/FaqAccordion';
 import FaqPageHeader from '@/components/FaqPageHeader';
 
 export const revalidate = 60;
 
 export default async function FaqPage() {
-  let faqs = [];
+  let faqs: Faq[] = [];
   try {
     const data = await getLandingPageData();
     faqs = data.faqs || [];
