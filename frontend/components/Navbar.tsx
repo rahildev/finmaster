@@ -70,8 +70,8 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-0 group" onClick={scrollToHero}>
-            <div className="relative w-20 h-20 flex-shrink-0 -my-4 -ml-2 transition-transform duration-200 group-hover:scale-110">
-              <Image src="/brand/finmaster-icon.png" alt="FinMaster" width={80} height={80} priority unoptimized className="h-full w-auto object-contain" />
+            <div className="relative w-28 h-28 flex-shrink-0 -my-6 -ml-2 transition-transform duration-200 group-hover:scale-110">
+              <Image src="/brand/finmaster-icon.png" alt="FinMaster" width={112} height={112} priority unoptimized className="h-full w-auto object-contain" />
             </div>
             <div className="flex flex-col -ml-5">
               <span className="font-bold text-[16px] leading-tight tracking-tight text-[#0A4D2C]">FinMaster</span>
