@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/contexts/LanguageContext';
 import type { Course, Contact } from '@/types/landing';
 
@@ -18,6 +19,16 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileAccordion, setMobileAccordion] = useState<string | null>(null);
   const { language, setLanguage } = useLanguage();
+  const pathname = usePathname();
+
+  const isActive = (key: string) => {
+    if (key === 'home')     return pathname === '/';
+    if (key === 'programs') return pathname.startsWith('/programs');
+    if (key === 'faq')      return pathname === '/faq';
+    return false;
+  };
+
+  const activeClass = 'border-b-2 border-b-gray-900';
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -55,7 +66,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
           <div className="hidden lg:flex items-center gap-1">
 
             {/* Ana Səhifə */}
-            <Link href="/" className="px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-[#0A4D2C] hover:text-white rounded-md transition-colors">
+            <Link href="/" className={`px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('home') ? activeClass : ''}`}>
               {language === 'en' ? 'Home' : 'Ana Səhifə'}
             </Link>
 
@@ -65,11 +76,8 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               onMouseEnter={() => setOpenDropdown('programs')}
               onMouseLeave={() => setOpenDropdown(null)}
             >
-              <button className="flex items-center gap-1 px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-[#0A4D2C] hover:text-white rounded-md transition-colors">
+              <button className={`px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('programs') ? activeClass : ''}`}>
                 {language === 'en' ? 'Programs' : 'Proqramlar'}
-                <svg className={`w-3 h-3 transition-transform duration-200 ${openDropdown === 'programs' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
               </button>
 
               {openDropdown === 'programs' && (
@@ -107,12 +115,12 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
             </div>
 
             {/* Haqqımızda */}
-            <Link href="/#footer" className="px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-[#0A4D2C] hover:text-white rounded-md transition-colors">
+            <Link href="/#footer" className="px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors">
               {language === 'en' ? 'About' : 'Haqqımızda'}
             </Link>
 
             {/* Sertifikat */}
-            <Link href="/#certificate" className="px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-[#0A4D2C] hover:text-white rounded-md transition-colors">
+            <Link href="/#certificate" className="px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors">
               {language === 'en' ? 'Certificate' : 'Sertifikat'}
             </Link>
 
@@ -122,11 +130,8 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               onMouseEnter={() => setOpenDropdown('contact')}
               onMouseLeave={() => setOpenDropdown(null)}
             >
-              <button className="flex items-center gap-1 px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-[#0A4D2C] hover:text-white rounded-md transition-colors">
+              <button className="px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors">
                 {language === 'en' ? 'Contact' : 'Əlaqə'}
-                <svg className={`w-3 h-3 transition-transform duration-200 ${openDropdown === 'contact' ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
               </button>
 
               {openDropdown === 'contact' && (
@@ -142,7 +147,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
                         }
                         target={c.type === 'whatsapp' ? '_blank' : undefined}
                         rel={c.type === 'whatsapp' ? 'noopener noreferrer' : undefined}
-                        className="flex items-center gap-2 py-2.5 text-sm text-gray-700 hover:bg-[#0A4D2C] hover:text-white rounded-md transition-colors border-b border-gray-50 last:border-0"
+                        className="flex items-center gap-2 py-2.5 text-sm text-gray-700 hover:text-[#0A4D2C] transition-colors border-b border-gray-50 last:border-0"
                       >
                         <span className="text-xs text-gray-400 w-16 capitalize shrink-0">{c.type}</span>
                         <span className="truncate">{c.value}</span>
@@ -156,10 +161,20 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
             {/* FAQ — sağda ayrı */}
             <Link
               href="/faq"
-              className="ml-2 px-4 py-2 text-[13px] font-medium text-gray-700 hover:bg-[#0A4D2C] hover:text-white rounded-md transition-colors border-l border-gray-200"
+              className={`ml-2 px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors border-l border-gray-200 ${isActive('faq') ? activeClass : ''}`}
             >
               FAQ
             </Link>
+
+            {/* Müraciət Et */}
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-8 px-4 py-1.5 text-[13px] font-semibold text-gray-800 border border-gray-400 rounded-md hover:bg-[#0A4D2C] hover:text-white hover:border-[#0A4D2C] transition-colors"
+            >
+              {language === 'en' ? 'Apply' : 'Müraciət Et'}
+            </a>
           </div>
 
           {/* Language + Hamburger */}

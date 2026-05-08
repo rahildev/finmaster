@@ -122,9 +122,14 @@ export default function Footer({ contacts }: FooterProps) {
                 <span className="hidden lg:block font-semibold text-[6.5px] leading-tight tracking-[0.12em] text-gray-500 whitespace-nowrap">ACCOUNTING & FINANCE TRAINING</span>
               </div>
             </Link>
-            <p className="text-gray-500 text-sm mt-3">
-              {language === 'en' ? 'Simple. Systematic. Logical.' : 'Sistemli. Sadə. Lojik.'}
-            </p>
+            <div className="mt-2 ml-8 flex flex-col gap-0.5">
+              {(language === 'en'
+                ? ['Simple.', 'Systematic.', 'Logical.']
+                : ['Sistemli.', 'Sadə.', 'Lojik.']
+              ).map(word => (
+                <span key={word} className="text-[10px] font-medium text-gray-700 leading-snug">— {word}</span>
+              ))}
+            </div>
           </div>
 
           {/* Sertifikat Doğrulama */}
