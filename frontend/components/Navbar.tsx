@@ -24,6 +24,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
   const isActive = (key: string) => {
     if (key === 'home')     return pathname === '/';
     if (key === 'programs') return pathname.startsWith('/programs');
+    if (key === 'about')    return pathname === '/about';
     if (key === 'faq')      return pathname === '/faq';
     return false;
   };
@@ -115,7 +116,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
             </div>
 
             {/* Haqqımızda */}
-            <Link href="/#footer" className="px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors">
+            <Link href="/about" className={`px-4 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('about') ? activeClass : ''}`}>
               {language === 'en' ? 'About' : 'Haqqımızda'}
             </Link>
 
@@ -242,7 +243,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               )}
             </div>
 
-            <Link href="/#footer" onClick={() => setMobileMenuOpen(false)} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
+            <Link href="/about" onClick={() => setMobileMenuOpen(false)} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
               {language === 'en' ? 'About' : 'Haqqımızda'}
             </Link>
 
