@@ -29,7 +29,7 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <div className="inline-flex items-center mb-4">
             <img src="/brand/finmaster-icon.png" alt="Finmaster" className="h-32 w-auto" />
-            <div className="text-left -ml-3">
+            <div className="text-left -ml-6">
               <h1 className="text-2xl font-bold text-primary-dark">FinMaster</h1>
               <p className="text-sm text-primary font-semibold tracking-wider">ACADEMY</p>
             </div>
