@@ -250,17 +250,9 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
                       key={c.id}
                       href={`/programs/${c.id}`}
                       onClick={closeMobileMenu}
-                      className="block py-2 border-b border-gray-50 last:border-0"
+                      className="block py-2 text-sm text-gray-700"
                     >
-                      <div className="text-sm text-gray-700">
-                        {language === 'en' && (c as any).name_en ? (c as any).name_en : c.name}
-                      </div>
-                      <div className="flex gap-3 mt-0.5">
-                        {c.duration && <span className="text-xs text-gray-400">{c.duration}</span>}
-                        {parseFloat(c.price) > 0 && (
-                          <span className="text-xs font-semibold text-[#0A4D2C]">{parseFloat(c.price).toFixed(0)} ₼</span>
-                        )}
-                      </div>
+                      {language === 'en' && (c as any).name_en ? (c as any).name_en : c.name}
                     </Link>
                   )) : (
                     <p className="py-2 text-sm text-gray-400">{language === 'en' ? 'No programs yet' : 'Proqram tapılmadı'}</p>
