@@ -4,7 +4,7 @@ import type { Video } from '@/types/landing';
 export const revalidate = 60;
 
 function getYoutubeThumbnail(url: string): string | null {
-  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+  const match = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([^&?\s/]+)/);
   return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : null;
 }
 
@@ -28,7 +28,6 @@ function VideoCard({ video }: { video: Video }) {
             </svg>
           </div>
         )}
-        {/* Play overlay */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
           <div className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center">
             <svg className="w-5 h-5 text-[#0A4D2C] ml-0.5" fill="currentColor" viewBox="0 0 24 24">
@@ -56,7 +55,6 @@ export default async function VideosPage() {
     courses = data.courses || [];
   } catch {}
 
-  // Group videos by course_id
   const grouped: { courseId: number | null; courseName: string; videos: Video[] }[] = [];
 
   courses.forEach(course => {
@@ -66,7 +64,6 @@ export default async function VideosPage() {
     }
   });
 
-  // Videos without a course
   const uncategorized = videos.filter(v => !v.course_id);
   if (uncategorized.length > 0) {
     grouped.push({ courseId: null, courseName: 'Digər videolar', videos: uncategorized });
@@ -76,20 +73,14 @@ export default async function VideosPage() {
     <section className="pt-28 pb-20 bg-background min-h-screen">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
 
-        <div className="mb-12 text-center">
-          <p className="text-[11px] font-bold tracking-[0.2em] text-[#0A4D2C] uppercase mb-3">Videolar</p>
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">Video Dərslər</h1>
-        </div>
-
         {grouped.length === 0 && (
           <p className="text-center text-gray-400">Hələ video yoxdur.</p>
         )}
 
         {grouped.map((group, i) => (
-          <div key={group.courseId ?? 'other'} className={i > 0 ? 'mt-16' : ''}>
-            {/* Section header */}
+          <div key={group.courseId ?? 'other'} id={group.courseId ? `course-${group.courseId}` : 'other'} className={i > 0 ? 'mt-20' : 'mt-4'}>
             <div className="text-center mb-8">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">{group.courseName}</h2>
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">{group.courseName}</h2>
               <div className="mt-2 mx-auto w-10 h-px bg-[#0A4D2C]" />
             </div>
 
