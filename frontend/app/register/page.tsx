@@ -217,7 +217,7 @@ export default function RegisterPage() {
               {loading ? 'Qeydiyyat aparılır...' : 'Qeydiyyatdan keç'}
             </button>
 
-            <p className="font-inter text-center text-sm text-gray-500 mt-4">
+            <p className="font-inter text-center text-xs text-gray-500 mt-4">
               Artıq hesabınız var?{' '}
               <Link href="/login" className="text-[#0A4D2C] font-semibold hover:underline">
                 Daxil ol

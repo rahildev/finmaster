@@ -81,7 +81,7 @@ export default function LoginPage() {
               {loading ? 'Giriş edilir...' : 'Daxil ol'}
             </button>
 
-            <p className="font-inter text-center text-sm text-gray-500 mt-4">
+            <p className="font-inter text-center text-xs text-gray-500 mt-4">
               Hesabınız yoxdur?{' '}
               <Link href="/register" className="text-[#0A4D2C] font-semibold hover:underline">
                 Qeydiyyatdan keçin
