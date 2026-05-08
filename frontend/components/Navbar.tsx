@@ -51,7 +51,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
 
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
-    setTimeout(() => setMobileMenuVisible(false), 250);
+    setTimeout(() => setMobileMenuVisible(false), 300);
   };
 
   const scrollToHero = () => {
@@ -222,7 +222,8 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
 
         {/* Mobile Menu */}
         {mobileMenuVisible && (
-          <div className={`lg:hidden border-t border-gray-100 py-2 transition-all duration-250 ease-in-out origin-top ${mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-2'}`}>
+          <div className={`lg:hidden border-t border-gray-100 overflow-hidden transition-[max-height,opacity] ease-in-out ${mobileMenuOpen ? 'max-h-[600px] opacity-100 duration-300' : 'max-h-0 opacity-0 duration-300'}`}>
+            <div className="py-2">
 
             <Link href="/" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
               {language === 'en' ? 'Home' : 'Ana Səhifə'}
@@ -330,6 +331,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               <span className="text-gray-300">|</span>
               <button onClick={() => { setLanguage('en'); closeMobileMenu(); }} className={`text-sm font-semibold transition-colors ${language === 'en' ? 'text-[#0A4D2C]' : 'text-gray-400 hover:text-[#0A4D2C]'}`}>EN</button>
             </div>
+          </div>
           </div>
         )}
       </div>
