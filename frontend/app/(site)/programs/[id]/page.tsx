@@ -26,8 +26,8 @@ export default async function ProgramPage({ params }: { params: Promise<{ id: st
       {is33Step ? (
         <Program33Section
           courseId={course.id}
-          contentAz={(course as any).page_content ?? null}
-          contentEn={(course as any).page_content_en ?? null}
+          descriptionAz={course.description ?? null}
+          descriptionEn={(course as any).description_en ?? null}
         />
       ) : (
         <section className="pt-10 pb-20">
