@@ -138,6 +138,7 @@ export default function VideosAdminPage() {
 
       resetForm();
       await fetchVideos();
+      await fetch('/api/revalidate', { method: 'POST' }).catch(() => {});
     } catch (error: any) {
       const errorMessage = error?.response?.data?.message || error?.message || 'Xəta baş verdi!';
       setMessage({ type: 'error', text: errorMessage });
@@ -340,7 +341,7 @@ export default function VideosAdminPage() {
                 style={{ position: 'relative', zIndex: 10 }}
                 className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {saving ? 'Yadda saxlanılır...' : editingId ? 'Yenilə' : 'Yadda Saxla'}
+                {saving ? 'Yadda saxlanılır...' : 'Yadda Saxla'}
               </button>
               <button
                 type="button"

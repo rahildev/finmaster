@@ -163,6 +163,7 @@ Throughout the program consisting of 33 (thirty-three) lesson days, i.e. 66 (six
 
       resetForm();
       await fetchCourses();
+      await fetch('/api/revalidate', { method: 'POST' }).catch(() => {});
     } catch (error: any) {
       const errorMessage = error?.response?.data?.message || error?.message || 'Xəta baş verdi!';
       setMessage({ type: 'error', text: errorMessage });
