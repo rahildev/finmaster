@@ -74,7 +74,8 @@ label,
   transition: color 0.3s ease, transform 0.3s ease;
   transform-origin: left;
 }
-.hover-items > *:hover {
+.hover-items > *:hover,
+.hover-items > *:hover a {
   color: #0A4D2C;
   transform: scale(1.03);
 }
