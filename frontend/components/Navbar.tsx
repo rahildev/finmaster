@@ -104,13 +104,6 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
                       {language === 'en' ? 'No programs yet' : 'Proqram tapılmadı'}
                     </div>
                   )}
-                  <div className="px-4 py-3 bg-gray-50 border-t border-gray-100">
-                    <a href={whatsappHref} target="_blank" rel="noopener noreferrer"
-                      className="text-xs font-semibold text-[#0A4D2C] hover:underline"
-                    >
-                      {language === 'en' ? 'Apply via WhatsApp →' : 'WhatsApp ilə müraciət et →'}
-                    </a>
-                  </div>
                 </div>
               )}
             </div>
