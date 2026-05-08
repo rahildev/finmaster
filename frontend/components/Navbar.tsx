@@ -209,10 +209,10 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
 
           {/* Language + Hamburger */}
           <div className="flex items-center gap-3">
-            <div className="hidden lg:flex items-center gap-2 text-[13px] font-semibold text-gray-700">
-              <button onClick={() => setLanguage('az')} className={`transition-colors pb-0.5 ${language === 'az' ? 'text-[#0A4D2C] border-b-2 border-b-[#0A4D2C]' : 'text-gray-400 hover:text-[#0A4D2C]'}`}>AZ</button>
-              <span className="text-gray-300">|</span>
-              <button onClick={() => setLanguage('en')} className={`transition-colors pb-0.5 ${language === 'en' ? 'text-[#0A4D2C] border-b-2 border-b-[#0A4D2C]' : 'text-gray-400 hover:text-[#0A4D2C]'}`}>EN</button>
+            <div className="hidden lg:flex items-center gap-1.5 font-semibold text-gray-700">
+              <button onClick={() => setLanguage('az')} className={`text-[11px] transition-colors pb-0.5 ${language === 'az' ? 'text-[#0A4D2C] border-b-2 border-b-[#0A4D2C]' : 'text-gray-400 hover:text-[#0A4D2C]'}`}>AZ</button>
+              <span className="text-[11px] text-gray-300">|</span>
+              <button onClick={() => setLanguage('en')} className={`text-[11px] transition-colors pb-0.5 ${language === 'en' ? 'text-[#0A4D2C] border-b-2 border-b-[#0A4D2C]' : 'text-gray-400 hover:text-[#0A4D2C]'}`}>EN</button>
             </div>
             <button
               onClick={() => mobileMenuOpen ? closeMobileMenu() : openMobileMenu()}

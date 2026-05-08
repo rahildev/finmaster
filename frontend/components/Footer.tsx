@@ -43,7 +43,7 @@ export default function Footer({ contacts }: FooterProps) {
     e.preventDefault();
   };
 
-  const socialContacts = contacts.filter(c => ['instagram', 'linkedin', 'youtube', 'tiktok'].includes(c.type));
+  const socialContacts = contacts.filter(c => ['instagram', 'linkedin', 'youtube'].includes(c.type));
   const infoContacts = contacts.filter(c => ['phone', 'whatsapp', 'email'].includes(c.type));
 
   const getSocialHref = (c: Contact) => {
@@ -139,7 +139,7 @@ export default function Footer({ contacts }: FooterProps) {
                     <SocialIcon type={c.type} />
                   </a>
                 ))
-                : ['instagram', 'linkedin', 'youtube', 'tiktok'].map(type => (
+                : ['instagram', 'linkedin', 'youtube'].map(type => (
                   <span key={type} className="text-gray-300">
                     <SocialIcon type={type} />
                   </span>

@@ -40,10 +40,16 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Footer və nav öz ölçülərini saxlasın */
-footer,
-nav {
-  font-size: 1rem;
+/* Footer, nav, form elementləri Cormorant 20px-dən təsirlənməsin */
+@layer base {
+  footer,
+  nav,
+  input,
+  textarea,
+  select,
+  button {
+    font-size: 1rem;
+  }
 }
 
 .font-inter {
