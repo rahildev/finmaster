@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from 'react';
 import type { Video } from '@/types/landing';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 function getYoutubeId(url: string): string | null {
   const match = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([^&?\s/]+)/);
@@ -18,8 +19,11 @@ function getThumbnail(video: Video): string | null {
 
 function VideoGridCard({ video, onOpen }: { video: Video; onOpen: () => void }) {
   const [hovered, setHovered] = useState(false);
+  const { language } = useLanguage();
   const id = getYoutubeId(video.video_url);
   const thumb = getThumbnail(video);
+  const title = language === 'en' && video.title_en ? video.title_en : video.title;
+  const description = language === 'en' ? (video.description_en || video.description) : video.description;
 
   return (
     <div
@@ -61,7 +65,10 @@ function VideoGridCard({ video, onOpen }: { video: Video; onOpen: () => void }) 
       </div>
 
       <div className="px-4 py-3">
-        <p className="text-sm font-medium text-gray-800 line-clamp-2">{video.title}</p>
+        <p className="text-sm font-medium text-gray-800 line-clamp-2">{title}</p>
+        {description && (
+          <p className="text-xs text-gray-500 mt-1 line-clamp-2">{description}</p>
+        )}
       </div>
     </div>
   );
@@ -79,6 +86,7 @@ function ShortsViewer({
   onClose: () => void;
 }) {
   const [index, setIndex] = useState(initialIndex);
+  const { language } = useLanguage();
   const scrolling = useRef(false);
 
   const goNext = useCallback(() => setIndex(i => Math.min(i + 1, videos.length - 1)), [videos.length]);
@@ -163,7 +171,9 @@ function ShortsViewer({
       </div>
 
       {/* Title */}
-      <p className="mt-3 text-white/80 text-sm text-center max-w-xs px-4 line-clamp-1">{video.title}</p>
+      <p className="mt-3 text-white/80 text-sm text-center max-w-xs px-4 line-clamp-1">
+        {language === 'en' && video.title_en ? video.title_en : video.title}
+      </p>
 
       {/* Up / Down arrows */}
       <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2">

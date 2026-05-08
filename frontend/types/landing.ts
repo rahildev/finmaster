@@ -49,7 +49,9 @@ export interface Course {
 export interface Video {
   id: number;
   title: string;
+  title_en: string | null;
   description: string | null;
+  description_en: string | null;
   video_url: string;
   video_type: 'video' | 'short';
   thumbnail_url: string | null;
