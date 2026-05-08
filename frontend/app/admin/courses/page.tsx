@@ -91,10 +91,37 @@ export default function CoursesAdminPage() {
       sort_order: course.sort_order || 0,
       is_active: course.is_active ?? true,
     });
+    const is33 = (course.name || '').includes('33');
     const pc = (course as any).page_content;
     const pce = (course as any).page_content_en;
-    setPageContent(pc && Object.keys(pc).length > 0 ? { ...emptyContent, ...pc, bullets: pc.bullets?.length ? pc.bullets : ['', '', '', ''] } : emptyContent);
-    setPageContentEn(pce && Object.keys(pce).length > 0 ? { ...emptyContent, ...pce, bullets: pce.bullets?.length ? pce.bullets : ['', '', '', ''] } : emptyContent);
+    const defaultAz = is33 ? {
+      heading: 'Güclü karyera, doğru sistemlə başlayır.',
+      intro: '"33 addımda mühasibat uçotu" ilə peşəkar inkişaf yolunuza bu gün başlaya bilmək imkanınız vardır.',
+      about: 'Finmaster Academiyasının akademik və sistemli tədris yanaşması ilə hazırlamış olduğu bu proqram, karyerasında güclü təməl qurmaq və peşəkar səviyyəyə yüksəlmək istəyənlər üçün nəzərdə tutulmuşdur.',
+      list_heading: '"33 Addımda Mühasibat uçotu" proqramı müddətində siz :',
+      bullets: [
+        'Mühasibatın uçotunun əsas strukturunu öyrənəcək ,',
+        'Maliyyə hesabatlarını analiz etmə bacarığınızı inkişaf etdirəcək ,',
+        'Real tətbiqlər üzərindən praktiki təcrübə qazanacaq ,',
+        'Müasir maliyyə sistemlərinə dair peşəkar baxış əldə edəcəksiniz.',
+      ],
+      outro: '33 (otuz üç) dərs günündən, yəni 66 (altmış altı) saatdan ibarət proqram müddətində tələbələr məxsusi olaraq hazırlanmış dərs materialları və mənimsəmə dərəcəsini yüksəltmək məqsədilə seçilmiş yoxlama suallar ilə (düzgün cavablar daxil olmaqla) təmin olunmaqdadır.',
+    } : emptyContent;
+    const defaultEn = is33 ? {
+      heading: 'A strong career begins with the right system.',
+      intro: 'With "Accounting in 33 Steps", you can start your professional development journey today.',
+      about: 'This program, developed with the academic and systematic teaching approach of Finmaster Academy, is designed for those who want to build a strong foundation in their career and advance to a professional level.',
+      list_heading: 'During the "Accounting in 33 Steps" program, you will:',
+      bullets: [
+        'Learn the fundamental structure of accounting,',
+        'Develop your skills in analyzing financial statements,',
+        'Gain practical experience through real-world applications,',
+        'Obtain a professional perspective on modern financial systems.',
+      ],
+      outro: 'Throughout the program consisting of 33 (thirty-three) lesson days, i.e. 66 (sixty-six) hours, students are provided with specially prepared lesson materials and selected review questions (including correct answers) to enhance their level of comprehension.',
+    } : emptyContent;
+    setPageContent(pc && Object.keys(pc).length > 0 ? { ...emptyContent, ...pc, bullets: pc.bullets?.length ? pc.bullets : defaultAz.bullets } : defaultAz);
+    setPageContentEn(pce && Object.keys(pce).length > 0 ? { ...emptyContent, ...pce, bullets: pce.bullets?.length ? pce.bullets : defaultEn.bullets } : defaultEn);
     setImagePreview(imgUrl);
     setOriginalImageUrl(imgUrl);
     setShouldDeleteImage(false);
