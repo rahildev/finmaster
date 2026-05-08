@@ -87,8 +87,8 @@ export default function Footer({ contacts }: FooterProps) {
           {/* Brand */}
           <div className="-ml-4">
             <Link href="/" className="flex items-center gap-0 mb-3 group" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              <div className="w-20 h-20 -my-1 flex-shrink-0 transition-transform duration-200 group-hover:scale-110">
-                <Image src="/brand/finmaster-icon.png" alt="FinMaster" width={80} height={80} unoptimized className="h-full w-auto object-contain" />
+              <div className="w-28 h-28 -my-3 flex-shrink-0 transition-transform duration-200 group-hover:scale-110">
+                <Image src="/brand/finmaster-icon.png" alt="FinMaster" width={112} height={112} unoptimized className="h-full w-auto object-contain" />
               </div>
               <div className="flex flex-col -ml-3">
                 <span className="font-bold text-[16px] leading-tight tracking-tight text-[#0A4D2C]">FinMaster</span>
