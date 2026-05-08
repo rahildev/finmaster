@@ -6,13 +6,14 @@ import SystemSteps from '@/components/SystemSteps';
 
 export const revalidate = 60;
 
-export default async function ProgramPage({ params }: { params: { id: string } }) {
+export default async function ProgramPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   let course;
   let whatsapp;
 
   try {
     const data = await getLandingPageData();
-    course = data.courses.find(c => c.id === Number(params.id));
+    course = data.courses.find(c => c.id === Number(id));
     whatsapp = data.contacts.find((c: any) => c.type === 'whatsapp');
   } catch {}
 
