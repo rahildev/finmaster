@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Cormorant_Garamond } from "next/font/google";
 import { cookies } from "next/headers";
 import "./globals.css";
@@ -17,6 +17,12 @@ const cormorant = Cormorant_Garamond({
   display: "swap",
   weight: ["300", "400", "500", "600", "700"],
 });
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+};
 
 export const metadata: Metadata = {
   title: "Finmaster Academy - Mühasibatlıq və Maliyyə Təhsili",
