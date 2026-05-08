@@ -153,7 +153,7 @@ export default function Footer({ contacts }: FooterProps) {
             <h4 className="text-[11px] font-bold tracking-[0.15em] uppercase text-gray-400 mb-4">
               {language === 'en' ? 'Verify Certificate' : 'Sertifikatı Doğrulayın'}
             </h4>
-            <p className="font-inter text-sm text-gray-500 mb-3">
+            <p className="font-inter text-xs text-gray-500 mb-3">
               {language === 'en'
                 ? 'Enter your certificate ID to verify.'
                 : 'Sertifikatınızı yoxlamaq üçün ID daxil edin.'}
