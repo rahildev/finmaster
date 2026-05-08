@@ -1,12 +1,13 @@
 import { getLandingPageData } from '@/lib/api';
 import type { Video } from '@/types/landing';
 import { VideoGrid } from '@/components/VideoCard';
+import CourseSectionHeading from '@/components/CourseSectionHeading';
 
 export const revalidate = 60;
 
 export default async function VideosPage() {
   let videos: Video[] = [];
-  let courses: { id: number; name: string }[] = [];
+  let courses: { id: number; name: string; name_en: string | null }[] = [];
 
   try {
     const data = await getLandingPageData();
@@ -14,11 +15,11 @@ export default async function VideosPage() {
     courses = data.courses || [];
   } catch {}
 
-  const grouped: { courseId: number | null; courseName: string; videos: Video[] }[] = [];
+  const grouped: { courseId: number; name: string; name_en: string | null; videos: Video[] }[] = [];
 
   courses.forEach(course => {
     const courseVideos = videos.filter(v => v.course_id === course.id);
-    grouped.push({ courseId: course.id, courseName: course.name, videos: courseVideos });
+    grouped.push({ courseId: course.id, name: course.name, name_en: course.name_en ?? null, videos: courseVideos });
   });
 
   return (
@@ -30,12 +31,8 @@ export default async function VideosPage() {
         )}
 
         {grouped.map((group, i) => (
-          <div key={group.courseId ?? 'other'} id={group.courseId ? `course-${group.courseId}` : 'other'} className={i > 0 ? 'mt-20' : 'mt-4'}>
-            <div className="text-center mb-8">
-              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">{group.courseName}</h2>
-              <div className="mt-2 mx-auto w-10 h-px bg-[#0A4D2C]" />
-            </div>
-
+          <div key={group.courseId} id={`course-${group.courseId}`} className={i > 0 ? 'mt-20' : 'mt-4'}>
+            <CourseSectionHeading name={group.name} nameEn={group.name_en} />
             <VideoGrid videos={group.videos} />
           </div>
         ))}

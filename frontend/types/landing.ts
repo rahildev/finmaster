@@ -31,8 +31,11 @@ export interface TeacherInfo {
 export interface Course {
   id: number;
   name: string;
+  name_en: string | null;
   description: string | null;
+  description_en: string | null;
   duration: string | null;
+  duration_en: string | null;
   price: string;
   image_url: string | null;
   sort_order: number;
