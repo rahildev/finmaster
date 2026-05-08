@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function LoginPage() {
@@ -25,14 +26,14 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-white to-primary/5 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4 mt-8">
-            <img src="/brand/finmaster-logo.png" alt="FinMaster Academy" className="h-60 w-auto" />
-          </div>
+      <div className="w-full max-w-md mx-auto">
+        <div className="flex justify-center relative z-10 -mb-16 mt-8">
+          <Link href="/" onClick={() => window.scrollTo({ top: 0 })}>
+            <img src="/brand/finmaster-logo.png" alt="FinMaster Academy" className="h-60 w-auto -translate-x-6 cursor-pointer" />
+          </Link>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 px-8 pb-8 pt-20">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">

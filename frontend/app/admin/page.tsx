@@ -81,7 +81,7 @@ export default function AdminDashboard() {
           <div className="text-5xl mb-4">🔒</div>
           <h2 className="text-xl font-semibold text-gray-dark mb-2">İcazə yoxdur</h2>
           <p className="text-gray-600">
-            Hal-hazırda heç bir bölməyə giriş icazəniz yoxdur. Super admin ilə əlaqə saxlayın.
+            Hal-hazırda heç bir bölməyə giriş icazəniz yoxdur. Admin ilə əlaqə saxlayın.
           </p>
         </div>
       ) : (

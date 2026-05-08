@@ -19,18 +19,44 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
   const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileAccordion, setMobileAccordion] = useState<string | null>(null);
+  const [activeSection, setActiveSection] = useState<string>('');
   const { language, setLanguage } = useLanguage();
   const pathname = usePathname();
 
+  useEffect(() => {
+    if (pathname !== '/') { setActiveSection(''); return; }
+    const map: Record<string, string> = {
+      hero: 'home', courses: 'programs', teacher: 'about', contact: 'contact',
+    };
+    const observers: IntersectionObserver[] = [];
+    Object.keys(map).forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveSection(map[id]); },
+        { threshold: 0.3 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+    return () => observers.forEach(o => o.disconnect());
+  }, [pathname]);
+
   const isActive = (key: string) => {
-    if (key === 'home')     return pathname === '/';
-    if (key === 'programs') return pathname.startsWith('/programs');
-    if (key === 'videos')   return pathname === '/videos';
-    if (key === 'blog')     return pathname.startsWith('/blog');
-    if (key === 'about')    return pathname === '/about';
-    if (key === 'faq')      return pathname === '/faq';
-    if (key === 'login')    return pathname === '/login';
-    if (key === 'register') return pathname === '/register';
+    if (pathname !== '/') {
+      if (key === 'programs') return pathname.startsWith('/programs');
+      if (key === 'videos')   return pathname === '/videos';
+      if (key === 'blog')     return pathname.startsWith('/blog');
+      if (key === 'about')    return pathname === '/about';
+      if (key === 'faq')      return pathname === '/faq';
+      if (key === 'login')    return pathname === '/login';
+      if (key === 'register') return pathname === '/register';
+      return false;
+    }
+    if (key === 'home')     return activeSection === 'home' || activeSection === '';
+    if (key === 'programs') return activeSection === 'programs';
+    if (key === 'about')    return activeSection === 'about';
+    if (key === 'contact')  return activeSection === 'contact';
     return false;
   };
 
@@ -64,7 +90,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
 
   return (
     <>
-    <nav className={`fixed top-0 left-0 right-0 z-50 bg-background transition-shadow duration-300 ${scrolled ? 'shadow-md' : 'border-b border-gray-100'}`}>
+    <nav className={`font-inter fixed top-0 left-0 right-0 z-50 bg-background transition-shadow duration-300 ${scrolled ? 'shadow-md' : 'border-b border-gray-100'}`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="flex items-center justify-between h-16">
 
@@ -92,23 +118,24 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               <button className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('programs') ? activeClass : ''}`}>
                 {language === 'en' ? 'Programs' : 'Proqramlar'}
               </button>
-              {openDropdown === 'programs' && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-72 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                  {courses.length > 0 ? courses.map(c => (
-                    <Link key={c.id} href={`/programs/${c.id}`} className="block px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0">
-                      <div className="text-sm font-medium text-gray-800">
-                        {language === 'en' && (c as any).name_en ? (c as any).name_en : c.name}
-                      </div>
-                      <div className="flex gap-3 mt-1">
-                        {c.duration && <span className="text-xs text-gray-400">{c.duration}</span>}
-                        {parseFloat(c.price) > 0 && <span className="text-xs font-semibold text-[#0A4D2C]">{parseFloat(c.price).toFixed(0)} ₼</span>}
-                      </div>
-                    </Link>
-                  )) : (
-                    <div className="px-4 py-4 text-sm text-gray-400">{language === 'en' ? 'No programs yet' : 'Proqram tapılmadı'}</div>
-                  )}
+              <div className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 bg-white rounded-xl shadow-xl border border-gray-100 overflow-visible z-50 transition-all duration-300 origin-top ${openDropdown === 'programs' ? 'opacity-100 scale-y-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-y-95 -translate-y-2 pointer-events-none'}`}>
+                <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-2 overflow-hidden">
+                  <div className="w-3 h-3 bg-white border-l border-t border-gray-100 rotate-45 translate-y-1 mx-auto shadow-sm" />
                 </div>
-              )}
+                {courses.length > 0 ? courses.map(c => (
+                  <Link key={c.id} href={`/programs/${c.id}`} className="block px-4 py-3 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-0">
+                    <div className="text-sm font-medium text-gray-800">
+                      {language === 'en' && (c as any).name_en ? (c as any).name_en : c.name}
+                    </div>
+                    <div className="flex gap-3 mt-1">
+                      {c.duration && <span className="text-xs text-gray-400">{c.duration}</span>}
+                      {parseFloat(c.price) > 0 && <span className="text-xs font-semibold text-[#0A4D2C]">{parseFloat(c.price).toFixed(0)} ₼</span>}
+                    </div>
+                  </Link>
+                )) : (
+                  <div className="px-4 py-4 text-sm text-gray-400">{language === 'en' ? 'No programs yet' : 'Proqram tapılmadı'}</div>
+                )}
+              </div>
             </div>
 
             <Link href="/videos" className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('videos') ? activeClass : ''}`}>
@@ -125,19 +152,21 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
 
             {/* Əlaqə dropdown */}
             <div className="relative" onMouseEnter={() => setOpenDropdown('contact')} onMouseLeave={() => setOpenDropdown(null)}>
-              <button className="px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors">
+              <button className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('contact') ? activeClass : ''}`}>
                 {language === 'en' ? 'Contact' : 'Əlaqə'}
               </button>
-              {openDropdown === 'contact' && (
-                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-0 w-64 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                  <div className="px-4 py-2">
-                    {infoContacts.map(c => (
-                      <a
-                        key={c.id}
-                        href={c.type === 'whatsapp' ? `https://wa.me/${c.value.replace(/\D/g, '')}` : c.type === 'email' ? `mailto:${c.value}` : `tel:${c.value.replace(/\s/g, '')}`}
-                        target={c.type === 'whatsapp' ? '_blank' : undefined}
-                        rel={c.type === 'whatsapp' ? 'noopener noreferrer' : undefined}
-                        className="flex items-center gap-2 py-2.5 text-sm text-gray-700 hover:text-[#0A4D2C] transition-colors border-b border-gray-50 last:border-0"
+              <div className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-100 overflow-visible z-50 transition-all duration-300 origin-top ${openDropdown === 'contact' ? 'opacity-100 scale-y-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-y-95 -translate-y-2 pointer-events-none'}`}>
+                <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-2 overflow-hidden">
+                  <div className="w-3 h-3 bg-white border-l border-t border-gray-100 rotate-45 translate-y-1 mx-auto shadow-sm" />
+                </div>
+                <div className="px-4 py-2">
+                  {infoContacts.map(c => (
+                    <a
+                      key={c.id}
+                      href={c.type === 'whatsapp' ? `https://wa.me/${c.value.replace(/\D/g, '')}` : c.type === 'email' ? `mailto:${c.value}` : `tel:${c.value.replace(/\s/g, '')}`}
+                      target={c.type === 'whatsapp' ? '_blank' : undefined}
+                      rel={c.type === 'whatsapp' ? 'noopener noreferrer' : undefined}
+                      className="flex items-center gap-2 py-2.5 text-sm text-gray-700 hover:text-[#0A4D2C] transition-colors border-b border-gray-50 last:border-0"
                       >
                         <span className="shrink-0">
                           {c.type === 'whatsapp' && (<svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.529 5.851L.057 23.57a.75.75 0 00.921.92l5.764-1.49A11.945 11.945 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.907 0-3.7-.505-5.25-1.385l-.372-.214-3.853.997.985-3.768-.234-.386A9.944 9.944 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>)}
@@ -148,8 +177,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
                       </a>
                     ))}
                   </div>
-                </div>
-              )}
+              </div>
             </div>
 
             <Link href="/faq" className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('faq') ? activeClass : ''}`}>

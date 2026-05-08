@@ -11,18 +11,21 @@ export default function RegisterPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [usernameError, setUsernameError] = useState('');
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setUsernameError('');
     setSuccess(false);
 
     // Şifrə yoxlaması
@@ -43,6 +46,7 @@ export default function RegisterPage() {
         `${API_BASE_URL}/api/register`,
         {
           name: formData.name,
+          username: formData.username,
           email: formData.email,
           password: formData.password,
         },
@@ -61,11 +65,17 @@ export default function RegisterPage() {
         router.push('/login');
       }, 3000);
     } catch (err: any) {
-      console.error('Register error:', err);
-      const errorMsg = err?.response?.data?.errors
-        ? Object.values(err.response.data.errors).flat().join(', ')
-        : err?.response?.data?.message || 'Qeydiyyat uğursuz oldu';
-      setError(errorMsg as string);
+      const errors = err?.response?.data?.errors;
+      if (errors?.username) {
+        setUsernameError('Bu istifadəçi adı artıq mövcuddur');
+      } else if (errors) {
+        const msgs = Object.entries(errors)
+          .filter(([key]) => key !== 'username')
+          .flatMap(([, v]) => v as string[]);
+        setError(msgs.join(', ') || 'Qeydiyyat uğursuz oldu');
+      } else {
+        setError(err?.response?.data?.message || 'Qeydiyyat uğursuz oldu');
+      }
     } finally {
       setLoading(false);
     }
@@ -97,24 +107,14 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/10 via-white to-primary/5 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <Link href="/" className="inline-flex items-center gap-3 mb-4">
-            <img
-              src="/brand/finmaster-icon.png"
-              alt="Finmaster"
-              className="h-16 w-auto"
-            />
-            <div className="text-left">
-              <h1 className="text-2xl font-bold text-primary-dark">FinMaster</h1>
-              <p className="text-sm text-primary font-semibold tracking-wider">ACADEMY</p>
-            </div>
+        <div className="flex justify-center relative z-10 -mb-16 mt-8">
+          <Link href="/" onClick={() => window.scrollTo({ top: 0 })}>
+            <img src="/brand/finmaster-logo.png" alt="FinMaster Academy" className="h-60 w-auto -translate-x-6 cursor-pointer" />
           </Link>
-          <h2 className="text-xl font-semibold text-gray-dark">Qeydiyyat</h2>
         </div>
 
         {/* Register Form */}
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 px-8 pb-8 pt-20">
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
@@ -136,6 +136,29 @@ export default function RegisterPage() {
                 placeholder="Ali Məmmədov"
                 disabled={loading}
               />
+            </div>
+
+            <div>
+              <label htmlFor="username" className="block text-sm font-semibold text-gray-700 mb-2">
+                İstifadəçi adı
+              </label>
+              <input
+                type="text"
+                id="username"
+                required
+                value={formData.username}
+                onChange={(e) => { setUsernameError(''); setFormData({ ...formData, username: e.target.value }); }}
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:border-transparent transition-colors ${
+                  usernameError
+                    ? 'border-red-500 focus:ring-red-300 text-red-700'
+                    : 'border-gray-300 focus:ring-primary'
+                }`}
+                placeholder="Istifadeci Adi"
+                disabled={loading}
+              />
+              {usernameError && (
+                <p className="mt-1.5 text-xs text-red-600">{usernameError}</p>
+              )}
             </div>
 
             <div>

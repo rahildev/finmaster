@@ -93,7 +93,7 @@ export default function Contact({ data }: ContactProps) {
               <div className="font-semibold text-gray-900 text-sm mb-1">
                 {language === 'en' ? (contact as any).label_en || contact.label : contact.label}
               </div>
-              <div className="text-gray-500 text-sm break-all">{contact.value}</div>
+              <div className="font-inter text-gray-500 text-sm break-all">{contact.value}</div>
             </motion.a>
           ))}
         </div>

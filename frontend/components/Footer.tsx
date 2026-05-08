@@ -85,52 +85,18 @@ export default function Footer({ contacts }: FooterProps) {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12 divide-y divide-gray-900/[0.05] sm:divide-y-0">
 
           {/* Brand */}
-          <div className="-ml-4">
-            <Link href="/" className="flex items-center gap-0 mb-3 group" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              <div className="w-28 h-28 -my-3 flex-shrink-0 transition-transform duration-200 group-hover:scale-110">
-                <Image src="/brand/finmaster-icon.png" alt="FinMaster" width={112} height={112} unoptimized className="h-full w-auto object-contain" />
-              </div>
-              <div className="flex flex-col -ml-3">
-                <span className="font-bold text-[16px] leading-tight tracking-tight text-[#0A4D2C]">FinMaster</span>
-                <span className="font-bold text-[9px] leading-tight tracking-[0.3em] text-[#3d7a52]">ACADEMY</span>
-                <span className="hidden lg:block font-semibold text-[6.5px] leading-tight tracking-[0.12em] text-gray-500 whitespace-nowrap">ACCOUNTING & FINANCE TRAINING</span>
-              </div>
+          <div className="-mt-20">
+            <Link href="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+              <Image src="/brand/finmaster-logo.png" alt="FinMaster Academy" width={180} height={180} unoptimized className="w-56 h-auto object-contain" />
             </Link>
-            <div className="mt-2 ml-8 flex flex-col gap-0.5">
+            <div className="-mt-14 ml-6 flex flex-col gap-0.5">
               {(language === 'en'
                 ? ['Simple.', 'Systematic.', 'Logical.']
                 : ['Sistemli.', 'Sadə.', 'Lojik.']
               ).map(word => (
-                <span key={word} className="text-[10px] font-semibold text-gray-600 leading-snug">— {word}</span>
+                <span key={word} className="font-inter text-[13px] font-semibold text-gray-600 leading-snug">— {word}</span>
               ))}
             </div>
-          </div>
-
-          {/* Sertifikat Doğrulama */}
-          <div id="certificate" className="sm:col-span-2 lg:col-span-1">
-            <h4 className="text-[11px] font-bold tracking-[0.15em] uppercase text-gray-400 mb-4">
-              {language === 'en' ? 'Verify Certificate' : 'Sertifikatı Doğrulayın'}
-            </h4>
-            <p className="text-sm text-gray-500 mb-3">
-              {language === 'en'
-                ? 'Enter your certificate ID to verify.'
-                : 'Sertifikatınızı yoxlamaq üçün ID daxil edin.'}
-            </p>
-            <form onSubmit={handleVerify} className="flex gap-2">
-              <input
-                type="text"
-                value={certId}
-                onChange={e => setCertId(e.target.value)}
-                placeholder="Certificate ID"
-                className="flex-1 min-w-0 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#0A4D2C] focus:ring-1 focus:ring-[#0A4D2C] bg-white"
-              />
-              <button
-                type="submit"
-                className="shrink-0 bg-[#0A4D2C] text-white font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#0c5e35] transition-colors"
-              >
-                {language === 'en' ? 'Verify' : 'Doğrula'}
-              </button>
-            </form>
           </div>
 
           {/* Əlaqə */}
@@ -143,7 +109,7 @@ export default function Footer({ contacts }: FooterProps) {
                 <li key={c.id}>
                   <a href={getInfoHref(c)} className="text-sm text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2">
                     {getInfoIcon(c.type)}
-                    <span>{c.value}</span>
+                    <span className="font-inter">{c.value}</span>
                   </a>
                 </li>
               ))}
@@ -182,14 +148,41 @@ export default function Footer({ contacts }: FooterProps) {
             </div>
           </div>
 
+          {/* Sertifikat Doğrulama */}
+          <div id="certificate" className="sm:col-span-2 lg:col-span-1">
+            <h4 className="text-[11px] font-bold tracking-[0.15em] uppercase text-gray-400 mb-4">
+              {language === 'en' ? 'Verify Certificate' : 'Sertifikatı Doğrulayın'}
+            </h4>
+            <p className="font-inter text-sm text-gray-500 mb-3">
+              {language === 'en'
+                ? 'Enter your certificate ID to verify.'
+                : 'Sertifikatınızı yoxlamaq üçün ID daxil edin.'}
+            </p>
+            <form onSubmit={handleVerify} className="flex gap-2">
+              <input
+                type="text"
+                value={certId}
+                onChange={e => setCertId(e.target.value)}
+                placeholder="Certificate ID"
+                className="flex-1 min-w-0 border border-gray-200 rounded-lg px-3 py-2 text-sm text-gray-800 placeholder-gray-400 focus:outline-none focus:border-[#0A4D2C] focus:ring-1 focus:ring-[#0A4D2C] bg-white"
+              />
+              <button
+                type="submit"
+                className="shrink-0 bg-[#0A4D2C] text-white font-semibold px-4 py-2 rounded-lg text-sm hover:bg-[#0c5e35] transition-colors"
+              >
+                {language === 'en' ? 'Verify' : 'Doğrula'}
+              </button>
+            </form>
+          </div>
+
         </div>
 
         {/* Bottom bar */}
         <div className="border-t border-gray-200 pt-6 flex flex-col items-center gap-2">
-          <p className="text-gray-400 text-xs text-center" suppressHydrationWarning>
+          <p className="font-inter text-gray-400 text-sm text-center" suppressHydrationWarning>
             © {currentYear} Finmaster Academy. {language === 'en' ? 'All rights reserved.' : 'Bütün hüquqlar qorunur.'}
           </p>
-          <div className="flex gap-5 text-xs text-gray-400">
+          <div className="font-inter flex gap-5 text-sm text-gray-400">
             <span className="hover:text-gray-700 cursor-pointer transition-colors">Privacy Policy</span>
             <span className="hover:text-gray-700 cursor-pointer transition-colors">Terms of Use</span>
           </div>

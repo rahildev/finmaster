@@ -82,7 +82,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
       <aside className="w-64 bg-primary-dark text-white flex-shrink-0 flex flex-col">
         <div className="p-6">
           <h1 className="text-2xl font-bold mb-2">Finmaster</h1>
-          <p className="text-primary-light text-sm">Admin Panel</p>
+          {user && (
+            <p className="text-primary-light text-sm">
+              {isSuperAdmin() ? 'Super Admin' : 'Admin'}
+            </p>
+          )}
         </div>
 
         <nav className="mt-6 flex-1">
@@ -145,9 +149,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
               </div>
               <div className="text-right">
                 <p className="text-sm font-medium text-gray-dark">{user.name}</p>
-                <p className="text-xs text-gray-500">
-                  {isSuperAdmin() ? 'Super Admin' : 'Admin'}
-                </p>
               </div>
               <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-semibold text-sm">
                 {initials}

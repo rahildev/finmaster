@@ -28,15 +28,33 @@
   --color-gray-light: var(--gray-light);
 
   /* Şriftlər */
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-cormorant);
 }
 
 /* Dark mode deaktiv - yalnız light mode */
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-cormorant), Georgia, serif;
+  font-size: 18px;
   scroll-behavior: smooth;
+}
+
+.font-inter {
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+}
+
+/* Başlıqlar, düymələr, rəqəm saxlayan elementlər Inter ilə */
+h1, h2, h3, h4, h5, h6,
+button,
+[role="button"],
+a[href^="tel:"],
+a[href^="mailto:"],
+a[href^="https://wa.me/"],
+input,
+label,
+.font-inter {
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
 }
 
 /* Apple-style smooth scrolling */

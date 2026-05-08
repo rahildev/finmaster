@@ -28,13 +28,13 @@ export default function Hero({ data, contacts = [] }: HeroProps) {
     <section id="hero" className="bg-background overflow-hidden pt-16">
 
       {/* Desktop layout */}
-      <div className="hidden lg:flex items-center relative" style={{ minHeight: '98vh' }}>
+      <div className="hidden lg:flex items-center relative" style={{ minHeight: '77vh' }}>
 
         {/* Desktop image — absolute right half with mask */}
         <div
           className="absolute top-0 bottom-0 right-0"
           style={{
-            left: '50%',
+            left: '40%',
             maskImage: 'linear-gradient(to right, transparent 0%, black 14%)',
             WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 14%)',
           }}
@@ -60,7 +60,7 @@ export default function Hero({ data, contacts = [] }: HeroProps) {
               transition={{ duration: 0.6 }}
               className="mb-5"
             >
-              <span className="text-[13px] font-bold tracking-[0.2em] text-gray-500">
+              <span className="font-inter text-[13px] font-bold tracking-[0.2em] text-gray-500">
                 {language === 'en' ? 'Systematic. Simple. Logical.' : 'Sistemli. Sadə. Lojik.'}
               </span>
               <div className="w-8 h-px bg-gray-400 mt-2" />
@@ -128,18 +128,16 @@ export default function Hero({ data, contacts = [] }: HeroProps) {
         </div>
 
         {/* Mobile image — tam genişlik, altda */}
-        <div className="relative w-full h-[380px]">
-          <Image
-            src="/hero-photo.png"
-            alt=""
-            fill
-            priority
-            unoptimized
-            className="object-cover"
-            style={{ objectPosition: 'center 30%' }}
-            sizes="100vw"
-          />
-        </div>
+        <Image
+          src="/hero-mobile.png"
+          alt=""
+          width={0}
+          height={0}
+          sizes="100vw"
+          priority
+          unoptimized
+          className="w-full h-auto block"
+        />
       </div>
 
     </section>
