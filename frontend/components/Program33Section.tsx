@@ -62,19 +62,21 @@ export default function Program33Section({ courseId, headingAz, headingEn, descr
             />
           </div>
 
-          {/* Bütün mətn — float şəkilin yanından axır, bitəndə altına keçir */}
+          {/* Əsas mətn — float şəkilin yanından axır */}
           <div className="text-gray-600 leading-relaxed text-xl">
             {mainLines.map((line, i) =>
               line === ''
                 ? <div key={i} className="h-6" />
                 : <p key={i} className="mb-1">{renderBold(line)}</p>
             )}
-            {lastParagraph && (
-              <p className="mt-4">{renderBold(lastParagraph)}</p>
-            )}
           </div>
 
           <div className="clear-both" />
+
+          {/* Son paraqraf — şəkilin altında, tam genişlikdə */}
+          {lastParagraph && (
+            <p className="mt-6 text-gray-600 leading-relaxed text-xl">{renderBold(lastParagraph)}</p>
+          )}
 
           {/* Düymə — sağa */}
           <div className="flex justify-end mt-6">
