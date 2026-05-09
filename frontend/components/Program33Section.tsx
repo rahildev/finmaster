@@ -23,25 +23,32 @@ export default function Program33Section({ courseId, headingAz, headingEn, descr
     ? (descriptionEn || descriptionAz || '')
     : (descriptionAz || '');
 
+  // Son paraqrafı ayır — şəkilin altına gedəcək
+  const paragraphs = body.split(/\n\n+/).filter(p => p.trim());
+  const mainBody = paragraphs.slice(0, -1).join('\n\n');
+  const lastParagraph = paragraphs[paragraphs.length - 1] || '';
+
   return (
     <section className="py-16 bg-[#f6f6f5]">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 
-          {/* Sol — mətn */}
-          <div className="space-y-6">
-            <h2 className="font-[family-name:var(--font-cormorant)] text-3xl sm:text-4xl font-bold text-gray-900 leading-snug">
-              {heading}
-            </h2>
-            {body && (
-              <div className="text-gray-600 leading-relaxed whitespace-pre-line">
-                {body}
-              </div>
-            )}
-          </div>
+        {/* Başlıq — tam genişlik */}
+        <h2 className="font-[family-name:var(--font-cormorant)] text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-snug mb-10">
+          {heading}
+        </h2>
 
-          {/* Sağ — şəkil + düymə */}
-          <div className="flex flex-col gap-4 pt-44">
+        {/* İki sütun: mətn sol, şəkil sağ */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+          {/* Sol — əsas mətn */}
+          {mainBody && (
+            <div className="text-gray-600 leading-relaxed whitespace-pre-line">
+              {mainBody}
+            </div>
+          )}
+
+          {/* Sağ — şəkil + son paraqraf + düymə */}
+          <div className="flex flex-col gap-4">
             <div className="relative rounded-2xl overflow-hidden shadow-xl">
               <Image
                 src="/programs-33.png"
@@ -53,6 +60,11 @@ export default function Program33Section({ courseId, headingAz, headingEn, descr
                 className="w-full h-auto"
               />
             </div>
+            {lastParagraph && (
+              <div className="text-gray-600 leading-relaxed whitespace-pre-line text-sm">
+                {lastParagraph}
+              </div>
+            )}
             <div className="flex justify-end">
               <Link
                 href={`/videos#course-${courseId}`}
