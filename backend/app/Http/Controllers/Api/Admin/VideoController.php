@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\VideoResource;
 use App\Models\Video;
 use App\Traits\HandlesImageUpload;
 use Illuminate\Http\JsonResponse;
@@ -21,7 +20,7 @@ class VideoController extends Controller
     public function index(): JsonResponse
     {
         $videos = Video::with('course:id,name')->orderBy('sort_order')->get();
-        return VideoResource::collection($videos);
+        return response()->json($videos);
     }
 
     /**
@@ -56,7 +55,7 @@ class VideoController extends Controller
 
         $video = Video::create($data);
 
-        return (new VideoResource($video->load('course:id,name')))->response()->setStatusCode(201);
+        return response()->json($video->load('course:id,name'), 201);
     }
 
     /**
@@ -65,7 +64,7 @@ class VideoController extends Controller
     public function show(string $id): JsonResponse
     {
         $video = Video::with('course:id,name')->findOrFail($id);
-        return new VideoResource($video);
+        return response()->json($video);
     }
 
     /**
@@ -103,7 +102,7 @@ class VideoController extends Controller
 
         $video->update($data);
 
-        return new VideoResource($video->load('course:id,name'));
+        return response()->json($video->load('course:id,name'));
     }
 
     /**

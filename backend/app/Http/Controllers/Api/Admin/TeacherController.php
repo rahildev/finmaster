@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\TeacherInfoResource;
 use App\Models\TeacherInfo;
 use App\Traits\HandlesImageUpload;
 use Illuminate\Http\JsonResponse;
@@ -21,7 +20,7 @@ class TeacherController extends Controller
     public function index(): JsonResponse
     {
         $teachers = TeacherInfo::orderBy('created_at', 'desc')->get();
-        return TeacherInfoResource::collection($teachers);
+        return response()->json($teachers);
     }
 
     /**
@@ -56,7 +55,7 @@ class TeacherController extends Controller
 
         $teacher = TeacherInfo::create($data);
 
-        return (new TeacherInfoResource($teacher))->response()->setStatusCode(201);
+        return response()->json($teacher, 201);
     }
 
     /**
@@ -65,7 +64,7 @@ class TeacherController extends Controller
     public function show(string $id): JsonResponse
     {
         $teacher = TeacherInfo::findOrFail($id);
-        return new TeacherInfoResource($teacher);
+        return response()->json($teacher);
     }
 
     /**
@@ -107,7 +106,7 @@ class TeacherController extends Controller
 
         $teacher->update($data);
 
-        return new TeacherInfoResource($teacher);
+        return response()->json($teacher);
     }
 
     /**
