@@ -31,8 +31,8 @@ export default function Program33Section({ courseId, headingAz, headingEn, descr
   const mainLines = lines.slice(0, lastIndex);
 
   const renderBold = (text: string) =>
-    text.split(/("(?:[^"]*)")/g).map((part, i) =>
-      /^".*"$/.test(part)
+    text.split(/([“"][^“”"]*[”"])/g).map((part, i) =>
+      /^[“"].*[”"]$/.test(part)
         ? <strong key={i} className="font-semibold text-gray-800">{part}</strong>
         : part
     );
@@ -50,7 +50,7 @@ export default function Program33Section({ courseId, headingAz, headingEn, descr
         <div className="overflow-hidden">
 
           {/* Şəkil — sağa float */}
-          <div className="float-right ml-10 mb-6 w-full lg:w-[52%] rounded-2xl overflow-hidden shadow-xl">
+          <div className="float-right ml-10 mb-6 mt-4 w-full lg:w-[52%] rounded-2xl overflow-hidden shadow-xl">
             <Image
               src="/programs-33.png"
               alt="33 Addımda Mühasibat uçotu"
