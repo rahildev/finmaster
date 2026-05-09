@@ -23,10 +23,11 @@ export default function Program33Section({ courseId, headingAz, headingEn, descr
     ? (descriptionEn || descriptionAz || '')
     : (descriptionAz || '');
 
-  const lines = body.split('\n').map(l => l.trim());
+  // Görünməz simvolları silib sətri təmizlə
+  const cleanLine = (l: string) => l.replace(/[­​‌‍⁠﻿]/g, '').trim();
+  const lines = body.split('\n').map(cleanLine);
   const nonEmptyLines = lines.filter(Boolean);
   const lastParagraph = nonEmptyLines[nonEmptyLines.length - 1] || '';
-  // All lines except the last non-empty one
   const lastIndex = lines.lastIndexOf(lastParagraph);
   const mainLines = lines.slice(0, lastIndex);
 
@@ -66,8 +67,8 @@ export default function Program33Section({ courseId, headingAz, headingEn, descr
           <div className="text-gray-600 leading-relaxed text-xl">
             {mainLines.map((line, i) =>
               line === ''
-                ? <div key={i} className="h-6" />
-                : <p key={i} className="mb-1">{renderBold(line)}</p>
+                ? <div key={i} className="h-5" />
+                : <p key={i} className="mb-0.5">{renderBold(line)}</p>
             )}
           </div>
 
