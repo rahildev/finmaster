@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import { getVideos, createVideo, updateVideo, deleteVideo, getCourses } from '@/lib/admin-api';
+import { getVideos, createVideo, updateVideo, deleteVideo, getCourses, purgeAllCaches } from '@/lib/admin-api';
 import type { Video, Course } from '@/types/landing';
 
 export default function VideosAdminPage() {
@@ -144,7 +144,7 @@ export default function VideosAdminPage() {
 
       resetForm();
       await fetchVideos();
-      await fetch('/api/revalidate', { method: 'POST' }).catch(() => {});
+      await purgeAllCaches();
     } catch (error: any) {
       const errorMessage = error?.response?.data?.message || error?.message || 'Xəta baş verdi!';
       setMessage({ type: 'error', text: errorMessage });

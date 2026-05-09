@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getCourses, createCourse, updateCourse, deleteCourse } from '@/lib/admin-api';
+import { getCourses, createCourse, updateCourse, deleteCourse, purgeAllCaches } from '@/lib/admin-api';
 import type { Course } from '@/types/landing';
 import { getImageUrl } from '@/lib/api';
 
@@ -163,7 +163,7 @@ Throughout the program consisting of 33 (thirty-three) lesson days, i.e. 66 (six
 
       resetForm();
       await fetchCourses();
-      await fetch('/api/revalidate', { method: 'POST' }).catch(() => {});
+      await purgeAllCaches();
     } catch (error: any) {
       const errorMessage = error?.response?.data?.message || error?.message || 'Xəta baş verdi!';
       setMessage({ type: 'error', text: errorMessage });

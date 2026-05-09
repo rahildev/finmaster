@@ -198,6 +198,10 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               FAQ
             </Link>
 
+            <Link href="/#certificate" className="px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors">
+              {language === 'en' ? 'Certificate' : 'Sertifikat'}
+            </Link>
+
             {/* Giriş / Qeydiyyat */}
             <div className="flex items-center gap-2 ml-3 pl-3 border-l border-gray-200">
               <Link href="/login" className={`px-3 py-1.5 text-[13px] font-medium border border-gray-300 rounded-md text-gray-700 hover:border-[#0A4D2C] hover:text-[#0A4D2C] transition-colors ${isActive('login') ? 'border-[#0A4D2C] text-[#0A4D2C]' : ''}`}>
@@ -330,6 +334,10 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
 
             <Link href="/faq" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
               FAQ
+            </Link>
+
+            <Link href="/#certificate" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
+              {language === 'en' ? 'Certificate' : 'Sertifikat'}
             </Link>
 
             {/* Giriş / Qeydiyyat */}

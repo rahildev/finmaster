@@ -37,6 +37,18 @@ function attachToken(config: any) {
 adminClient.interceptors.request.use(attachToken);
 uploadClient.interceptors.request.use(attachToken);
 
+// Next.js + Cloudflare cache-ni birlikdə təmizlə
+export const purgeAllCaches = async () => {
+  await fetch('/api/revalidate', { method: 'POST' }).catch(() => {});
+  const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
+  if (token) {
+    await fetch(`${API_BASE_URL}/api/admin/purge-cache`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+    }).catch(() => {});
+  }
+};
+
 // ==================== HERO SECTIONS ====================
 
 export const getHeroSections = async (): Promise<HeroSection[]> => {
