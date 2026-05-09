@@ -50,7 +50,7 @@ export default function Program33Section({ courseId, headingAz, headingEn, descr
         <div className="overflow-hidden">
 
           {/* Şəkil — sağa float */}
-          <div className="float-right ml-10 mb-6 mt-1 w-full lg:w-[48%] rounded-2xl overflow-hidden shadow-xl">
+          <div className="float-right ml-10 mb-6 -mt-2 w-full lg:w-[48%] rounded-2xl overflow-hidden shadow-xl">
             <Image
               src="/programs-33.png"
               alt="33 Addımda Mühasibat uçotu"
