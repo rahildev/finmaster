@@ -40,12 +40,10 @@ export default function Program33Section({ courseId, headingAz, headingEn, descr
         {/* İki sütun: mətn sol, şəkil sağ */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
 
-          {/* Sol — əsas mətn */}
-          {mainBody && (
-            <div className="text-gray-600 leading-relaxed whitespace-pre-line">
-              {mainBody}
-            </div>
-          )}
+          {/* Sol — əsas mətn (həmişə render olunur) */}
+          <div className="text-gray-600 leading-relaxed whitespace-pre-line">
+            {mainBody}
+          </div>
 
           {/* Sağ — şəkil + son paraqraf + düymə */}
           <div className="flex flex-col gap-4">
