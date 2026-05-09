@@ -24,6 +24,6 @@ class SuperAdminSeeder extends Seeder
 
         $this->command->info('✅ Super Admin yaradıldı:');
         $this->command->info('   Email: admin@finmaster.az');
-        $this->command->info('   Şifrə: admin123');
+        $this->command->info('   Şifrə: SUPER_ADMIN_PASSWORD .env dəyişənindən götürüldü');
     }
 }

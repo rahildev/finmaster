@@ -46,7 +46,7 @@ class AuthController extends Controller
         ];
 
         $cookie = cookie('admin_token', $token, 60 * 24, '/', null, true, true, false, 'Strict');
-        return response()->json(['user' => $userArray, 'token' => $token])->withCookie($cookie);
+        return response()->json(['user' => $userArray])->withCookie($cookie);
     }
 
     /**

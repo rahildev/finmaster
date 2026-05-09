@@ -21,12 +21,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Public Landing Page endpoint
-Route::get('/landing', [LandingPageController::class, 'index']);
+Route::get('/landing', [LandingPageController::class, 'index'])->middleware('throttle:60,1');
 
 // Authentication routes
-Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
+Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:5,1');
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 });

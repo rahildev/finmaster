@@ -16,6 +16,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
         ]);
+        // Extract Sanctum token from httpOnly cookie on every API request
+        $middleware->prependToGroup('api', \App\Http\Middleware\ReadTokenFromCookie::class);
         $middleware->append(\App\Http\Middleware\SecurityHeaders::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -32,12 +32,10 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
     setPurging(true);
     setPurgeMsg('');
     try {
-      const token = localStorage.getItem('admin_token');
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/admin/purge-cache`, {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` },
+        credentials: 'include',
       });
-      const data = await res.json();
       setPurgeMsg(res.ok ? '✓ Keş təmizləndi' : '✗ Xəta baş verdi');
     } catch {
       setPurgeMsg('✗ Xəta baş verdi');

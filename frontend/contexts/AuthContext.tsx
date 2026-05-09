@@ -13,7 +13,6 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  token: string | null;
   loading: boolean;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
@@ -27,31 +26,21 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    const savedToken = localStorage.getItem('admin_token');
-    if (savedToken) {
-      setToken(savedToken);
-      fetchMe(savedToken);
-    } else {
-      setLoading(false);
-    }
+    fetchMe();
   }, []);
 
-  const fetchMe = async (t: string) => {
+  const fetchMe = async () => {
     try {
       const res = await fetch(`${API_URL}/api/me`, {
-        headers: { Authorization: `Bearer ${t}` },
+        credentials: 'include',
       });
       if (res.ok) {
         const data = await res.json();
         setUser(data);
-      } else {
-        localStorage.removeItem('admin_token');
-        setToken(null);
       }
     } finally {
       setLoading(false);
@@ -62,6 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const res = await fetch(`${API_URL}/api/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({ username, password }),
     });
 
@@ -71,21 +61,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     const data = await res.json();
-    localStorage.setItem('admin_token', data.token);
-    setToken(data.token);
     setUser(data.user);
     router.push('/admin');
   };
 
   const logout = async () => {
-    if (token) {
-      await fetch(`${API_URL}/api/logout`, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
-      }).catch(() => {});
-    }
-    localStorage.removeItem('admin_token');
-    setToken(null);
+    await fetch(`${API_URL}/api/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    }).catch(() => {});
     setUser(null);
     router.push('/login');
   };
@@ -99,7 +83,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, logout, isSuperAdmin, hasPermission }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, isSuperAdmin, hasPermission }}>
       {children}
     </AuthContext.Provider>
   );

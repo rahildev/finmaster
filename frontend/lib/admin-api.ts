@@ -14,6 +14,7 @@ const adminClient = axios.create({
     'Content-Type': 'application/json',
     'Accept': 'application/json',
   },
+  withCredentials: true,
 });
 
 const uploadClient = axios.create({
@@ -21,21 +22,8 @@ const uploadClient = axios.create({
   headers: {
     'Content-Type': 'multipart/form-data',
   },
+  withCredentials: true,
 });
-
-function attachToken(config: any) {
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('admin_token');
-    if (token) {
-      config.headers = config.headers || {};
-      config.headers['Authorization'] = `Bearer ${token}`;
-    }
-  }
-  return config;
-}
-
-adminClient.interceptors.request.use(attachToken);
-uploadClient.interceptors.request.use(attachToken);
 
 // Next.js + Cloudflare cache-ni birlikdə təmizlə
 export const purgeAllCaches = async () => {
@@ -43,13 +31,10 @@ export const purgeAllCaches = async () => {
     method: 'POST',
     headers: { 'x-revalidate-secret': process.env.NEXT_PUBLIC_REVALIDATE_SECRET || '' },
   }).catch(() => {});
-  const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
-  if (token) {
-    await fetch(`${API_BASE_URL}/api/admin/purge-cache`, {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
-    }).catch(() => {});
-  }
+  await fetch(`${API_BASE_URL}/api/admin/purge-cache`, {
+    method: 'POST',
+    credentials: 'include',
+  }).catch(() => {});
 };
 
 // ==================== HERO SECTIONS ====================
