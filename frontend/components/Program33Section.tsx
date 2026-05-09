@@ -75,7 +75,7 @@ export default function Program33Section({ courseId, headingAz, headingEn, descr
 
           {/* Son paraqraf — şəkilin altında, tam genişlikdə */}
           {lastParagraph && (
-            <p className="mt-6 text-gray-600 leading-relaxed text-xl">{renderBold(lastParagraph)}</p>
+            <p className="mt-1 text-gray-600 leading-relaxed text-xl">{renderBold(lastParagraph)}</p>
           )}
 
           {/* Düymə — sağa */}
