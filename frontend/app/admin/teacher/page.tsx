@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getTeachers, createTeacher, updateTeacher, deleteTeacher } from '@/lib/admin-api';
+import { getTeachers, createTeacher, updateTeacher, deleteTeacher, purgeAllCaches } from '@/lib/admin-api';
 import type { TeacherInfo } from '@/types/landing';
 import { getImageUrl } from '@/lib/api';
 
@@ -130,6 +130,7 @@ export default function TeachersAdminPage() {
 
       resetForm();
       await fetchTeachers();
+      await purgeAllCaches();
     } catch (error: any) {
       const errorMessage = error?.response?.data?.message || error?.message || 'Xəta baş verdi!';
       setMessage({ type: 'error', text: errorMessage });
@@ -146,6 +147,7 @@ export default function TeachersAdminPage() {
       setDeleteTargetId(null);
       resetForm();
       await fetchTeachers();
+      await purgeAllCaches();
     } catch (error) {
       console.error('Xəta:', error);
       setMessage({ type: 'error', text: 'Silinmədi!' });

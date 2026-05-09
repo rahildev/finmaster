@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getContacts, createContact, updateContact, deleteContact } from '@/lib/admin-api';
+import { getContacts, createContact, updateContact, deleteContact, purgeAllCaches } from '@/lib/admin-api';
 import type { Contact } from '@/types/landing';
 
 export default function ContactsAdminPage() {
@@ -76,6 +76,7 @@ export default function ContactsAdminPage() {
 
       resetForm();
       await fetchContacts();
+      await purgeAllCaches();
     } catch (error) {
       console.error('Xəta:', error);
       setMessage({ type: 'error', text: 'Xəta baş verdi!' });

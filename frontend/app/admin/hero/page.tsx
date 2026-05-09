@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getHeroSections, createHeroSection, updateHeroSection, deleteHeroSection } from '@/lib/admin-api';
+import { getHeroSections, createHeroSection, updateHeroSection, deleteHeroSection, purgeAllCaches } from '@/lib/admin-api';
 import type { HeroSection } from '@/types/landing';
 import { getImageUrl } from '@/lib/api';
 
@@ -123,6 +123,7 @@ export default function HeroAdminPage() {
 
       resetForm();
       await fetchHeroes();
+      await purgeAllCaches();
     } catch (error: any) {
       const errorMessage = error?.response?.data?.message || error?.message || 'Xəta baş verdi!';
       setMessage({ type: 'error', text: errorMessage });
@@ -139,6 +140,7 @@ export default function HeroAdminPage() {
       setDeleteTargetId(null);
       resetForm();
       await fetchHeroes();
+      await purgeAllCaches();
     } catch (error) {
       console.error('Xəta:', error);
       setMessage({ type: 'error', text: 'Silinmədi!' });

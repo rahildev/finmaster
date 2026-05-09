@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getFaqs, createFaq, updateFaq, deleteFaq } from '@/lib/admin-api';
+import { getFaqs, createFaq, updateFaq, deleteFaq, purgeAllCaches } from '@/lib/admin-api';
 import type { Faq } from '@/types/landing';
 
 export default function FaqsAdminPage() {
@@ -73,6 +73,7 @@ export default function FaqsAdminPage() {
 
       resetForm();
       await fetchFaqs();
+      await purgeAllCaches();
     } catch (error) {
       console.error('Xəta:', error);
       setMessage({ type: 'error', text: 'Xəta baş verdi!' });
@@ -86,6 +87,7 @@ export default function FaqsAdminPage() {
       await deleteFaq(id);
       setMessage({ type: 'success', text: 'FAQ silindi!' });
       await fetchFaqs();
+      await purgeAllCaches();
     } catch (error) {
       console.error('Xəta:', error);
       setMessage({ type: 'error', text: 'Silinmədi!' });
