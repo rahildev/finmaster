@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ContactResource;
 use App\Models\Contact;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class ContactController extends Controller
     public function index(): JsonResponse
     {
         $contacts = Contact::orderBy('sort_order')->get();
-        return response()->json($contacts);
+        return ContactResource::collection($contacts);
     }
 
     /**
@@ -41,7 +42,7 @@ class ContactController extends Controller
 
         $contact = Contact::create($validator->validated());
 
-        return response()->json($contact, 201);
+        return (new ContactResource($contact))->response()->setStatusCode(201);
     }
 
     /**
@@ -50,7 +51,7 @@ class ContactController extends Controller
     public function show(string $id): JsonResponse
     {
         $contact = Contact::findOrFail($id);
-        return response()->json($contact);
+        return new ContactResource($contact);
     }
 
     /**
@@ -76,7 +77,7 @@ class ContactController extends Controller
 
         $contact->update($validator->validated());
 
-        return response()->json($contact);
+        return new ContactResource($contact);
     }
 
     /**

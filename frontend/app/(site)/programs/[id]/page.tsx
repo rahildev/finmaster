@@ -1,9 +1,16 @@
 import { getLandingPageData } from '@/lib/api';
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { notFound } from 'next/navigation';
-import SystemSteps from '@/components/SystemSteps';
-import Program33Section from '@/components/Program33Section';
+
+const SystemSteps = dynamic(() => import('@/components/SystemSteps'), {
+  loading: () => <div className="py-20 bg-[#F9F6F1] animate-pulse" />,
+});
+
+const Program33Section = dynamic(() => import('@/components/Program33Section'), {
+  loading: () => <div className="py-16 bg-[#f6f6f5] animate-pulse" />,
+});
 
 export const revalidate = 60;
 

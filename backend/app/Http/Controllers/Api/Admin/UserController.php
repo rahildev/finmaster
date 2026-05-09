@@ -62,14 +62,14 @@ class UserController extends Controller
             'role' => 'admin',
         ]);
 
-        // Permissions əlavə et
-        if ($request->has('permissions')) {
-            foreach ($request->permissions as $permission) {
-                UserPermission::create([
-                    'user_id' => $user->id,
-                    'permission' => $permission,
-                ]);
-            }
+        if ($request->has('permissions') && count($request->permissions)) {
+            $now = now();
+            UserPermission::insert(array_map(fn($p) => [
+                'user_id'    => $user->id,
+                'permission' => $p,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ], $request->permissions));
         }
 
         $user->load('permissions');
@@ -136,17 +136,16 @@ class UserController extends Controller
 
         $user->save();
 
-        // Update permissions
         if ($request->has('permissions')) {
-            // Köhnə permissions-ları sil
             UserPermission::where('user_id', $user->id)->delete();
-
-            // Yeni permissions əlavə et
-            foreach ($request->permissions as $permission) {
-                UserPermission::create([
-                    'user_id' => $user->id,
-                    'permission' => $permission,
-                ]);
+            if (count($request->permissions)) {
+                $now = now();
+                UserPermission::insert(array_map(fn($p) => [
+                    'user_id'    => $user->id,
+                    'permission' => $p,
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ], $request->permissions));
             }
         }
 

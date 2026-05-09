@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\FaqResource;
 use App\Models\Faq;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class FaqController extends Controller
     public function index(): JsonResponse
     {
         $faqs = Faq::orderBy('sort_order')->get();
-        return response()->json($faqs);
+        return FaqResource::collection($faqs);
     }
 
     /**
@@ -41,7 +42,7 @@ class FaqController extends Controller
 
         $faq = Faq::create($validator->validated());
 
-        return response()->json($faq, 201);
+        return (new FaqResource($faq))->response()->setStatusCode(201);
     }
 
     /**
@@ -50,7 +51,7 @@ class FaqController extends Controller
     public function show(string $id): JsonResponse
     {
         $faq = Faq::findOrFail($id);
-        return response()->json($faq);
+        return new FaqResource($faq);
     }
 
     /**
@@ -76,7 +77,7 @@ class FaqController extends Controller
 
         $faq->update($validator->validated());
 
-        return response()->json($faq);
+        return new FaqResource($faq);
     }
 
     /**

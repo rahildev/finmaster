@@ -1,6 +1,13 @@
 import { getLandingPageData } from '@/lib/api';
-import Features from '@/components/Features';
-import Teacher from '@/components/Teacher';
+import dynamic from 'next/dynamic';
+
+const Features = dynamic(() => import('@/components/Features'), {
+  loading: () => <div className="py-20 bg-background animate-pulse" />,
+});
+
+const Teacher = dynamic(() => import('@/components/Teacher'), {
+  loading: () => <div className="min-h-[400px] bg-gray-100 animate-pulse" />,
+});
 
 export const revalidate = 60;
 

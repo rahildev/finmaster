@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { getImageUrl } from '@/lib/api';
 import { useLanguage } from '@/contexts/LanguageContext';
 import type { TeacherInfo, Contact } from '@/types/landing';
@@ -39,10 +40,13 @@ export default function Teacher({ data, contacts = [] }: TeacherProps) {
             className="relative min-h-[300px] lg:min-h-0 lg:h-full bg-gray-100 overflow-hidden"
           >
             {photoUrl ? (
-              <img
+              <Image
                 src={photoUrl}
                 alt={teacher.name}
-                className="w-full h-full object-cover object-top absolute inset-0"
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover object-top"
+                unoptimized
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-gray-200 absolute inset-0">

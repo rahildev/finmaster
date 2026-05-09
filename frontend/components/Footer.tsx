@@ -87,7 +87,7 @@ export default function Footer({ contacts }: FooterProps) {
           {/* Brand */}
           <div className="-mt-20">
             <Link href="/" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-              <Image src="/brand/finmaster-logo.png" alt="FinMaster Academy" width={180} height={180} unoptimized className="w-56 h-auto object-contain" />
+              <Image src="/brand/finmaster-logo.png" alt="FinMaster Academy" width={224} height={100} className="w-56 h-auto object-contain" />
             </Link>
             <div className="-mt-14 ml-6 flex flex-col gap-0.5">
               {(language === 'en'

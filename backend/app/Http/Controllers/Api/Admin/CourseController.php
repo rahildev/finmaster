@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CourseResource;
 use App\Models\Course;
 use App\Traits\HandlesImageUpload;
 use Illuminate\Http\JsonResponse;
@@ -20,7 +21,7 @@ class CourseController extends Controller
     public function index(): JsonResponse
     {
         $courses = Course::orderBy('sort_order')->get();
-        return response()->json($courses);
+        return CourseResource::collection($courses);
     }
 
     /**
@@ -64,7 +65,7 @@ class CourseController extends Controller
 
         $course = Course::create($data);
 
-        return response()->json($course, 201);
+        return (new CourseResource($course))->response()->setStatusCode(201);
     }
 
     /**
@@ -73,7 +74,7 @@ class CourseController extends Controller
     public function show(string $id): JsonResponse
     {
         $course = Course::with('videos')->findOrFail($id);
-        return response()->json($course);
+        return new CourseResource($course);
     }
 
     /**
@@ -123,7 +124,7 @@ class CourseController extends Controller
 
         $course->update($data);
 
-        return response()->json($course);
+        return new CourseResource($course);
     }
 
     /**

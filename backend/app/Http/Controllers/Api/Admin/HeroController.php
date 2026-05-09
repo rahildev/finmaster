@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\HeroSectionResource;
 use App\Models\HeroSection;
 use App\Traits\HandlesImageUpload;
 use Illuminate\Http\JsonResponse;
@@ -20,7 +21,7 @@ class HeroController extends Controller
     public function index(): JsonResponse
     {
         $heroes = HeroSection::orderBy('sort_order')->get();
-        return response()->json($heroes);
+        return HeroSectionResource::collection($heroes);
     }
 
     /**
@@ -55,7 +56,7 @@ class HeroController extends Controller
 
         $hero = HeroSection::create($data);
 
-        return response()->json($hero, 201);
+        return (new HeroSectionResource($hero))->response()->setStatusCode(201);
     }
 
     /**
@@ -64,7 +65,7 @@ class HeroController extends Controller
     public function show(string $id): JsonResponse
     {
         $hero = HeroSection::findOrFail($id);
-        return response()->json($hero);
+        return new HeroSectionResource($hero);
     }
 
     /**
@@ -102,7 +103,7 @@ class HeroController extends Controller
 
         $hero->update($data);
 
-        return response()->json($hero);
+        return new HeroSectionResource($hero);
     }
 
     /**

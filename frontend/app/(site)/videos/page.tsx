@@ -1,7 +1,20 @@
 import { getLandingPageData } from '@/lib/api';
+import dynamic from 'next/dynamic';
 import type { Video } from '@/types/landing';
-import { VideoGrid } from '@/components/VideoCard';
 import CourseSectionHeading from '@/components/CourseSectionHeading';
+
+const VideoGrid = dynamic(
+  () => import('@/components/VideoCard').then(m => m.VideoGrid),
+  {
+    loading: () => (
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="rounded-xl bg-gray-100 animate-pulse aspect-[9/16]" />
+        ))}
+      </div>
+    ),
+  }
+);
 
 export const revalidate = 60;
 
