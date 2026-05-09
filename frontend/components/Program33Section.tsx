@@ -65,18 +65,22 @@ export default function Program33Section({ courseId, headingAz, headingEn, descr
 
           {/* Əsas mətn — float şəkilin yanından axır */}
           <div className="text-gray-600 leading-relaxed text-xl">
-            {mainLines.map((line, i) =>
-              line === ''
-                ? <div key={i} className="h-5" />
-                : <p key={i} className="mb-0.5">{renderBold(line)}</p>
-            )}
+            {mainLines.map((line, i) => {
+              if (line === '') return <div key={i} className="h-5" />;
+              const isBullet = line.startsWith('•');
+              return (
+                <p key={i} className="mb-0.5" style={isBullet ? {} : { textIndent: '2em' }}>
+                  {renderBold(line)}
+                </p>
+              );
+            })}
           </div>
 
           <div className="clear-both" />
 
           {/* Son paraqraf — şəkilin altında, tam genişlikdə */}
           {lastParagraph && (
-            <p className="mt-1 text-gray-600 leading-relaxed text-xl">{renderBold(lastParagraph)}</p>
+            <p className="mt-1 text-gray-600 leading-relaxed text-xl" style={{ textIndent: '2em' }}>{renderBold(lastParagraph)}</p>
           )}
 
           {/* Düymə — sağa */}
