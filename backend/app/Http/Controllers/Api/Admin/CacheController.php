@@ -9,8 +9,8 @@ class CacheController extends Controller
 {
     public function purge(): JsonResponse
     {
-        $zoneId = env('CLOUDFLARE_ZONE_ID');
-        $token = env('CLOUDFLARE_API_TOKEN');
+        $zoneId = config('services.cloudflare.zone_id');
+        $token = config('services.cloudflare.token');
 
         if (!$zoneId || !$token) {
             return response()->json(['message' => 'Cloudflare konfiqurasiya edilməyib'], 500);

@@ -24,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/landing', [LandingPageController::class, 'index']);
 
 // Authentication routes
-Route::post('/register', [AuthController::class, 'register']);
+Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
@@ -32,7 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 // Admin routes (auth required)
-Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
+Route::prefix('admin')->middleware(['auth:sanctum', 'admin', 'throttle:60,1'])->group(function () {
 
     // Site Settings
     Route::apiResource('settings', SettingsController::class);

@@ -7,6 +7,7 @@ use App\Models\TeacherInfo;
 use App\Traits\HandlesImageUpload;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
 class TeacherController extends Controller
@@ -27,6 +28,7 @@ class TeacherController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        Cache::forget('landing_page_data');
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'title' => 'nullable|string|max:255',
@@ -70,6 +72,7 @@ class TeacherController extends Controller
      */
     public function update(Request $request, string $id): JsonResponse
     {
+        Cache::forget('landing_page_data');
         $teacher = TeacherInfo::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
@@ -111,6 +114,7 @@ class TeacherController extends Controller
      */
     public function destroy(string $id): JsonResponse
     {
+        Cache::forget('landing_page_data');
         $teacher = TeacherInfo::findOrFail($id);
         $this->deleteImage($teacher->photo_url);
         $teacher->delete();

@@ -7,6 +7,7 @@ use App\Models\HeroSection;
 use App\Traits\HandlesImageUpload;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
 class HeroController extends Controller
@@ -27,6 +28,7 @@ class HeroController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        Cache::forget('landing_page_data');
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'title_en' => 'nullable|string|max:255',
@@ -70,6 +72,7 @@ class HeroController extends Controller
      */
     public function update(Request $request, string $id): JsonResponse
     {
+        Cache::forget('landing_page_data');
         $hero = HeroSection::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
@@ -107,6 +110,7 @@ class HeroController extends Controller
      */
     public function destroy(string $id): JsonResponse
     {
+        Cache::forget('landing_page_data');
         $hero = HeroSection::findOrFail($id);
         $this->deleteImage($hero->image_url);
         $hero->delete();

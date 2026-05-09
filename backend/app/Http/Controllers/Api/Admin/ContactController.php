@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Contact;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
 class ContactController extends Controller
@@ -24,6 +25,7 @@ class ContactController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        Cache::forget('landing_page_data');
         $validator = Validator::make($request->all(), [
             'type' => 'required|string|max:255',
             'label' => 'required|string|max:255',
@@ -56,6 +58,7 @@ class ContactController extends Controller
      */
     public function update(Request $request, string $id): JsonResponse
     {
+        Cache::forget('landing_page_data');
         $contact = Contact::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
@@ -81,6 +84,7 @@ class ContactController extends Controller
      */
     public function destroy(string $id): JsonResponse
     {
+        Cache::forget('landing_page_data');
         $contact = Contact::findOrFail($id);
         $contact->delete();
 

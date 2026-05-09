@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -29,7 +30,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md mx-auto">
         <div className="flex justify-center relative z-10 -mb-16 mt-8 overflow-hidden">
           <Link href="/" onClick={() => window.scrollTo({ top: 0 })}>
-            <img src="/brand/finmaster-logo.png" alt="FinMaster Academy" className="h-60 max-w-full w-auto -translate-x-6 cursor-pointer" />
+            <Image src="/brand/finmaster-logo.png" alt="FinMaster Academy" width={0} height={0} sizes="100vw" className="h-60 max-w-full w-auto -translate-x-6 cursor-pointer" unoptimized />
           </Link>
         </div>
 

@@ -39,7 +39,10 @@ uploadClient.interceptors.request.use(attachToken);
 
 // Next.js + Cloudflare cache-ni birlikdə təmizlə
 export const purgeAllCaches = async () => {
-  await fetch('/api/revalidate', { method: 'POST' }).catch(() => {});
+  await fetch('/api/revalidate', {
+    method: 'POST',
+    headers: { 'x-revalidate-secret': process.env.NEXT_PUBLIC_REVALIDATE_SECRET || '' },
+  }).catch(() => {});
   const token = typeof window !== 'undefined' ? localStorage.getItem('admin_token') : null;
   if (token) {
     await fetch(`${API_BASE_URL}/api/admin/purge-cache`, {

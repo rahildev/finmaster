@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
+import Image from 'next/image';
 import type { Video } from '@/types/landing';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -46,7 +47,7 @@ function VideoGridCard({ video, onOpen }: { video: Video; onOpen: () => void }) 
         {/* Thumbnail (always mounted, hidden when hovered) */}
         <div className={`absolute inset-0 transition-opacity duration-300 ${hovered ? 'opacity-0' : 'opacity-100'}`}>
           {thumb ? (
-            <img src={thumb} alt={video.title} className="w-full h-full object-cover" />
+            <Image src={thumb} alt={video.title} width={0} height={0} sizes="100vw" className="w-full h-full object-cover" unoptimized />
           ) : (
             <div className="w-full h-full bg-gray-200" />
           )}

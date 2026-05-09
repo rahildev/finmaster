@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'cloudflare' => [
+        'zone_id' => env('CLOUDFLARE_ZONE_ID'),
+        'token'   => env('CLOUDFLARE_API_TOKEN'),
+    ],
+
 ];

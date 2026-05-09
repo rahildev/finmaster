@@ -12,6 +12,7 @@ use App\Models\SiteSetting;
 use App\Models\TeacherInfo;
 use App\Models\Video;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 
 class LandingPageController extends Controller
 {
@@ -21,46 +22,48 @@ class LandingPageController extends Controller
      */
     public function index(): JsonResponse
     {
-        // Get section visibility settings
-        $sectionSettings = SectionSetting::pluck('is_visible', 'section_key')->toArray();
+        $data = Cache::remember('landing_page_data', 300, function () {
+            // Get section visibility settings
+            $sectionSettings = SectionSetting::pluck('is_visible', 'section_key')->toArray();
 
-        $data = [
-            'hero' => $this->getSectionData('hero', $sectionSettings, function() {
-                return HeroSection::where('is_active', true)
-                    ->orderBy('sort_order')
-                    ->get();
-            }),
+            return [
+                'hero' => $this->getSectionData('hero', $sectionSettings, function() {
+                    return HeroSection::where('is_active', true)
+                        ->orderBy('sort_order')
+                        ->get();
+                }),
 
-            'teacher' => $this->getSectionData('teacher', $sectionSettings, function() {
-                return TeacherInfo::orderBy('created_at')->get();
-            }),
+                'teacher' => $this->getSectionData('teacher', $sectionSettings, function() {
+                    return TeacherInfo::orderBy('created_at')->get();
+                }),
 
-            'courses' => $this->getSectionData('courses', $sectionSettings, function() {
-                return Course::where('is_active', true)
-                    ->orderBy('sort_order')
-                    ->get();
-            }),
+                'courses' => $this->getSectionData('courses', $sectionSettings, function() {
+                    return Course::where('is_active', true)
+                        ->orderBy('sort_order')
+                        ->get();
+                }),
 
-            'videos' => $this->getSectionData('videos', $sectionSettings, function() {
-                return Video::where('is_active', true)
-                    ->orderBy('sort_order')
-                    ->with('course:id,name')
-                    ->get();
-            }),
+                'videos' => $this->getSectionData('videos', $sectionSettings, function() {
+                    return Video::where('is_active', true)
+                        ->orderBy('sort_order')
+                        ->with('course:id,name')
+                        ->get();
+                }),
 
-            'faqs' => $this->getSectionData('faq', $sectionSettings, function() {
-                return Faq::where('is_active', true)
-                    ->orderBy('sort_order')
-                    ->get();
-            }),
+                'faqs' => $this->getSectionData('faq', $sectionSettings, function() {
+                    return Faq::where('is_active', true)
+                        ->orderBy('sort_order')
+                        ->get();
+                }),
 
-            'contacts' => $this->getSectionData('contact', $sectionSettings, function() {
-                return Contact::orderBy('sort_order')->get();
-            }),
+                'contacts' => $this->getSectionData('contact', $sectionSettings, function() {
+                    return Contact::orderBy('sort_order')->get();
+                }),
 
-            'settings' => $this->formatSettings(),
-            'section_visibility' => $sectionSettings,
-        ];
+                'settings' => $this->formatSettings(),
+                'section_visibility' => $sectionSettings,
+            ];
+        });
 
         return response()->json($data);
     }

@@ -83,6 +83,9 @@ class User extends Authenticatable
      */
     public function getPermissionNames(): array
     {
+        if ($this->relationLoaded('permissions')) {
+            return $this->permissions->pluck('permission')->toArray();
+        }
         return $this->permissions()->pluck('permission')->toArray();
     }
 }

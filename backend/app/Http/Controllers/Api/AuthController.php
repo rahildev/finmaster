@@ -37,16 +37,16 @@ class AuthController extends Controller
         // Token yaradırıq (Laravel Sanctum)
         $token = $user->createToken('admin-token')->plainTextToken;
 
-        return response()->json([
-            'user' => [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'role' => $user->role,
-                'permissions' => $user->getPermissionNames(),
-            ],
-            'token' => $token,
-        ]);
+        $userArray = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'role' => $user->role,
+            'permissions' => $user->getPermissionNames(),
+        ];
+
+        $cookie = cookie('admin_token', $token, 60 * 24, '/', null, true, true, false, 'Strict');
+        return response()->json(['user' => $userArray, 'token' => $token])->withCookie($cookie);
     }
 
     /**
@@ -56,7 +56,7 @@ class AuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
 
-        return response()->json(['message' => 'Çıxış edildi']);
+        return response()->json(['message' => 'Çıxış edildi'])->withCookie(cookie()->forget('admin_token'));
     }
 
     /**
@@ -97,7 +97,7 @@ class AuthController extends Controller
             'username' => $request->username,
             'email'    => $request->email,
             'password' => Hash::make($request->password),
-            'role'     => 'admin',
+            'role'     => 'user',
         ]);
 
         return response()->json([

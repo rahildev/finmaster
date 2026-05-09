@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Traits\HandlesImageUpload;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
 class CourseController extends Controller
@@ -27,6 +28,7 @@ class CourseController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
+        Cache::forget('landing_page_data');
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'name_en' => 'required|string|max:255',
@@ -79,6 +81,7 @@ class CourseController extends Controller
      */
     public function update(Request $request, string $id): JsonResponse
     {
+        Cache::forget('landing_page_data');
         $course = Course::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
@@ -128,6 +131,7 @@ class CourseController extends Controller
      */
     public function destroy(string $id): JsonResponse
     {
+        Cache::forget('landing_page_data');
         $course = Course::findOrFail($id);
         $this->deleteImage($course->image_url);
         $course->delete();
