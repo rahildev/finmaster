@@ -28,13 +28,14 @@ class LandingPageController extends Controller
                 'hero' => $this->getSectionData('hero', $sectionSettings, function () {
                     return HeroSection::select([
                         'id','title','title_en','subtitle','subtitle_en',
-                        'image_url','btn_text','btn_text_en','btn_link','sort_order','is_active',
+                        'image_url','image_url_mobile','btn_text','btn_text_en','btn_link','sort_order','is_active',
                     ])->where('is_active', true)->orderBy('sort_order')->get();
                 }),
 
                 'teacher' => $this->getSectionData('teacher', $sectionSettings, function () {
                     return TeacherInfo::select([
-                        'id','name','title','title_en','bio','bio_en','photo_url',
+                        'id','name','title','title_en','bio','bio_en',
+                        'photo_url','photo_url_mobile',
                         'experience','experience_en','achievements','achievements_en',
                     ])->orderBy('created_at')->get();
                 }),
@@ -43,7 +44,7 @@ class LandingPageController extends Controller
                     return Course::select([
                         'id','name','name_en','heading','heading_en',
                         'description','description_en','duration','duration_en',
-                        'price','image_url','sort_order','is_active','page_content','page_content_en',
+                        'price','image_url','image_url_mobile','sort_order','is_active','page_content','page_content_en',
                     ])->where('is_active', true)->orderBy('sort_order')->get();
                 }),
 

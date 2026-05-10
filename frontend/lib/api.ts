@@ -23,7 +23,7 @@ const apiClient = axios.create({
  */
 export async function getLandingPageData(): Promise<LandingPageData> {
   const res = await fetch(`${API_BASE_URL}/api/landing`, {
-    next: { revalidate: 60 },
+    cache: 'no-store',
     headers: { 'Accept': 'application/json' },
   });
   if (!res.ok) throw new Error('Landing page datası yüklənə bilmədi');
