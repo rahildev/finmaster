@@ -79,7 +79,7 @@ export default function AboutSection() {
           <div className="clear-both" />
 
           {/* Son cümlə — tam genişlikdə */}
-          <p className="mt-1 text-gray-600 leading-relaxed text-xl" style={{ textIndent: '2em' }}>
+          <p className="mt-1 text-gray-600 leading-relaxed text-xl">
             {last}
           </p>
 
