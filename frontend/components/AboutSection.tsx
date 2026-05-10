@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
-import type { SiteSettings } from '@/types/landing';
+import type { TeacherInfo } from '@/types/landing';
 
 // Fallback mətnlər — admin paneldə setting yoxdursa göstərilir
 const FALLBACK_AZ =
@@ -40,15 +40,15 @@ function parseContent(raw: string) {
 }
 
 interface Props {
-  settings?: SiteSettings;
+  teacher?: TeacherInfo | null;
 }
 
-export default function AboutSection({ settings = {} }: Props) {
+export default function AboutSection({ teacher }: Props) {
   const { language } = useLanguage();
 
   const raw = language === 'en'
-    ? (settings.about_content_en || FALLBACK_EN)
-    : (settings.about_content_az || FALLBACK_AZ);
+    ? ((teacher as any)?.bio_en || teacher?.bio || FALLBACK_EN)
+    : (teacher?.bio || FALLBACK_AZ);
 
   const { mainLines, lastParagraph } = parseContent(raw);
 

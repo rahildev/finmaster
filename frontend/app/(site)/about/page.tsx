@@ -1,5 +1,6 @@
 import { getLandingPageData } from '@/lib/api';
 import AboutSection from '@/components/AboutSection';
+import type { TeacherInfo } from '@/types/landing';
 
 export const metadata = {
   title: 'Haqqımızda | FinMaster Academy',
@@ -8,15 +9,15 @@ export const metadata = {
 export const revalidate = 60;
 
 export default async function AboutPage() {
-  let settings = {};
+  let teacher: TeacherInfo | null = null;
   try {
     const data = await getLandingPageData();
-    settings = data.settings ?? {};
+    teacher = data.teacher?.[0] ?? null;
   } catch {}
 
   return (
     <div className="pt-16">
-      <AboutSection settings={settings} />
+      <AboutSection teacher={teacher} />
     </div>
   );
 }
