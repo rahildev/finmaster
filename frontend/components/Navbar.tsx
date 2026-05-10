@@ -53,11 +53,12 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
 
   const isActive = (key: string) => {
     if (pathname !== '/') {
-      if (key === 'programs') return pathname.startsWith('/programs');
-      if (key === 'videos')   return pathname === '/videos';
-      if (key === 'blog')     return pathname.startsWith('/blog');
-      if (key === 'about')    return pathname === '/about';
-      if (key === 'faq')      return pathname === '/faq';
+      if (key === 'programs')      return pathname.startsWith('/programs');
+      if (key === 'videos')        return pathname === '/videos';
+      if (key === 'blog')          return pathname.startsWith('/blog');
+      if (key === 'certification') return pathname === '/certification';
+      if (key === 'about')         return pathname === '/about';
+      if (key === 'faq')           return pathname === '/faq';
       if (key === 'login')    return pathname === '/login';
       if (key === 'register') return pathname === '/register';
       return false;
@@ -152,6 +153,10 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               Blog
             </Link>
 
+            <Link href="/certification" className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('certification') ? activeClass : ''}`}>
+              {language === 'en' ? 'Certification' : 'Sertifikasiya'}
+            </Link>
+
             <Link href="/about" className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('about') ? activeClass : ''}`}>
               {language === 'en' ? 'About' : 'Haqqımızda'}
             </Link>
@@ -196,10 +201,6 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
 
             <Link href="/faq" className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('faq') ? activeClass : ''}`}>
               FAQ
-            </Link>
-
-            <Link href="/#certificate" className="px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors">
-              {language === 'en' ? 'Certificate' : 'Sertifikat'}
             </Link>
 
             {/* Giriş / Qeydiyyat */}
@@ -280,6 +281,10 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               Blog
             </Link>
 
+            <Link href="/certification" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
+              {language === 'en' ? 'Certification' : 'Sertifikasiya'}
+            </Link>
+
             <Link href="/about" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
               {language === 'en' ? 'About' : 'Haqqımızda'}
             </Link>
@@ -334,10 +339,6 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
 
             <Link href="/faq" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
               FAQ
-            </Link>
-
-            <Link href="/#certificate" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
-              {language === 'en' ? 'Certificate' : 'Sertifikat'}
             </Link>
 
             {/* Giriş / Qeydiyyat */}
