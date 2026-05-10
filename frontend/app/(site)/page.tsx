@@ -1,7 +1,7 @@
 import { getLandingPageData } from '@/lib/api';
 import Hero from '@/components/Hero';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function Home() {
   let data;

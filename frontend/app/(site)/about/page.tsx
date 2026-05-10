@@ -6,7 +6,7 @@ export const metadata = {
   title: 'Haqqımızda | FinMaster Academy',
 };
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function AboutPage() {
   let teacher: TeacherInfo | null = null;

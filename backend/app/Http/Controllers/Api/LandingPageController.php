@@ -72,13 +72,7 @@ class LandingPageController extends Controller
             ];
         });
 
-        $response = response()->json($data);
-        $etag = md5($response->getContent());
-        $response->setEtag($etag);
-        $response->headers->set('Cache-Control', 'public, max-age=60, s-maxage=60, stale-while-revalidate=30');
-        $response->isNotModified($request);
-
-        return $response;
+        return response()->json($data);
     }
 
     private function getSectionData(string $sectionKey, array $sectionSettings, callable $callback)
