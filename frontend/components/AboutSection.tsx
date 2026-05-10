@@ -2,37 +2,55 @@
 
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
+import type { SiteSettings } from '@/types/landing';
 
-const LINES_AZ = [
-  'Mühasibat və maliyyə sahəsində peşəkar inkişafı hədəfləyənlər üçün yaradılmış premium təhsil platforması.',
-  '',
-  'Finmaster Akademiyası, nəzəri bilik ilə real iş təcrübəsini bir araya gətirərək tələbələrə sistemli, müasir və praktik yönümlü öyrənmə mühiti təqdim etməkdədir :',
-  '— Müasir və premium təhsil sistemi ;',
-  '— Praktiki mühasibat təlimləri ;',
-  '— Real iş proseslərinə əsaslanan yanaşma ;',
-  '— Peşəkar inkişaf yönümlü proqramlar ;',
-  '— Sertifikatlaşdırma imkanları .',
-];
+// Fallback mətnlər — admin paneldə setting yoxdursa göstərilir
+const FALLBACK_AZ =
+`Mühasibat və maliyyə sahəsində peşəkar inkişafı hədəfləyənlər üçün yaradılmış premium təhsil platforması.
 
-const LAST_AZ = 'Düzgün təhsil yalnız bilik vermir, eyni zamanda insanın gələcəyini formalaşdırır. Finmaster Akademiyası da məhz bu məqsədlə yaradılmışdır.';
+Finmaster Akademiyası, nəzəri bilik ilə real iş təcrübəsini bir araya gətirərək tələbələrə sistemli, müasir və praktik yönümlü öyrənmə mühiti təqdim etməkdədir :
+— Müasir və premium təhsil sistemi ;
+— Praktiki mühasibat təlimləri ;
+— Real iş proseslərinə əsaslanan yanaşma ;
+— Peşəkar inkişaf yönümlü proqramlar ;
+— Sertifikatlaşdırma imkanları .
 
-const LINES_EN = [
-  'A premium education platform created for those aiming for professional growth in accounting and finance.',
-  '',
-  'Finmaster Academy brings together theoretical knowledge and real-world work experience, providing students with a systematic, modern and practice-oriented learning environment :',
-  '— Modern and premium education system ;',
-  '— Practical accounting training ;',
-  '— Approach based on real work processes ;',
-  '— Career-oriented development programs ;',
-  '— Certification opportunities .',
-];
+Düzgün təhsil yalnız bilik vermir, eyni zamanda insanın gələcəyini formalaşdırır. Finmaster Akademiyası da məhz bu məqsədlə yaradılmışdır.`;
 
-const LAST_EN = "Quality education does not only provide knowledge — it shapes a person's future. Finmaster Academy was created for exactly this purpose.";
+const FALLBACK_EN =
+`A premium education platform created for those aiming for professional growth in accounting and finance.
 
-export default function AboutSection() {
+Finmaster Academy brings together theoretical knowledge and real-world work experience, providing students with a systematic, modern and practice-oriented learning environment :
+— Modern and premium education system ;
+— Practical accounting training ;
+— Approach based on real work processes ;
+— Career-oriented development programs ;
+— Certification opportunities .
+
+Quality education does not only provide knowledge — it shapes a person's future. Finmaster Academy was created for exactly this purpose.`;
+
+const cleanLine = (l: string) => l.replace(/[­​‌‍⁠﻿]/g, '').trim();
+
+function parseContent(raw: string) {
+  const lines = raw.split('\n').map(cleanLine);
+  const nonEmpty = lines.filter(Boolean);
+  const lastParagraph = nonEmpty[nonEmpty.length - 1] ?? '';
+  const lastIndex = lines.lastIndexOf(lastParagraph);
+  return { mainLines: lines.slice(0, lastIndex), lastParagraph };
+}
+
+interface Props {
+  settings?: SiteSettings;
+}
+
+export default function AboutSection({ settings = {} }: Props) {
   const { language } = useLanguage();
-  const lines = language === 'en' ? LINES_EN : LINES_AZ;
-  const last  = language === 'en' ? LAST_EN  : LAST_AZ;
+
+  const raw = language === 'en'
+    ? (settings.about_content_en || FALLBACK_EN)
+    : (settings.about_content_az || FALLBACK_AZ);
+
+  const { mainLines, lastParagraph } = parseContent(raw);
 
   return (
     <section className="py-16 bg-[#f6f6f5]">
@@ -63,9 +81,9 @@ export default function AboutSection() {
             />
           </div>
 
-          {/* Mətn — şəkilin sağından axır */}
+          {/* Əsas mətn */}
           <div className="text-gray-600 leading-relaxed text-xl">
-            {lines.map((line, i) => {
+            {mainLines.map((line, i) => {
               if (line === '') return <div key={i} className="h-5" />;
               const isBullet = line.startsWith('—');
               return (
@@ -78,10 +96,12 @@ export default function AboutSection() {
 
           <div className="clear-both" />
 
-          {/* Son cümlə — tam genişlikdə */}
-          <p className="mt-1 text-gray-600 leading-relaxed text-xl">
-            {last}
-          </p>
+          {/* Son cümlə — şəkilin altından, tam genişlikdə, abzassız */}
+          {lastParagraph && (
+            <p className="mt-1 text-gray-600 leading-relaxed text-xl">
+              {lastParagraph}
+            </p>
+          )}
 
         </div>
       </div>

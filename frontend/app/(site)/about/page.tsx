@@ -1,3 +1,4 @@
+import { getLandingPageData } from '@/lib/api';
 import AboutSection from '@/components/AboutSection';
 
 export const metadata = {
@@ -6,10 +7,16 @@ export const metadata = {
 
 export const revalidate = 60;
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  let settings = {};
+  try {
+    const data = await getLandingPageData();
+    settings = data.settings ?? {};
+  } catch {}
+
   return (
     <div className="pt-16">
-      <AboutSection />
+      <AboutSection settings={settings} />
     </div>
   );
 }
