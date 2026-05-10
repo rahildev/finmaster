@@ -5,6 +5,76 @@ import { getHeroSections, createHeroSection, updateHeroSection, deleteHeroSectio
 import type { HeroSection } from '@/types/landing';
 import { getImageUrl } from '@/lib/api';
 
+function ImageUploadBox({
+  id,
+  label,
+  preview,
+  onFile,
+  onClear,
+  aspect = 'aspect-video',
+  placeholder = '🖼',
+}: {
+  id: string;
+  label: string;
+  preview: string | null;
+  onFile: (file: File, preview: string) => void;
+  onClear: () => void;
+  aspect?: string;
+  placeholder?: string;
+}) {
+  return (
+    <div>
+      <label className="block text-sm font-semibold text-gray-700 mb-2">{label}</label>
+      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+        {preview ? (
+          <div className={`relative w-full ${aspect} max-w-xs mx-auto mb-3 rounded-lg overflow-hidden`}>
+            <img src={preview} alt={label} className="w-full h-full object-cover" />
+          </div>
+        ) : (
+          <div className={`w-full ${aspect} max-w-xs mx-auto bg-gray-100 rounded-lg flex items-center justify-center mb-3`}>
+            <span className="text-4xl text-gray-300">{placeholder}</span>
+          </div>
+        )}
+        <div className="space-y-2">
+          <input
+            type="file"
+            id={id}
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                const reader = new FileReader();
+                reader.onloadend = () => onFile(file, reader.result as string);
+                reader.readAsDataURL(file);
+              }
+            }}
+            className="hidden"
+          />
+          <label
+            htmlFor={id}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-primary text-white text-sm rounded-lg hover:bg-primary-dark transition-colors cursor-pointer"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            {preview ? 'Dəyiş' : 'Şəkil Seç'}
+          </label>
+          {preview && (
+            <button
+              type="button"
+              onClick={onClear}
+              className="w-full flex items-center justify-center gap-2 px-3 py-2 text-xs bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+            >
+              Şəkili Sil
+            </button>
+          )}
+          <p className="text-xs text-gray-400">PNG, JPG, WEBP (max 5MB)</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function HeroAdminPage() {
   const [heroes, setHeroes] = useState<HeroSection[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,8 +100,11 @@ export default function HeroAdminPage() {
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [originalImageUrl, setOriginalImageUrl] = useState<string | null>(null);
   const [shouldDeleteImage, setShouldDeleteImage] = useState(false);
+
+  const [imageMobileFile, setImageMobileFile] = useState<File | null>(null);
+  const [imageMobilePreview, setImageMobilePreview] = useState<string | null>(null);
+  const [shouldDeleteImageMobile, setShouldDeleteImageMobile] = useState(false);
 
   useEffect(() => {
     fetchHeroes();
@@ -49,31 +122,18 @@ export default function HeroAdminPage() {
   };
 
   const resetForm = () => {
-    setFormData({
-      title: '',
-      title_en: '',
-      subtitle: '',
-      subtitle_en: '',
-      btn_text: '',
-      btn_text_en: '',
-      btn_link: '',
-      sort_order: 0,
-      is_active: true,
-    });
+    setFormData({ title: '', title_en: '', subtitle: '', subtitle_en: '', btn_text: '', btn_text_en: '', btn_link: '', sort_order: 0, is_active: true });
     setImageFile(null);
     setImagePreview(null);
-    setOriginalImageUrl(null);
     setShouldDeleteImage(false);
+    setImageMobileFile(null);
+    setImageMobilePreview(null);
+    setShouldDeleteImageMobile(false);
     setEditingId(null);
     setShowForm(false);
   };
 
-  const handleCancel = () => {
-    resetForm();
-  };
-
   const handleEdit = (hero: HeroSection) => {
-    const imgUrl = hero.image_url ? getImageUrl(hero.image_url) : null;
     setFormData({
       title: hero.title || '',
       title_en: (hero as any).title_en || '',
@@ -85,9 +145,12 @@ export default function HeroAdminPage() {
       sort_order: hero.sort_order || 0,
       is_active: hero.is_active ?? true,
     });
-    setImagePreview(imgUrl);
-    setOriginalImageUrl(imgUrl);
+    setImagePreview(hero.image_url ? getImageUrl(hero.image_url) : null);
     setShouldDeleteImage(false);
+    setImageMobilePreview(hero.image_url_mobile ? getImageUrl(hero.image_url_mobile) : null);
+    setShouldDeleteImageMobile(false);
+    setImageFile(null);
+    setImageMobileFile(null);
     setEditingId(hero.id);
     setFormKey(prev => prev + 1);
     setShowForm(true);
@@ -96,22 +159,32 @@ export default function HeroAdminPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     e.stopPropagation();
-
     setSaving(true);
     setMessage(null);
 
     try {
-      const data: any = {
-        title: formData.title,
-        title_en: formData.title_en,
-        subtitle: formData.subtitle,
-        subtitle_en: formData.subtitle_en,
-        btn_text: formData.btn_text,
-        btn_text_en: formData.btn_text_en,
-        btn_link: formData.btn_link,
-        sort_order: formData.sort_order,
-        is_active: formData.is_active,
-      };
+      const data = new FormData();
+      data.append('title', formData.title);
+      data.append('title_en', formData.title_en);
+      data.append('subtitle', formData.subtitle);
+      data.append('subtitle_en', formData.subtitle_en);
+      data.append('btn_text', formData.btn_text);
+      data.append('btn_text_en', formData.btn_text_en);
+      data.append('btn_link', formData.btn_link);
+      data.append('sort_order', formData.sort_order.toString());
+      data.append('is_active', formData.is_active ? '1' : '0');
+
+      if (imageFile) {
+        data.append('image', imageFile);
+      } else if (shouldDeleteImage) {
+        data.append('delete_image', '1');
+      }
+
+      if (imageMobileFile) {
+        data.append('image_mobile', imageMobileFile);
+      } else if (shouldDeleteImageMobile) {
+        data.append('delete_image_mobile', '1');
+      }
 
       if (editingId) {
         await updateHeroSection(editingId, data);
@@ -125,8 +198,7 @@ export default function HeroAdminPage() {
       await fetchHeroes();
       await purgeAllCaches();
     } catch (error: any) {
-      const errorMessage = error?.response?.data?.message || error?.message || 'Xəta baş verdi!';
-      setMessage({ type: 'error', text: errorMessage });
+      setMessage({ type: 'error', text: error?.response?.data?.message || error?.message || 'Xəta baş verdi!' });
     } finally {
       setSaving(false);
     }
@@ -141,8 +213,7 @@ export default function HeroAdminPage() {
       resetForm();
       await fetchHeroes();
       await purgeAllCaches();
-    } catch (error) {
-      console.error('Xəta:', error);
+    } catch {
       setMessage({ type: 'error', text: 'Silinmədi!' });
       setShowDeleteModal(false);
     }
@@ -164,10 +235,7 @@ export default function HeroAdminPage() {
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold text-gray-dark">Hero Section</h1>
         <button
-          onClick={() => {
-            setFormKey(prev => prev + 1);
-            setShowForm(true);
-          }}
+          onClick={() => { setFormKey(prev => prev + 1); setShowForm(true); }}
           className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
         >
           + Yeni Hero
@@ -175,13 +243,7 @@ export default function HeroAdminPage() {
       </div>
 
       {message && (
-        <div
-          className={`mb-6 p-4 rounded-lg ${
-            message.type === 'success'
-              ? 'bg-green-50 text-green-800 border border-green-200'
-              : 'bg-red-50 text-red-800 border border-red-200'
-          }`}
-        >
+        <div className={`mb-6 p-4 rounded-lg ${message.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'}`}>
           {message.text}
         </div>
       )}
@@ -192,10 +254,29 @@ export default function HeroAdminPage() {
             {editingId ? 'Hero Section Redaktə Et' : 'Yeni Hero Section Əlavə Et'}
           </h2>
           <form key={formKey} onSubmit={handleSubmit} className="space-y-4">
+
+            {/* Images row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <ImageUploadBox
+                id="hero-image-desktop"
+                label="Şəkil — Desktop"
+                preview={imagePreview}
+                onFile={(file, prev) => { setImageFile(file); setImagePreview(prev); setShouldDeleteImage(false); }}
+                onClear={() => { setShouldDeleteImage(true); setImageFile(null); setImagePreview(null); }}
+                aspect="aspect-video"
+              />
+              <ImageUploadBox
+                id="hero-image-mobile"
+                label="Şəkil — Mobile"
+                preview={imageMobilePreview}
+                onFile={(file, prev) => { setImageMobileFile(file); setImageMobilePreview(prev); setShouldDeleteImageMobile(false); }}
+                onClear={() => { setShouldDeleteImageMobile(true); setImageMobileFile(null); setImageMobilePreview(null); }}
+                aspect="aspect-[9/16]"
+              />
+            </div>
+
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Başlıq (AZ) *
-              </label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Başlıq (AZ) *</label>
               <input
                 type="text"
                 required
@@ -207,9 +288,7 @@ export default function HeroAdminPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Başlıq (EN)
-              </label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Başlıq (EN)</label>
               <input
                 type="text"
                 value={formData.title_en}
@@ -220,9 +299,7 @@ export default function HeroAdminPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Alt Başlıq (AZ)
-              </label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Alt Başlıq (AZ)</label>
               <textarea
                 rows={2}
                 value={formData.subtitle}
@@ -233,9 +310,7 @@ export default function HeroAdminPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">
-                Alt Başlıq (EN)
-              </label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Alt Başlıq (EN)</label>
               <textarea
                 rows={2}
                 value={formData.subtitle_en}
@@ -247,9 +322,7 @@ export default function HeroAdminPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Button Mətni (AZ)
-                </label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Button Mətni (AZ)</label>
                 <input
                   type="text"
                   value={formData.btn_text}
@@ -258,11 +331,8 @@ export default function HeroAdminPage() {
                   placeholder="Kursları İncələ"
                 />
               </div>
-
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Button Mətni (EN)
-                </label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Button Mətni (EN)</label>
                 <input
                   type="text"
                   value={formData.btn_text_en}
@@ -271,11 +341,8 @@ export default function HeroAdminPage() {
                   placeholder="Explore Courses"
                 />
               </div>
-
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Button Linki
-                </label>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Button Linki</label>
                 <input
                   type="text"
                   value={formData.btn_link}
@@ -296,7 +363,6 @@ export default function HeroAdminPage() {
                 />
                 <span className="text-sm font-medium text-gray-700">Aktiv</span>
               </label>
-
               <div className="flex items-center gap-2">
                 <label className="text-sm font-medium text-gray-700">Sıra:</label>
                 <input
@@ -312,34 +378,25 @@ export default function HeroAdminPage() {
               <div className="flex gap-4">
                 <button
                   type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleSubmit(e as any);
-                  }}
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSubmit(e as any); }}
                   disabled={saving}
-                  style={{ position: 'relative', zIndex: 10 }}
                   className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {saving ? 'Yadda saxlanılır...' : 'Yadda Saxla'}
                 </button>
                 <button
                   type="button"
-                  onClick={handleCancel}
+                  onClick={resetForm}
                   disabled={saving}
                   className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
                 >
                   Ləğv Et
                 </button>
               </div>
-
               {editingId && (
                 <button
                   type="button"
-                  onClick={() => {
-                    setDeleteTargetId(editingId);
-                    setShowDeleteModal(true);
-                  }}
+                  onClick={() => { setDeleteTargetId(editingId); setShowDeleteModal(true); }}
                   disabled={saving}
                   className="px-6 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors disabled:opacity-50"
                 >
@@ -354,34 +411,34 @@ export default function HeroAdminPage() {
       {!showForm && (
         <div className="grid gap-4">
           {heroes.map((hero) => (
-            <div
-              key={hero.id}
-              className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex justify-between items-start"
-            >
-              <div className="flex-1">
-                <h3 className="text-lg font-bold text-gray-dark mb-1">{hero.title}</h3>
-                {hero.subtitle && (
-                  <p className="text-gray-600 text-sm mb-2">{hero.subtitle}</p>
+            <div key={hero.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex justify-between items-start">
+              <div className="flex gap-4 flex-1">
+                {hero.image_url && (
+                  <div className="w-32 h-20 rounded-lg overflow-hidden flex-shrink-0">
+                    <img src={getImageUrl(hero.image_url) || ''} alt="" className="w-full h-full object-cover" />
+                  </div>
                 )}
-                <div className="flex items-center gap-4 text-xs text-gray-500">
-                  {hero.btn_text && <span>🔘 {hero.btn_text}</span>}
-                  <span className={hero.is_active ? 'text-green-600' : 'text-gray-400'}>
-                    {hero.is_active ? '✓ Aktiv' : '✗ Deaktiv'}
-                  </span>
-                  <span>Sıra: {hero.sort_order}</span>
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold text-gray-dark mb-1">{hero.title}</h3>
+                  {hero.subtitle && <p className="text-gray-600 text-sm mb-2">{hero.subtitle}</p>}
+                  <div className="flex items-center gap-4 text-xs text-gray-500">
+                    {hero.btn_text && <span>🔘 {hero.btn_text}</span>}
+                    {hero.image_url_mobile && <span>📱 Mobile şəkil var</span>}
+                    <span className={hero.is_active ? 'text-green-600' : 'text-gray-400'}>
+                      {hero.is_active ? '✓ Aktiv' : '✗ Deaktiv'}
+                    </span>
+                    <span>Sıra: {hero.sort_order}</span>
+                  </div>
                 </div>
               </div>
-              <div className="flex gap-2 flex-shrink-0">
-                <button
-                  onClick={() => handleEdit(hero)}
-                  className="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors"
-                >
-                  Redaktə
-                </button>
-              </div>
+              <button
+                onClick={() => handleEdit(hero)}
+                className="px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors flex-shrink-0"
+              >
+                Redaktə
+              </button>
             </div>
           ))}
-
           {heroes.length === 0 && (
             <div className="text-center py-12 text-gray-500">
               Heç bir hero section yoxdur. Yeni hero section əlavə edin.
@@ -390,7 +447,6 @@ export default function HeroAdminPage() {
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden">
@@ -400,28 +456,17 @@ export default function HeroAdminPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                 </svg>
               </div>
-              <h3 className="text-xl font-bold text-gray-dark text-center mb-2">
-                Hero section silmək istədiyinizə əminsiniz?
-              </h3>
-              <p className="text-gray-600 text-center mb-6">
-                Bu əməliyyat geri qaytarıla bilməz. Bütün məlumatlar silinəcək.
-              </p>
+              <h3 className="text-xl font-bold text-gray-dark text-center mb-2">Hero section silmək istədiyinizə əminsiniz?</h3>
+              <p className="text-gray-600 text-center mb-6">Bu əməliyyat geri qaytarıla bilməz.</p>
               <div className="flex gap-3">
                 <button
-                  onClick={() => {
-                    setShowDeleteModal(false);
-                    setDeleteTargetId(null);
-                  }}
+                  onClick={() => { setShowDeleteModal(false); setDeleteTargetId(null); }}
                   className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
                 >
                   Ləğv Et
                 </button>
                 <button
-                  onClick={() => {
-                    if (deleteTargetId) {
-                      handleDelete(deleteTargetId);
-                    }
-                  }}
+                  onClick={() => { if (deleteTargetId) handleDelete(deleteTargetId); }}
                   className="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
                 >
                   Sil

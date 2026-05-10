@@ -44,13 +44,14 @@ export const getHeroSections = async (): Promise<HeroSection[]> => {
   return response.data;
 };
 
-export const createHeroSection = async (data: Partial<HeroSection>): Promise<HeroSection> => {
-  const response = await adminClient.post('/hero', data);
+export const createHeroSection = async (formData: FormData): Promise<HeroSection> => {
+  const response = await uploadClient.post('/hero', formData);
   return response.data;
 };
 
-export const updateHeroSection = async (id: number, data: Partial<HeroSection>): Promise<HeroSection> => {
-  const response = await adminClient.put(`/hero/${id}`, data);
+export const updateHeroSection = async (id: number, formData: FormData): Promise<HeroSection> => {
+  formData.append('_method', 'PUT');
+  const response = await uploadClient.post(`/hero/${id}`, formData);
   return response.data;
 };
 

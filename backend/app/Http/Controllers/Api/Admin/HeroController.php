@@ -34,7 +34,8 @@ class HeroController extends Controller
             'title_en' => 'nullable|string|max:255',
             'subtitle' => 'nullable|string',
             'subtitle_en' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'image_mobile' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'btn_text' => 'nullable|string|max:255',
             'btn_text_en' => 'nullable|string|max:255',
             'btn_link' => 'nullable|string|max:255',
@@ -51,6 +52,11 @@ class HeroController extends Controller
         if ($request->hasFile('image')) {
             $data['image_url'] = $this->uploadImage($request->file('image'), 'hero');
             unset($data['image']);
+        }
+
+        if ($request->hasFile('image_mobile')) {
+            $data['image_url_mobile'] = $this->uploadImage($request->file('image_mobile'), 'hero');
+            unset($data['image_mobile']);
         }
 
         $hero = HeroSection::create($data);
@@ -80,7 +86,8 @@ class HeroController extends Controller
             'title_en' => 'nullable|string|max:255',
             'subtitle' => 'nullable|string',
             'subtitle_en' => 'nullable|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'image_mobile' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'btn_text' => 'nullable|string|max:255',
             'btn_text_en' => 'nullable|string|max:255',
             'btn_link' => 'nullable|string|max:255',
@@ -98,6 +105,18 @@ class HeroController extends Controller
             $this->deleteImage($hero->image_url);
             $data['image_url'] = $this->uploadImage($request->file('image'), 'hero');
             unset($data['image']);
+        } elseif ($request->has('delete_image') && $request->input('delete_image') === '1') {
+            $this->deleteImage($hero->image_url);
+            $data['image_url'] = null;
+        }
+
+        if ($request->hasFile('image_mobile')) {
+            $this->deleteImage($hero->image_url_mobile);
+            $data['image_url_mobile'] = $this->uploadImage($request->file('image_mobile'), 'hero');
+            unset($data['image_mobile']);
+        } elseif ($request->has('delete_image_mobile') && $request->input('delete_image_mobile') === '1') {
+            $this->deleteImage($hero->image_url_mobile);
+            $data['image_url_mobile'] = null;
         }
 
         $hero->update($data);
@@ -113,6 +132,7 @@ class HeroController extends Controller
         Cache::forget('landing_page_data');
         $hero = HeroSection::findOrFail($id);
         $this->deleteImage($hero->image_url);
+        $this->deleteImage($hero->image_url_mobile);
         $hero->delete();
 
         return response()->json(['message' => 'Hero seksiyası silindi'], 200);

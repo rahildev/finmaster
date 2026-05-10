@@ -36,6 +36,10 @@ export default function CoursesAdminPage() {
   const [originalImageUrl, setOriginalImageUrl] = useState<string | null>(null);
   const [shouldDeleteImage, setShouldDeleteImage] = useState(false);
 
+  const [imageMobileFile, setImageMobileFile] = useState<File | null>(null);
+  const [imageMobilePreview, setImageMobilePreview] = useState<string | null>(null);
+  const [shouldDeleteImageMobile, setShouldDeleteImageMobile] = useState(false);
+
   useEffect(() => {
     fetchCourses();
   }, []);
@@ -69,6 +73,9 @@ export default function CoursesAdminPage() {
     setImagePreview(null);
     setOriginalImageUrl(null);
     setShouldDeleteImage(false);
+    setImageMobileFile(null);
+    setImageMobilePreview(null);
+    setShouldDeleteImageMobile(false);
     setEditingId(null);
     setShowForm(false);
   };
@@ -118,9 +125,13 @@ Throughout the program consisting of 33 (thirty-three) lesson days, i.e. 66 (six
       sort_order: course.sort_order || 0,
       is_active: course.is_active ?? true,
     });
+    const imgMobileUrl = (course as any).image_url_mobile ? getImageUrl((course as any).image_url_mobile) : null;
     setImagePreview(imgUrl);
     setOriginalImageUrl(imgUrl);
     setShouldDeleteImage(false);
+    setImageMobilePreview(imgMobileUrl);
+    setShouldDeleteImageMobile(false);
+    setImageMobileFile(null);
     setEditingId(course.id);
     setFormKey(prev => prev + 1);
     setShowForm(true);
@@ -151,6 +162,12 @@ Throughout the program consisting of 33 (thirty-three) lesson days, i.e. 66 (six
         data.append('image', imageFile);
       } else if (shouldDeleteImage) {
         data.append('delete_image', '1');
+      }
+
+      if (imageMobileFile) {
+        data.append('image_mobile', imageMobileFile);
+      } else if (shouldDeleteImageMobile) {
+        data.append('delete_image_mobile', '1');
       }
 
       if (editingId) {
@@ -191,6 +208,12 @@ Throughout the program consisting of 33 (thirty-three) lesson days, i.e. 66 (six
     setShouldDeleteImage(true);
     setImageFile(null);
     setImagePreview(null);
+  };
+
+  const handleClearImageMobile = () => {
+    setShouldDeleteImageMobile(true);
+    setImageMobileFile(null);
+    setImageMobilePreview(null);
   };
 
   if (loading) {
@@ -238,11 +261,12 @@ Throughout the program consisting of 33 (thirty-three) lesson days, i.e. 66 (six
           </h2>
           <form key={formKey} onSubmit={handleSubmit} className="space-y-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Sol tərəf - Şəkil */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Kurs Şəkli
-                </label>
+              {/* Sol tərəf - Şəkillər */}
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Kurs Şəkli — Desktop
+                  </label>
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                   {imagePreview ? (
                     <div className="relative w-full aspect-video max-w-md mx-auto mb-4 rounded-lg overflow-hidden">
@@ -300,7 +324,66 @@ Throughout the program consisting of 33 (thirty-three) lesson days, i.e. 66 (six
                       </button>
                     )}
 
-                    <p className="text-xs text-gray-500 text-center">PNG, JPG, WEBP (max 2MB)</p>
+                    <p className="text-xs text-gray-500 text-center">PNG, JPG, WEBP (max 5MB)</p>
+                  </div>
+                </div>
+                </div>
+
+                {/* Mobile image */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Kurs Şəkli — Mobile
+                  </label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                    {imageMobilePreview ? (
+                      <div className="relative w-full aspect-[9/16] max-w-[120px] mx-auto mb-4 rounded-lg overflow-hidden">
+                        <img src={imageMobilePreview} alt="Mobile" className="w-full h-full object-cover" />
+                      </div>
+                    ) : (
+                      <div className="w-full aspect-[9/16] max-w-[120px] mx-auto bg-gray-100 rounded-lg flex items-center justify-center mb-4">
+                        <span className="text-3xl text-gray-300">📱</span>
+                      </div>
+                    )}
+                    <div className="space-y-2">
+                      <input
+                        type="file"
+                        id="image-mobile-upload"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            setImageMobileFile(file);
+                            setShouldDeleteImageMobile(false);
+                            const reader = new FileReader();
+                            reader.onloadend = () => setImageMobilePreview(reader.result as string);
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                        className="hidden"
+                      />
+                      <label
+                        htmlFor="image-mobile-upload"
+                        className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors cursor-pointer"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        {imageMobilePreview ? 'Şəkili Dəyiş' : 'Şəkil Seç'}
+                      </label>
+                      {imageMobilePreview && (
+                        <button
+                          type="button"
+                          onClick={handleClearImageMobile}
+                          className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                          Şəkili Sil
+                        </button>
+                      )}
+                      <p className="text-xs text-gray-500 text-center">PNG, JPG, WEBP (max 5MB)</p>
+                    </div>
                   </div>
                 </div>
               </div>

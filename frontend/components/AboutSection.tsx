@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { getImageUrl } from '@/lib/api';
 import type { TeacherInfo } from '@/types/landing';
 
 // Fallback mətnlər — admin paneldə setting yoxdursa göstərilir
@@ -52,6 +53,9 @@ export default function AboutSection({ teacher }: Props) {
 
   const { mainLines, lastParagraph } = parseContent(raw);
 
+  const desktopSrc = (teacher?.photo_url ? getImageUrl(teacher.photo_url) : null) ?? '/akademiya-desktop.png';
+  const mobileSrc = ((teacher as any)?.photo_url_mobile ? getImageUrl((teacher as any).photo_url_mobile) : null) ?? '/akademiya-mobile.png';
+
   return (
     <section className="py-16 bg-[#f6f6f5]">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
@@ -60,7 +64,7 @@ export default function AboutSection({ teacher }: Props) {
           {/* Desktop şəkil — sola float */}
           <div className="hidden lg:block float-left mr-10 mb-6 -mt-2 w-[46%] rounded-2xl overflow-hidden">
             <Image
-              src="/akademiya-desktop.png"
+              src={desktopSrc}
               alt="Finmaster Akademiyası"
               width={1536}
               height={1024}
@@ -72,7 +76,7 @@ export default function AboutSection({ teacher }: Props) {
           {/* Mobile şəkil — tam genişlik, mətnin üstündə */}
           <div className="lg:hidden mb-6 rounded-2xl overflow-hidden">
             <Image
-              src="/akademiya-mobile.png"
+              src={mobileSrc}
               alt="Finmaster Akademiyası"
               width={941}
               height={1672}

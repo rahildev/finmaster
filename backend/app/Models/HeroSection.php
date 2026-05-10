@@ -12,6 +12,7 @@ class HeroSection extends Model
         'subtitle',
         'subtitle_en',
         'image_url',
+        'image_url_mobile',
         'btn_text',
         'btn_text_en',
         'btn_link',

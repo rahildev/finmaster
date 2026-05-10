@@ -33,6 +33,10 @@ export default function TeachersAdminPage() {
   const [originalPhotoUrl, setOriginalPhotoUrl] = useState<string | null>(null);
   const [shouldDeletePhoto, setShouldDeletePhoto] = useState(false);
 
+  const [photoMobileFile, setPhotoMobileFile] = useState<File | null>(null);
+  const [photoMobilePreview, setPhotoMobilePreview] = useState<string | null>(null);
+  const [shouldDeletePhotoMobile, setShouldDeletePhotoMobile] = useState(false);
+
   useEffect(() => {
     fetchTeachers();
   }, []);
@@ -64,6 +68,9 @@ export default function TeachersAdminPage() {
     setPhotoPreview(null);
     setOriginalPhotoUrl(null);
     setShouldDeletePhoto(false);
+    setPhotoMobileFile(null);
+    setPhotoMobilePreview(null);
+    setShouldDeletePhotoMobile(false);
     setEditingId(null);
     setShowForm(false);
   };
@@ -86,9 +93,13 @@ export default function TeachersAdminPage() {
       achievements: teacher.achievements || '',
       achievements_en: (teacher as any).achievements_en || '',
     });
+    const photoMobileUrl = (teacher as any).photo_url_mobile ? getImageUrl((teacher as any).photo_url_mobile) : null;
     setPhotoPreview(photoUrl);
-    setOriginalPhotoUrl(photoUrl); // Original şəkli saxla
+    setOriginalPhotoUrl(photoUrl);
     setShouldDeletePhoto(false);
+    setPhotoMobilePreview(photoMobileUrl);
+    setShouldDeletePhotoMobile(false);
+    setPhotoMobileFile(null);
     setEditingId(teacher.id);
     setFormKey(prev => prev + 1);
     setShowForm(true);
@@ -116,8 +127,13 @@ export default function TeachersAdminPage() {
       if (photoFile) {
         data.append('photo', photoFile);
       } else if (shouldDeletePhoto) {
-        // Şəkili silmək üçün boş string göndər
         data.append('delete_photo', '1');
+      }
+
+      if (photoMobileFile) {
+        data.append('photo_mobile', photoMobileFile);
+      } else if (shouldDeletePhotoMobile) {
+        data.append('delete_photo_mobile', '1');
       }
 
       if (editingId) {
@@ -159,6 +175,12 @@ export default function TeachersAdminPage() {
     setShouldDeletePhoto(true);
     setPhotoFile(null);
     setPhotoPreview(null);
+  };
+
+  const handleClearPhotoMobile = () => {
+    setShouldDeletePhotoMobile(true);
+    setPhotoMobileFile(null);
+    setPhotoMobilePreview(null);
   };
 
   if (loading) {
@@ -210,10 +232,11 @@ export default function TeachersAdminPage() {
             className="space-y-4"
           >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Sol tərəf - Foto */}
-              <div>
+              {/* Sol tərəf - Fotolar */}
+              <div className="space-y-4">
+                <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Müəllimin Şəkli
+                  Şəkil — Desktop
                 </label>
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                   {photoPreview ? (
@@ -272,7 +295,66 @@ export default function TeachersAdminPage() {
                       </button>
                     )}
 
-                    <p className="text-xs text-gray-500 text-center">PNG, JPG, WEBP (max 2MB)</p>
+                    <p className="text-xs text-gray-500 text-center">PNG, JPG, WEBP (max 5MB)</p>
+                  </div>
+                </div>
+                </div>
+
+                {/* Mobile photo */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Şəkil — Mobile
+                  </label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                    {photoMobilePreview ? (
+                      <div className="relative w-full aspect-[9/16] max-w-[120px] mx-auto mb-4 rounded-lg overflow-hidden">
+                        <img src={photoMobilePreview} alt="Mobile" className="w-full h-full object-cover" />
+                      </div>
+                    ) : (
+                      <div className="w-full aspect-[9/16] max-w-[120px] mx-auto bg-gray-100 rounded-lg flex items-center justify-center mb-4">
+                        <span className="text-3xl text-gray-300">📱</span>
+                      </div>
+                    )}
+                    <div className="space-y-2">
+                      <input
+                        type="file"
+                        id="photo-mobile-upload"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            setPhotoMobileFile(file);
+                            setShouldDeletePhotoMobile(false);
+                            const reader = new FileReader();
+                            reader.onloadend = () => setPhotoMobilePreview(reader.result as string);
+                            reader.readAsDataURL(file);
+                          }
+                        }}
+                        className="hidden"
+                      />
+                      <label
+                        htmlFor="photo-mobile-upload"
+                        className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors cursor-pointer"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        {photoMobilePreview ? 'Şəkili Dəyiş' : 'Şəkil Seç'}
+                      </label>
+                      {photoMobilePreview && (
+                        <button
+                          type="button"
+                          onClick={handleClearPhotoMobile}
+                          className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                          Şəkili Sil
+                        </button>
+                      )}
+                      <p className="text-xs text-gray-500 text-center">PNG, JPG, WEBP (max 5MB)</p>
+                    </div>
                   </div>
                 </div>
               </div>

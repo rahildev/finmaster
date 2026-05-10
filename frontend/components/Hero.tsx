@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { getImageUrl } from '@/lib/api';
 import type { HeroSection as HeroType, Contact } from '@/types/landing';
 
 interface HeroProps {
@@ -18,6 +19,9 @@ export default function Hero({ data, contacts = [] }: HeroProps) {
   const hero = data[0];
   const title = language === 'en' ? (hero as any).title_en || hero.title : hero.title;
   const subtitle = language === 'en' ? (hero as any).subtitle_en || hero.subtitle : hero.subtitle;
+
+  const desktopSrc = (hero.image_url ? getImageUrl(hero.image_url) : null) ?? '/hero-photo.png';
+  const mobileSrc = (hero.image_url_mobile ? getImageUrl(hero.image_url_mobile) : null) ?? '/hero-mobile.png';
 
   const whatsapp = contacts.find(c => c.type === 'whatsapp');
   const whatsappHref = whatsapp
@@ -40,7 +44,7 @@ export default function Hero({ data, contacts = [] }: HeroProps) {
           }}
         >
           <Image
-            src="/hero-photo.png"
+            src={desktopSrc}
             alt=""
             fill
             priority
@@ -129,7 +133,7 @@ export default function Hero({ data, contacts = [] }: HeroProps) {
 
         {/* Mobile image — tam genişlik, altda */}
         <Image
-          src="/hero-mobile.png"
+          src={mobileSrc}
           alt=""
           width={0}
           height={0}

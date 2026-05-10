@@ -35,7 +35,8 @@ class TeacherController extends Controller
             'title_en' => 'nullable|string|max:255',
             'bio' => 'nullable|string',
             'bio_en' => 'nullable|string',
-            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'photo_mobile' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'experience' => 'nullable|string',
             'experience_en' => 'nullable|string',
             'achievements' => 'nullable|string',
@@ -51,6 +52,11 @@ class TeacherController extends Controller
         if ($request->hasFile('photo')) {
             $data['photo_url'] = $this->uploadImage($request->file('photo'), 'teacher');
             unset($data['photo']);
+        }
+
+        if ($request->hasFile('photo_mobile')) {
+            $data['photo_url_mobile'] = $this->uploadImage($request->file('photo_mobile'), 'teacher');
+            unset($data['photo_mobile']);
         }
 
         $teacher = TeacherInfo::create($data);
@@ -81,7 +87,8 @@ class TeacherController extends Controller
             'title_en' => 'nullable|string|max:255',
             'bio' => 'nullable|string',
             'bio_en' => 'nullable|string',
-            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'photo_mobile' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'experience' => 'nullable|string',
             'experience_en' => 'nullable|string',
             'achievements' => 'nullable|string',
@@ -99,9 +106,17 @@ class TeacherController extends Controller
             $data['photo_url'] = $this->uploadImage($request->file('photo'), 'teacher');
             unset($data['photo']);
         } elseif ($request->has('delete_photo') && $request->input('delete_photo') === '1') {
-            // Şəkili sil
             $this->deleteImage($teacher->photo_url);
             $data['photo_url'] = null;
+        }
+
+        if ($request->hasFile('photo_mobile')) {
+            $this->deleteImage($teacher->photo_url_mobile);
+            $data['photo_url_mobile'] = $this->uploadImage($request->file('photo_mobile'), 'teacher');
+            unset($data['photo_mobile']);
+        } elseif ($request->has('delete_photo_mobile') && $request->input('delete_photo_mobile') === '1') {
+            $this->deleteImage($teacher->photo_url_mobile);
+            $data['photo_url_mobile'] = null;
         }
 
         $teacher->update($data);
@@ -117,6 +132,7 @@ class TeacherController extends Controller
         Cache::forget('landing_page_data');
         $teacher = TeacherInfo::findOrFail($id);
         $this->deleteImage($teacher->photo_url);
+        $this->deleteImage($teacher->photo_url_mobile);
         $teacher->delete();
 
         return response()->json(['message' => 'Müəllim məlumatı silindi'], 200);

@@ -39,7 +39,8 @@ class CourseController extends Controller
             'duration' => 'nullable|string|max:255',
             'duration_en' => 'nullable|string|max:255',
             'price' => 'nullable|numeric|min:0',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'image_mobile' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'sort_order' => 'nullable|integer',
             'is_active' => 'nullable|boolean',
         ]);
@@ -53,6 +54,11 @@ class CourseController extends Controller
         if ($request->hasFile('image')) {
             $data['image_url'] = $this->uploadImage($request->file('image'), 'courses');
             unset($data['image']);
+        }
+
+        if ($request->hasFile('image_mobile')) {
+            $data['image_url_mobile'] = $this->uploadImage($request->file('image_mobile'), 'courses');
+            unset($data['image_mobile']);
         }
 
         if ($request->has('page_content')) {
@@ -94,7 +100,8 @@ class CourseController extends Controller
             'duration' => 'nullable|string|max:255',
             'duration_en' => 'nullable|string|max:255',
             'price' => 'nullable|numeric|min:0',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'image_mobile' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
             'sort_order' => 'nullable|integer',
             'is_active' => 'nullable|boolean',
         ]);
@@ -112,6 +119,15 @@ class CourseController extends Controller
         } elseif ($request->has('delete_image') && $request->input('delete_image') === '1') {
             $this->deleteImage($course->image_url);
             $data['image_url'] = null;
+        }
+
+        if ($request->hasFile('image_mobile')) {
+            $this->deleteImage($course->image_url_mobile);
+            $data['image_url_mobile'] = $this->uploadImage($request->file('image_mobile'), 'courses');
+            unset($data['image_mobile']);
+        } elseif ($request->has('delete_image_mobile') && $request->input('delete_image_mobile') === '1') {
+            $this->deleteImage($course->image_url_mobile);
+            $data['image_url_mobile'] = null;
         }
 
         if ($request->has('page_content')) {
@@ -134,6 +150,7 @@ class CourseController extends Controller
         Cache::forget('landing_page_data');
         $course = Course::findOrFail($id);
         $this->deleteImage($course->image_url);
+        $this->deleteImage($course->image_url_mobile);
         $course->delete();
 
         return response()->json(['message' => 'Kurs silindi'], 200);

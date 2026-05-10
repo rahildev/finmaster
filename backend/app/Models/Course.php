@@ -17,6 +17,7 @@ class Course extends Model
         'duration_en',
         'price',
         'image_url',
+        'image_url_mobile',
         'page_content',
         'page_content_en',
         'sort_order',

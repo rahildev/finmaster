@@ -15,6 +15,7 @@ class TeacherInfo extends Model
         'bio',
         'bio_en',
         'photo_url',
+        'photo_url_mobile',
         'experience',
         'experience_en',
         'achievements',

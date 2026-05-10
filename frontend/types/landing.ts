@@ -8,6 +8,7 @@ export interface HeroSection {
   title: string;
   subtitle: string | null;
   image_url: string | null;
+  image_url_mobile: string | null;
   btn_text: string | null;
   btn_link: string | null;
   sort_order: number;
@@ -22,6 +23,7 @@ export interface TeacherInfo {
   title: string | null;
   bio: string | null;
   photo_url: string | null;
+  photo_url_mobile: string | null;
   experience: string | null;
   achievements: string | null;
   created_at: string;
@@ -40,6 +42,7 @@ export interface Course {
   duration_en: string | null;
   price: string;
   image_url: string | null;
+  image_url_mobile: string | null;
   sort_order: number;
   is_active: boolean;
   created_at: string;
