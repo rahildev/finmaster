@@ -175,7 +175,7 @@ export default function TeachersAdminPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-gray-dark">Müəllimlər</h1>
+        <h1 className="text-3xl font-bold text-gray-dark">Haqqımızda</h1>
         <button
           onClick={() => {
             setFormKey(prev => prev + 1);

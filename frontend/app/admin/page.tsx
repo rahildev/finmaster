@@ -52,7 +52,7 @@ export default function AdminDashboard() {
 
   const allQuickActions = [
     { title: 'Hero Section Redaktə Et', href: '/admin/hero', icon: '🎯', permission: 'manage_hero' },
-    { title: 'Müəllim Məlumatı', href: '/admin/teacher', icon: '👨‍🏫', permission: 'manage_teacher' },
+    { title: 'Haqqımızda', href: '/admin/teacher', icon: '👨‍🏫', permission: 'manage_teacher' },
     { title: 'Yeni Kurs Əlavə Et', href: '/admin/courses', icon: '➕', permission: 'manage_courses' },
     { title: 'Yeni Video Əlavə Et', href: '/admin/videos', icon: '➕', permission: 'manage_videos' },
   ];

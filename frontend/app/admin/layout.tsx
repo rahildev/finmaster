@@ -13,7 +13,7 @@ const menuItems = [
   { name: 'Dashboard', href: '/admin', icon: '📊', permission: '' },
   { name: 'Səhifə Bölmələri', href: '/admin/sections', icon: '⚙️', superAdminOnly: true },
   { name: 'Hero Section', href: '/admin/hero', icon: '🎯', permission: 'manage_hero' },
-  { name: 'Müəllim', href: '/admin/teacher', icon: '👨‍🏫', permission: 'manage_teachers' },
+  { name: 'Haqqımızda', href: '/admin/teacher', icon: '👨‍🏫', permission: 'manage_teachers' },
   { name: 'Kurslar', href: '/admin/courses', icon: '📚', permission: 'manage_courses' },
   { name: 'Videolar', href: '/admin/videos', icon: '🎥', permission: 'manage_videos' },
   { name: 'FAQ', href: '/admin/faqs', icon: '❓', permission: 'manage_faqs' },
