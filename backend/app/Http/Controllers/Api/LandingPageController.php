@@ -72,7 +72,10 @@ class LandingPageController extends Controller
             ];
         });
 
-        return response()->json($data);
+        return response()->json($data)
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('CDN-Cache-Control', 'no-store')
+            ->header('Pragma', 'no-cache');
     }
 
     private function getSectionData(string $sectionKey, array $sectionSettings, callable $callback)
