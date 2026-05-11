@@ -197,7 +197,7 @@ export default function AboutSection({ teacher }: Props) {
                 </p>
               )}
               {signature && (
-                <p className="text-xl font-semibold text-gray-500 tracking-wide">
+                <p className="text-xl font-semibold text-gray-500 tracking-wide mt-4">
                   {signature}
                 </p>
               )}
