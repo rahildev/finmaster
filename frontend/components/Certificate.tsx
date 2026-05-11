@@ -60,6 +60,31 @@ export default function Certificate() {
           <div className="clear-both" />
 
         </div>
+
+        {/* Yeni şəkil — mətn və şəklin altında */}
+        <div className="mt-16">
+          <div className="hidden lg:block rounded-2xl overflow-hidden">
+            <Image
+              src="/sert-desk.webp"
+              alt="Sertifikat nümunəsi"
+              width={1881}
+              height={836}
+              className="w-full h-auto"
+              unoptimized
+            />
+          </div>
+          <div className="lg:hidden rounded-2xl overflow-hidden">
+            <Image
+              src="/sert-mobile.webp"
+              alt="Sertifikat nümunəsi"
+              width={600}
+              height={400}
+              className="w-full h-auto"
+              unoptimized
+            />
+          </div>
+        </div>
+
       </div>
     </section>
   );
