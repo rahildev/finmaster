@@ -168,7 +168,7 @@ export default function AboutSection({ teacher }: Props) {
           {/* Sağ: qurucu şəkli */}
           <div className="w-full lg:w-[55%] shrink-0 rounded-2xl overflow-hidden lg:pt-8">
             <Image
-              src="/qurucu-desktop-t.png"
+              src="/qurucu-desktop-t.webp"
               alt="Qurucu"
               width={700}
               height={560}
@@ -176,7 +176,7 @@ export default function AboutSection({ teacher }: Props) {
               unoptimized
             />
             <Image
-              src="/qurucu-mobile-t.png"
+              src="/qurucu-mobile-t.webp"
               alt="Qurucu"
               width={480}
               height={640}
