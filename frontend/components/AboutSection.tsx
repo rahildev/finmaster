@@ -206,7 +206,7 @@ export default function AboutSection({ teacher }: Props) {
                 alt="İmza"
                 width={220}
                 height={110}
-                className="w-44 h-auto mt-2 ml-16"
+                className="w-44 h-auto mt-2 ml-28"
               />
             </div>
           )}
