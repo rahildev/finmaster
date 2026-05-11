@@ -52,9 +52,9 @@ export default function Certificate() {
 
           {/* Mətn */}
           <div className="text-gray-600 leading-relaxed text-xl space-y-5 mt-10">
-            <p>{t.p1}</p>
-            <p>{t.p2}</p>
-            <p>{t.p3}</p>
+            <p style={{ textIndent: '2em' }}>{t.p1}</p>
+            <p style={{ textIndent: '2em' }}>{t.p2}</p>
+            <p style={{ textIndent: '2em' }}>{t.p3}</p>
           </div>
 
           <div className="clear-both" />
