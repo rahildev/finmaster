@@ -84,15 +84,12 @@ export default function FaqAccordion({ faqs }: { faqs: Faq[] }) {
         return (
           <div
             key={faq.id}
-            className="border border-gray-200 rounded-xl overflow-hidden bg-white/40"
+            className={`border rounded-xl overflow-hidden transition-colors ${isOpen ? 'border-[#0A4D2C]' : 'border-gray-200'}`}
           >
             <button
               onClick={() => setOpen(isOpen ? null : faq.id)}
               className="w-full flex items-center gap-4 px-5 py-4 text-left"
             >
-              <span className="shrink-0 w-9 h-9 border border-[#0A4D2C] rounded-full flex items-center justify-center text-[#0A4D2C]">
-                <span className="w-[17px] h-[17px] flex items-center justify-center">{icon}</span>
-              </span>
               <span className="flex-1 font-medium text-[#1D1D1F] text-sm sm:text-[15px] leading-snug">
                 {question}
               </span>
@@ -102,11 +99,8 @@ export default function FaqAccordion({ faqs }: { faqs: Faq[] }) {
             </button>
 
             {isOpen && (
-              <div className="border-t border-gray-100">
-                <div className="flex gap-4 px-5 pt-4 pb-5">
-                  <span className="shrink-0 w-9" />
-                  <p className="text-gray-600 text-sm leading-relaxed">{answer}</p>
-                </div>
+              <div className="border-t border-gray-100 px-5 pt-4 pb-5">
+                <p className="text-gray-600 text-sm leading-relaxed">{answer}</p>
               </div>
             )}
           </div>

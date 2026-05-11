@@ -2,7 +2,6 @@ import { getLandingPageData } from '@/lib/api';
 import type { Faq } from '@/types/landing';
 import FaqAccordion from '@/components/FaqAccordion';
 import FaqPageHeader from '@/components/FaqPageHeader';
-import FaqFeatures from '@/components/FaqFeatures';
 import { notFound } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
@@ -20,7 +19,6 @@ export default async function FaqPage() {
       <div className="max-w-3xl mx-auto px-6 lg:px-10">
         <FaqPageHeader />
         <FaqAccordion faqs={faqs} />
-        <FaqFeatures />
       </div>
     </section>
   );
