@@ -156,7 +156,7 @@ export default function AboutSection({ teacher }: Props) {
 
             {/* Ad + vəzifə */}
             <p className="text-sm font-bold tracking-[0.15em] text-[#1D1D1F] uppercase">
-              {language === 'en' ? 'Toğrul Həsənov' : 'Toğrul Həsənov'}
+              {language === 'en' ? 'Toghrul Allahverdiyev' : 'Toğrul Allahverdiyev'}
             </p>
             <p className="text-xs tracking-[0.12em] text-gray-500 uppercase mt-0.5 mb-3">
               Founder &amp; Director
