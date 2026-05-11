@@ -29,7 +29,7 @@ export default function Certificate() {
           {/* Desktop şəkil — sağa float */}
           <div className="hidden lg:block float-right ml-10 mb-6 -mt-2 w-[54%] rounded-2xl overflow-hidden">
             <Image
-              src="/cert-desktop-t.png"
+              src="/cert-desktop-t.webp"
               alt="Sertifikasiya"
               width={1200}
               height={800}
@@ -41,7 +41,7 @@ export default function Certificate() {
           {/* Mobile şəkil — tam genişlik, mətnin üstündə */}
           <div className="lg:hidden mb-6 rounded-2xl overflow-hidden">
             <Image
-              src="/cert-mobile-t.png"
+              src="/cert-mobile-t.webp"
               alt="Sertifikasiya"
               width={600}
               height={900}
