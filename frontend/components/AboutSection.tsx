@@ -109,6 +109,84 @@ export default function AboutSection({ teacher }: Props) {
 
         </div>
       </div>
+
+      {/* Qurucu bölməsi */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 mt-16 pb-10">
+        <div className="flex flex-col-reverse lg:flex-row items-start gap-10 lg:gap-16">
+
+          {/* Sol: tam blok */}
+          <div className="flex-1 pt-16">
+
+            {/* FOUNDER label */}
+            <p className="text-[13px] font-bold tracking-[0.25em] text-gray-500 uppercase mb-2 text-center">
+              Founder
+            </p>
+            <div className="w-6 h-px bg-gray-400 mb-5 mx-auto" />
+
+            {/* Başlıq */}
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#1D1D1F] leading-tight mb-4">
+              {language === 'en'
+                ? 'Founder of Finmaster Academy'
+                : 'Finmaster Akademiyasının təsisçisi'}
+            </h2>
+            <div className="w-6 h-px bg-gray-400 mb-6" />
+
+            {/* Alt başlıq mətni */}
+            <p className="text-gray-600 text-lg leading-relaxed mb-6">
+              {language === 'en'
+                ? 'My goal is to bring together knowledge and experience in accounting, creating an educational environment that generates real value for students and serves as a reliable guide on their career path.'
+                : 'Mənim məqsədim – mühasibat sahəsində bilik və təcrübəni birləşdirərək, tələbələrə real dəyər yaradan bir təhsil mühiti qurmaq, onların karyera yolunda etibarlı bir bələdçi olmaq üçün yaradılıb.'}
+            </p>
+
+            {/* Əsas sitat */}
+            <p className="text-[1.2rem] sm:text-xl text-gray-700 leading-relaxed italic mb-8">
+              {language === 'en'
+                ? 'Drawing on years of practical experience in finance and accounting, I founded Finmaster Academy with the goal of making learning simpler, more systematic, and more effective.'
+                : 'Maliyyə və mühasibat sahəsində uzun illərin praktik təcrübəsinə əsaslanaraq, öyrənməyi daha sadə, daha sistemli və daha effektiv etmək məqsədilə Finmaster Academy-ni yaratdım.'}
+            </p>
+
+            {/* İmza */}
+            <Image
+              src="/signature-transparent.png"
+              alt="İmza"
+              width={180}
+              height={90}
+              className="w-40 h-auto mb-3"
+            />
+
+            {/* Ad + vəzifə */}
+            <p className="text-sm font-bold tracking-[0.15em] text-[#1D1D1F] uppercase">
+              {language === 'en' ? 'Toğrul Həsənov' : 'Toğrul Həsənov'}
+            </p>
+            <p className="text-xs tracking-[0.12em] text-gray-500 uppercase mt-0.5 mb-3">
+              Founder &amp; Director
+            </p>
+            <div className="w-6 h-px bg-gray-400" />
+
+          </div>
+
+          {/* Sağ: qurucu şəkli */}
+          <div className="w-full lg:w-[55%] shrink-0 rounded-2xl overflow-hidden lg:pt-8">
+            <Image
+              src="/qurucu-desktop-t.png"
+              alt="Qurucu"
+              width={700}
+              height={560}
+              className="hidden lg:block w-full h-auto"
+              unoptimized
+            />
+            <Image
+              src="/qurucu-mobile-t.png"
+              alt="Qurucu"
+              width={480}
+              height={640}
+              className="lg:hidden w-full h-auto"
+              unoptimized
+            />
+          </div>
+
+        </div>
+      </div>
     </section>
   );
 }
