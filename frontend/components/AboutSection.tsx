@@ -192,7 +192,7 @@ export default function AboutSection({ teacher }: Props) {
             <div className="mt-6 flex items-end justify-between gap-6">
               <div className="text-gray-600 leading-relaxed">
                 {quote && (
-                  <p className="italic text-[#0A4D2C] mb-3 text-xl" style={{ textIndent: '2em' }}>
+                  <p className="italic text-[#0A4D2C] mb-1 text-xl" style={{ textIndent: '2em' }}>
                     {quote}
                   </p>
                 )}
