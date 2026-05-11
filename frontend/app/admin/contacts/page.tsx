@@ -99,9 +99,13 @@ export default function ContactsAdminPage() {
   const getTypeLabel = (type: string) => {
     const labels: Record<string, string> = {
       phone: 'Telefon',
+      whatsapp: 'WhatsApp',
       email: 'Email',
       address: 'Ünvan',
-      social: 'Sosial',
+      instagram: 'Instagram',
+      youtube: 'YouTube',
+      tiktok: 'TikTok',
+      linkedin: 'LinkedIn',
     };
     return labels[type] || type;
   };
@@ -158,9 +162,13 @@ export default function ContactsAdminPage() {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
               >
                 <option value="phone">Telefon</option>
+                <option value="whatsapp">WhatsApp</option>
                 <option value="email">Email</option>
                 <option value="address">Ünvan</option>
-                <option value="social">Sosial Media</option>
+                <option value="instagram">Instagram</option>
+                <option value="youtube">YouTube</option>
+                <option value="tiktok">TikTok</option>
+                <option value="linkedin">LinkedIn</option>
               </select>
             </div>
 
