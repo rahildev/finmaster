@@ -164,8 +164,8 @@ export default function HeroAdminPage() {
 
     try {
       const data = new FormData();
-      data.append('title', formData.title);
-      data.append('title_en', formData.title_en);
+      data.append('title', formData.title || 'hero');
+      data.append('title_en', formData.title_en || 'hero');
       data.append('subtitle', formData.subtitle);
       data.append('subtitle_en', formData.subtitle_en);
       data.append('btn_text', formData.btn_text);
@@ -276,47 +276,24 @@ export default function HeroAdminPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Başlıq (AZ) *</label>
-              <input
-                type="text"
-                required
-                value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="Mühasibatlıqda Uğurun Açarı"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Başlıq (EN)</label>
-              <input
-                type="text"
-                value={formData.title_en}
-                onChange={(e) => setFormData({ ...formData, title_en: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="The Key to Success in Accounting"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Alt Başlıq (AZ)</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Təsvir (AZ)</label>
               <textarea
-                rows={2}
+                rows={8}
                 value={formData.subtitle}
                 onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="Peşəkar mühasib olmaq üçün lazım olan bütün biliklər"
+                placeholder="Mühasibat və maliyyə sahəsində..."
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Alt Başlıq (EN)</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Təsvir (EN)</label>
               <textarea
-                rows={2}
+                rows={8}
                 value={formData.subtitle_en}
                 onChange={(e) => setFormData({ ...formData, subtitle_en: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="All the knowledge needed to become a professional accountant"
+                placeholder="A premium education platform..."
               />
             </div>
 
