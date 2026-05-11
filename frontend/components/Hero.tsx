@@ -119,7 +119,7 @@ export default function Hero({ data, contacts = [] }: HeroProps) {
           className="w-full h-auto block"
         />
         <div className="px-6 py-10 text-gray-600 leading-relaxed text-lg">
-          {lines.map((line, i) => {
+          {lines.map((line: string, i: number) => {
             if (line === '') return <div key={i} className="h-3" />;
             const isBullet = line.startsWith('—');
             return (
