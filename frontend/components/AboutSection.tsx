@@ -118,7 +118,7 @@ export default function AboutSection({ teacher }: Props) {
         <div className="overflow-hidden">
 
           {/* Desktop: şəkil sağa float */}
-          <div className="hidden lg:block float-right ml-10 mb-6 -mt-2 w-[46%] rounded-2xl overflow-hidden">
+          <div className="hidden lg:block float-right ml-10 mb-6 -mt-2 w-[46%] rounded-2xl overflow-hidden bg-[#f6f6f5]">
             <Image
               src="/qurucu-desktop-t.webp"
               alt="Qurucu"
@@ -130,7 +130,7 @@ export default function AboutSection({ teacher }: Props) {
           </div>
 
           {/* Mobile: şəkil üstdə */}
-          <div className="lg:hidden mb-6 rounded-2xl overflow-hidden">
+          <div className="lg:hidden mb-6 rounded-2xl overflow-hidden bg-[#f6f6f5]">
             <Image
               src="/qurucu-mobile-t.webp"
               alt="Qurucu"
@@ -155,18 +155,20 @@ export default function AboutSection({ teacher }: Props) {
             <p className="mb-4" style={{ textIndent: '2em' }}>
               Bu anlayışa uyğun olaraq qurmuş olduğum Finmaster Akademiyası, tələbələrinə müasir iş dünyasının gözləntilərinə cavab verən sadə, lakin güclü öyrənmə təcrübəsi təqdim etməyi qarşısına məqsəd qoymuşdur.
             </p>
-            <p className="mb-6" style={{ textIndent: '2em' }}>
+            <p style={{ textIndent: '2em' }}>
               Proqramlar və məzmunlar təkcə bilik vermək üçün deyil, həm də tələbələrin analitik təfəkkürünü, maliyyə şərhini və peşəkar inkişaf bacarıqlarını gücləndirmək üçün nəzərdə tutulmaqdadır.
-            </p>
-            <p className="italic text-[#0A4D2C] mb-4 text-lg">
-              "Uğur təsadüfi deyildir — Düzgün qurulmuş disiplinli sistemin və fədakar xarakterin nəticəsidir."
-            </p>
-            <p className="text-sm font-semibold text-gray-500 tracking-wide">
-              — Toğrul Allahverdiyev | Təsisçi, Finmaster Akademiyası
             </p>
           </div>
 
           <div className="clear-both" />
+
+          {/* Şəkilin altına davam edən hissə */}
+          <p className="italic text-[#0A4D2C] mt-6 mb-3 text-xl" style={{ textIndent: '2em' }}>
+            "Uğur təsadüfi deyildir — Düzgün qurulmuş disiplinli sistemin və fədakar xarakterin nəticəsidir."
+          </p>
+          <p className="text-base font-semibold text-gray-500 tracking-wide">
+            — Toğrul Allahverdiyev | Təsisçi, Finmaster Akademiyası
+          </p>
         </div>
       </div>
 
