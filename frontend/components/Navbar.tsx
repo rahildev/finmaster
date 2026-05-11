@@ -21,6 +21,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
   const showAbout         = sv.teacher       !== false;
   const showContact       = sv.contact       !== false;
   const showCertification = sv.certification !== false;
+  const showBlog          = sv.blog          !== false;
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
@@ -160,9 +161,11 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
             </Link>
             )}
 
-            <span className="px-3 py-2 text-[13px] font-medium text-gray-700 cursor-default select-none">
-              Blog
-            </span>
+            {showBlog && (
+              <span className="px-3 py-2 text-[13px] font-medium text-gray-700 cursor-default select-none">
+                Blog
+              </span>
+            )}
 
             {showCertification && (
               <Link href="/certification" className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('certification') ? activeClass : ''}`}>
@@ -300,9 +303,11 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
             </Link>
             )}
 
-            <span className="block px-2 py-2.5 text-sm font-medium text-gray-700 cursor-default select-none">
-              Blog
-            </span>
+            {showBlog && (
+              <span className="block px-2 py-2.5 text-sm font-medium text-gray-700 cursor-default select-none">
+                Blog
+              </span>
+            )}
 
             {showCertification && (
               <Link href="/certification" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">

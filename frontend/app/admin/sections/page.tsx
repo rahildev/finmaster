@@ -70,6 +70,7 @@ export default function SectionsPage() {
       faq: '❓',
       contact: '📞',
       certification: '🎓',
+      blog: '📝',
     };
     return icons[key] || '📄';
   };
