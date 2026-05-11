@@ -128,18 +128,15 @@ export default function AboutSection({ teacher }: Props) {
                 </p>
               );
             })}
+
+            {lastParagraph && (
+              <p className="mt-1" style={{ textIndent: '2em' }}>{lastParagraph}</p>
+            )}
           </div>
 
           <div className="clear-both" />
 
         </div>
-
-        {/* Son cümlə — overflow-hidden xaricində, mobil + desktop üçün görünür */}
-        {lastParagraph && (
-          <p className="text-gray-600 leading-relaxed text-xl mt-1" style={{ textIndent: '2em' }}>
-            {lastParagraph}
-          </p>
-        )}
       </div>
 
       {/* İkinci bölmə — mətn sol, şəkil sağ */}
