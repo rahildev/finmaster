@@ -86,7 +86,7 @@ export default function AboutSection({ teacher }: Props) {
   return (
     <section className="py-16 bg-[#f6f6f5]">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="overflow-hidden">
+        <div className="lg:overflow-hidden">
 
           {/* Desktop şəkil — sola float */}
           <div className="hidden lg:block float-left mr-10 mb-6 -mt-2 w-[46%] rounded-2xl overflow-hidden">
