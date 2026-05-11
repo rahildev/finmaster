@@ -170,7 +170,7 @@ export default function AboutSection({ teacher }: Props) {
 
           {/* Sol: mətn */}
           <p className="text-center text-[15px] font-bold tracking-[0.2em] text-[#0A4D2C] uppercase mb-5">
-            {language === 'en' ? '— About the Founder of FinMaster Academy —' : '— FinMaster Akademiyanın Təsisçisi —'}
+            {language === 'en' ? '— About the Founder of FinMaster Academy —' : '— FinMaster Akademiyasının Təsisçisi —'}
           </p>
           <div className="text-gray-600 leading-relaxed text-xl">
             {mainParas.slice(0, -1).map((para, i) => (
