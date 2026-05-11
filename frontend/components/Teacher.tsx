@@ -80,17 +80,6 @@ export default function Teacher({ data, contacts = [] }: TeacherProps) {
             {bio && (
               <p className="text-gray-500 text-lg leading-relaxed italic">{bio}</p>
             )}
-
-            {/* İmza */}
-            <div className="flex justify-end mt-4">
-              <Image
-                src="/signature-transparent.png"
-                alt="İmza"
-                width={200}
-                height={100}
-                className="w-44 h-auto"
-              />
-            </div>
           </motion.div>
 
         </div>

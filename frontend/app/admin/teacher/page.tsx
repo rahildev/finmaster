@@ -429,27 +429,27 @@ export default function TeachersAdminPage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Qurucu Təsviri (AZ)
+                    Təcrübə (AZ)
                   </label>
                   <textarea
-                    rows={6}
+                    rows={3}
                     value={formData.experience}
                     onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="Mənim məqsədim – mühasibat sahəsində bilik və təcrübəni birləşdirərək..."
+                    placeholder="15+ il mühasibatlıq və audit təcrübəsi..."
                   />
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Qurucu Təsviri (EN)
+                    Təcrübə (EN)
                   </label>
                   <textarea
-                    rows={6}
+                    rows={3}
                     value={formData.experience_en}
                     onChange={(e) => setFormData({ ...formData, experience_en: e.target.value })}
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    placeholder="My goal is to bring together knowledge and experience in accounting..."
+                    placeholder="15+ years of accounting and audit experience..."
                   />
                 </div>
 
