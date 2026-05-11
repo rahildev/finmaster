@@ -66,7 +66,7 @@ export default function Hero({ data, contacts = [] }: HeroProps) {
           {/* Şəkil — sağa float */}
           <div
             className="float-right ml-10 mb-6 -mt-2"
-            style={{ width: '52%' }}
+            style={{ width: '60%' }}
           >
             <Image
               src={desktopSrc}
