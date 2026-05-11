@@ -54,20 +54,10 @@ Proqramlar və məzmunlar təkcə bilik vermək üçün deyil, həm də tələb�
 — Toğrul Allahverdiyev | Təsisçi, Finmaster Akademiyası`;
 
 function parseFounderContent(raw: string) {
-  const paragraphs: string[] = [];
-  let current = '';
-  for (const line of raw.split('\n').map(cleanLine)) {
-    if (line === '') {
-      if (current) { paragraphs.push(current); current = ''; }
-    } else {
-      current += (current ? ' ' : '') + line;
-    }
-  }
-  if (current) paragraphs.push(current);
-
-  const quote = paragraphs.find(p => p.startsWith('"') || p.startsWith('“')) ?? null;
-  const signature = paragraphs.find(p => p.startsWith('—') && p.includes('|')) ?? null;
-  const mainParas = paragraphs.filter(p => p !== quote && p !== signature);
+  const lines = raw.split('\n').map(cleanLine).filter(Boolean);
+  const quote = lines.find(l => l.startsWith('”') || l.startsWith('“')) ?? null;
+  const signature = lines.find(l => l.startsWith('—') && l.includes('|')) ?? null;
+  const mainParas = lines.filter(l => l !== quote && l !== signature);
   return { mainParas, quote, signature };
 }
 
@@ -179,7 +169,7 @@ export default function AboutSection({ teacher }: Props) {
 
           {/* Sol: mətn */}
           <p className="text-center text-[15px] font-bold tracking-[0.2em] text-[#0A4D2C] uppercase mb-5">
-            — FinMaster Akademiyanın Təsisçisi haqqında —
+            {language === 'en' ? '— About the Founder of FinMaster Academy —' : '— FinMaster Akademiyanın Təsisçisi haqqında —'}
           </p>
           <div className="text-gray-600 leading-relaxed text-xl">
             {mainParas.slice(0, -1).map((para, i) => (
