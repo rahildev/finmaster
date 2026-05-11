@@ -109,6 +109,80 @@ export default function AboutSection({ teacher }: Props) {
 
         </div>
       </div>
+
+      {/* Qurucu bölməsi */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 mt-6 pb-10">
+        <div className="overflow-hidden">
+
+          {/* Desktop: şəkil sağa float */}
+          <div className="hidden lg:block float-right ml-10 mb-4 w-[52%]">
+            <Image
+              src="/qurucu-desktop-t.webp"
+              alt="Qurucu"
+              width={700}
+              height={560}
+              className="w-full h-auto"
+              unoptimized
+            />
+          </div>
+
+          {/* Mobile: şəkil üstdə */}
+          <div className="lg:hidden mb-6">
+            <Image
+              src="/qurucu-mobile-t.webp"
+              alt="Qurucu"
+              width={480}
+              height={640}
+              className="w-full h-auto"
+              unoptimized
+            />
+          </div>
+
+          {/* Mətn — şəkilin solunda axır, altına uzanır */}
+          <div>
+
+            {(() => {
+              const expRaw = language === 'en'
+                ? ((teacher as any)?.experience_en || (teacher as any)?.experience || '')
+                : ((teacher as any)?.experience || '');
+              if (!expRaw) return null;
+              return (
+                <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-4">
+                  {expRaw.split('\n').map((line: string, i: number) =>
+                    line.trim() === ''
+                      ? null
+                      : <p key={i} className={line.trim().startsWith('"') ? 'italic' : ''}>{line}</p>
+                  )}
+                </div>
+              );
+            })()}
+
+            <p className="text-[1.2rem] sm:text-xl text-gray-700 leading-relaxed italic mb-8">
+              {language === 'en'
+                ? 'Drawing on years of practical experience in finance and accounting, I founded Finmaster Academy with the goal of making learning simpler, more systematic, and more effective.'
+                : 'Maliyyə və mühasibat sahəsində uzun illərin praktik təcrübəsinə əsaslanaraq, öyrənməyi daha sadə, daha sistemli və daha effektiv etmək məqsədilə Finmaster Academy-ni yaratdım.'}
+            </p>
+
+            <Image
+              src="/signature-transparent.png"
+              alt="İmza"
+              width={180}
+              height={90}
+              className="w-40 h-auto mb-3"
+            />
+
+            <p className="text-sm font-bold tracking-[0.15em] text-[#1D1D1F] uppercase">
+              {language === 'en' ? 'Toghrul Allahverdiyev' : 'Toğrul Allahverdiyev'}
+            </p>
+            <p className="text-xs tracking-[0.12em] text-gray-500 uppercase mt-0.5 mb-3">
+              Founder &amp; Director
+            </p>
+            <div className="w-6 h-px bg-gray-400" />
+          </div>
+
+          <div className="clear-both" />
+        </div>
+      </div>
     </section>
   );
 }
