@@ -14,6 +14,12 @@ interface NavbarProps {
 }
 
 export default function Navbar({ sectionVisibility = {}, courses = [], contacts = [] }: NavbarProps) {
+  const sv = sectionVisibility;
+  const showCourses = sv.courses !== false;
+  const showVideos  = sv.videos  !== false;
+  const showFaq     = sv.faq     !== false;
+  const showAbout   = sv.teacher !== false;
+  const showContact = sv.contact !== false;
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
@@ -124,6 +130,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
             </Link>
 
             {/* Proqramlar dropdown */}
+            {showCourses && (
             <div className="relative" onMouseEnter={() => openDrop('programs')} onMouseLeave={closeDrop}>
               <button className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('programs') ? activeClass : ''}`}>
                 {language === 'en' ? 'Programs' : 'Proqramlar'}
@@ -144,10 +151,13 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
                 </div>
               </div>
             </div>
+            )}
 
+            {showVideos && (
             <Link href="/videos" className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('videos') ? activeClass : ''}`}>
               {language === 'en' ? 'Videos' : 'Video'}
             </Link>
+            )}
 
             <Link href="/blog" className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('blog') ? activeClass : ''}`}>
               Blog
@@ -157,11 +167,14 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               {language === 'en' ? 'Certification' : 'Sertifikasiya'}
             </Link>
 
+            {showAbout && (
             <Link href="/about" className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('about') ? activeClass : ''}`}>
               {language === 'en' ? 'About' : 'Haqqımızda'}
             </Link>
+            )}
 
             {/* Əlaqə dropdown */}
+            {showContact && (
             <div className="relative" onMouseEnter={() => openDrop('contact')} onMouseLeave={closeDrop}>
               <button className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('contact') ? activeClass : ''}`}>
                 {language === 'en' ? 'Contact' : 'Əlaqə'}
@@ -198,10 +211,13 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
                   </div>
               </div>
             </div>
+            )}
 
+            {showFaq && (
             <Link href="/faq" className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('faq') ? activeClass : ''}`}>
               FAQ
             </Link>
+            )}
 
             {/* Giriş / Qeydiyyat */}
             <div className="flex items-center gap-2 ml-3 pl-3 border-l border-gray-200">
@@ -245,6 +261,7 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
             </Link>
 
             {/* Proqramlar accordion */}
+            {showCourses && (
             <div>
               <button
                 onClick={() => setMobileAccordion(prev => prev === 'programs' ? null : 'programs')}
@@ -272,10 +289,13 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
                 </div>
               )}
             </div>
+            )}
 
+            {showVideos && (
             <Link href="/videos" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
               {language === 'en' ? 'Videos' : 'Video'}
             </Link>
+            )}
 
             <Link href="/blog" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
               Blog
@@ -285,11 +305,14 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               {language === 'en' ? 'Certification' : 'Sertifikasiya'}
             </Link>
 
+            {showAbout && (
             <Link href="/about" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
               {language === 'en' ? 'About' : 'Haqqımızda'}
             </Link>
+            )}
 
             {/* Əlaqə accordion */}
+            {showContact && (
             <div>
               <button
                 onClick={() => setMobileAccordion(prev => prev === 'contact' ? null : 'contact')}
@@ -336,10 +359,13 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
                 </div>
               )}
             </div>
+            )}
 
+            {showFaq && (
             <Link href="/faq" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
               FAQ
             </Link>
+            )}
 
             {/* Giriş / Qeydiyyat */}
             <div className="flex gap-2 px-2 pt-3 mt-1 border-t border-gray-100">

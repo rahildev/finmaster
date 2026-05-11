@@ -1,9 +1,10 @@
 import { getLandingPageData } from '@/lib/api';
-import dynamic from 'next/dynamic';
+import dynamicImport from 'next/dynamic';
 import type { Video } from '@/types/landing';
 import CourseSectionHeading from '@/components/CourseSectionHeading';
+import { notFound } from 'next/navigation';
 
-const VideoGrid = dynamic(
+const VideoGrid = dynamicImport(
   () => import('@/components/VideoCard').then(m => m.VideoGrid),
   {
     loading: () => (
@@ -16,7 +17,7 @@ const VideoGrid = dynamic(
   }
 );
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function VideosPage() {
   let videos: Video[] = [];
@@ -24,6 +25,7 @@ export default async function VideosPage() {
 
   try {
     const data = await getLandingPageData();
+    if (data.section_visibility?.videos === false) return notFound();
     videos = data.videos || [];
     courses = data.courses || [];
   } catch {}

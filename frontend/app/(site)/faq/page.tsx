@@ -2,13 +2,15 @@ import { getLandingPageData } from '@/lib/api';
 import type { Faq } from '@/types/landing';
 import FaqAccordion from '@/components/FaqAccordion';
 import FaqPageHeader from '@/components/FaqPageHeader';
+import { notFound } from 'next/navigation';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function FaqPage() {
   let faqs: Faq[] = [];
   try {
     const data = await getLandingPageData();
+    if (data.section_visibility?.faq === false) return notFound();
     faqs = data.faqs || [];
   } catch {}
 
