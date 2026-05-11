@@ -159,9 +159,9 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
             </Link>
             )}
 
-            <Link href="/blog" className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('blog') ? activeClass : ''}`}>
+            <span className="px-3 py-2 text-[13px] font-medium text-gray-700 cursor-default select-none">
               Blog
-            </Link>
+            </span>
 
             <Link href="/certification" className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('certification') ? activeClass : ''}`}>
               {language === 'en' ? 'Certification' : 'Sertifikasiya'}
@@ -297,9 +297,9 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
             </Link>
             )}
 
-            <Link href="/blog" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
+            <span className="block px-2 py-2.5 text-sm font-medium text-gray-700 cursor-default select-none">
               Blog
-            </Link>
+            </span>
 
             <Link href="/certification" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
               {language === 'en' ? 'Certification' : 'Sertifikasiya'}
