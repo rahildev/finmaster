@@ -58,18 +58,6 @@ export default function Hero({ data, contacts = [] }: HeroProps) {
         {/* Desktop text */}
         <div className="relative z-10 max-w-7xl mx-auto px-10 w-full py-16">
           <div className="max-w-xl">
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="mb-5"
-            >
-              <span className="font-inter text-[13px] font-bold tracking-[0.2em] text-gray-500">
-                {language === 'en' ? 'Systematic. Simple. Logical.' : 'Sistemli. Sadə. Lojik.'}
-              </span>
-              <div className="w-8 h-px bg-gray-400 mt-2" />
-            </motion.div>
-
             <motion.h1
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
@@ -98,18 +86,6 @@ export default function Hero({ data, contacts = [] }: HeroProps) {
 
         {/* Mobile text */}
         <div className="px-6 pt-10 pb-6">
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-4"
-          >
-            <span className="font-inter text-[11px] font-bold tracking-[0.2em] text-gray-500">
-              {language === 'en' ? 'Systematic. Simple. Logical.' : 'Sistemli. Sadə. Lojik.'}
-            </span>
-            <div className="w-7 h-px bg-gray-400 mt-2" />
-          </motion.div>
-
           <motion.h1
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
