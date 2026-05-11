@@ -113,6 +113,63 @@ export default function AboutSection({ teacher }: Props) {
         </div>
       </div>
 
+      {/* İkinci bölmə — mətn sol, şəkil sağ */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 mt-16 pb-10">
+        <div className="overflow-hidden">
+
+          {/* Desktop: şəkil sağa float */}
+          <div className="hidden lg:block float-right ml-10 mb-6 -mt-2 w-[46%] rounded-2xl overflow-hidden">
+            <Image
+              src="/qurucu-desktop-t.webp"
+              alt="Qurucu"
+              width={700}
+              height={560}
+              className="w-full h-auto"
+              unoptimized
+            />
+          </div>
+
+          {/* Mobile: şəkil üstdə */}
+          <div className="lg:hidden mb-6 rounded-2xl overflow-hidden">
+            <Image
+              src="/qurucu-mobile-t.webp"
+              alt="Qurucu"
+              width={480}
+              height={640}
+              className="w-full h-auto"
+              unoptimized
+            />
+          </div>
+
+          {/* Sol: mətn */}
+          <div className="text-gray-600 leading-relaxed text-xl">
+            <p className="text-[13px] font-bold tracking-[0.2em] text-[#0A4D2C] uppercase mb-5">
+              Finmaster Akademiyasının təsisçisindən,
+            </p>
+            <p className="mb-4" style={{ textIndent: '2em' }}>
+              Bu təhsil platformasını, mühasibat uçotu və maliyyə sistemlərindəki təcrübəmi daha sistemli, başa düşülən və peşəkar təlim strukturuna çevirmək məqsədi ilə yaratdım.
+            </p>
+            <p className="mb-4" style={{ textIndent: '2em' }}>
+              Çoxillik mühasibat təcrübəm boyunca, hesab edirdim ki, mühasibat uçotunu yalnız nəzəri biliklərlə deyil, eyni zamanda nizam-intizamlı yanaşma, düzgün sistem və praktik tətbiqlər vasitəsilə daha uzunmüddətli və yadda qalan tərzdə öyrənmək və öyrətmək olar.
+            </p>
+            <p className="mb-4" style={{ textIndent: '2em' }}>
+              Bu anlayışa uyğun olaraq qurmuş olduğum Finmaster Akademiyası, tələbələrinə müasir iş dünyasının gözləntilərinə cavab verən sadə, lakin güclü öyrənmə təcrübəsi təqdim etməyi qarşısına məqsəd qoymuşdur.
+            </p>
+            <p className="mb-6" style={{ textIndent: '2em' }}>
+              Proqramlar və məzmunlar təkcə bilik vermək üçün deyil, həm də tələbələrin analitik təfəkkürünü, maliyyə şərhini və peşəkar inkişaf bacarıqlarını gücləndirmək üçün nəzərdə tutulmaqdadır.
+            </p>
+            <p className="italic text-[#0A4D2C] mb-4 text-lg">
+              "Uğur təsadüfi deyildir — Düzgün qurulmuş disiplinli sistemin və fədakar xarakterin nəticəsidir."
+            </p>
+            <p className="text-sm font-semibold text-gray-500 tracking-wide">
+              — Toğrul Allahverdiyev | Təsisçi, Finmaster Akademiyası
+            </p>
+          </div>
+
+          <div className="clear-both" />
+        </div>
+      </div>
+
     </section>
   );
 }
