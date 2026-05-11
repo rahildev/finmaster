@@ -55,7 +55,8 @@ Proqramlar və məzmunlar təkcə bilik vermək üçün deyil, həm də tələb�
 
 function parseFounderContent(raw: string) {
   const lines = raw.split('\n').map(cleanLine).filter(Boolean);
-  const quote = lines.find(l => /^[“'“”‘’]/.test(l)) ?? null;
+  const QUOTE_CODES = new Set([0x0022, 0x0027, 0x201C, 0x201D, 0x2018, 0x2019]);
+  const quote = lines.find(l => l.length > 0 && QUOTE_CODES.has(l.charCodeAt(0))) ?? null;
   const signature = lines.find(l => l.startsWith('—') && l.includes('|')) ?? null;
   const mainParas = lines.filter(l => l !== quote && l !== signature);
   return { mainParas, quote, signature };
@@ -189,7 +190,7 @@ export default function AboutSection({ teacher }: Props) {
           )}
 
           {(quote || signature) && (
-            <div className="mt-2 flex items-end justify-between gap-6">
+            <div className="mt-2 flex items-start justify-between gap-6">
               <div className="text-gray-600 leading-relaxed">
                 {quote && (
                   <p className="italic text-[#0A4D2C] mb-1 text-xl" style={{ textIndent: '2em' }}>
