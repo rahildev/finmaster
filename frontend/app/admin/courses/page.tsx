@@ -418,31 +418,6 @@ Throughout the program consisting of 33 (thirty-three) lesson days, i.e. 66 (six
                   />
                 </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Başlıq (AZ)
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.heading}
-                    onChange={(e) => setFormData({ ...formData, heading: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="Güclü karyera, doğru sistemlə başlayır."
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Başlıq (EN)
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.heading_en}
-                    onChange={(e) => setFormData({ ...formData, heading_en: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    placeholder="A strong career begins with the right system."
-                  />
-                </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
