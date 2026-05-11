@@ -125,56 +125,54 @@ export default function AboutSection({ teacher }: Props) {
           />
         </div>
 
-        {/* Desktop: float layout — şəkil sağa, mətn yanından axır və altına uzanır */}
-        <div style={{ overflow: 'hidden' }}>
-
-          <div
-            className="hidden lg:block"
-            style={{ float: 'right', marginLeft: '2.5rem', marginBottom: '1rem', width: '52%' }}
-          >
-            <Image
-              src="/qurucu-desktop-t.webp"
-              alt="Qurucu"
-              width={700}
-              height={560}
-              className="w-full h-auto"
-              unoptimized
-            />
-          </div>
-
-          {/* Mətn birbaşa — float-un yanında axır */}
-          <div className="text-gray-600 text-lg leading-relaxed space-y-4 mb-6">
-            {(language === 'en'
-              ? ((teacher as any)?.experience_en || (teacher as any)?.experience || '')
-              : ((teacher as any)?.experience || '')
-            ).split('\n').filter((l: string) => l.trim() !== '').map((line: string, i: number) => (
-              <p key={i} className={line.trim().startsWith('"') ? 'italic' : ''}>{line}</p>
-            ))}
-          </div>
-
-          <p className="text-[1.2rem] sm:text-xl text-gray-700 leading-relaxed italic mb-8">
+        {/* Desktop: float layout */}
+        <div className="hidden lg:block" style={{ overflow: 'hidden' }}>
+          <img
+            src="/qurucu-desktop-t.webp"
+            alt="Qurucu"
+            style={{ float: 'right', marginLeft: '2.5rem', marginBottom: '1rem', width: '50%' }}
+          />
+          {(language === 'en'
+            ? ((teacher as any)?.experience_en || (teacher as any)?.experience || '')
+            : ((teacher as any)?.experience || '')
+          ).split('\n').filter((l: string) => l.trim() !== '').map((line: string, i: number) => (
+            <p key={i} style={{ marginBottom: '1rem', fontSize: '1.125rem', lineHeight: '1.75', color: '#4b5563', fontStyle: line.trim().startsWith('"') ? 'italic' : 'normal' }}>{line}</p>
+          ))}
+          <p style={{ fontSize: '1.2rem', lineHeight: '1.75', color: '#374151', fontStyle: 'italic', marginBottom: '2rem' }}>
             {language === 'en'
               ? 'Drawing on years of practical experience in finance and accounting, I founded Finmaster Academy with the goal of making learning simpler, more systematic, and more effective.'
               : 'Maliyyə və mühasibat sahəsində uzun illərin praktik təcrübəsinə əsaslanaraq, öyrənməyi daha sadə, daha sistemli və daha effektiv etmək məqsədilə Finmaster Academy-ni yaratdım.'}
           </p>
+          <img src="/signature-transparent.png" alt="İmza" style={{ width: '160px', height: 'auto', marginBottom: '0.75rem' }} />
+          <p style={{ fontSize: '0.875rem', fontWeight: 700, letterSpacing: '0.15em', color: '#1D1D1F', textTransform: 'uppercase' }}>
+            {language === 'en' ? 'Toghrul Allahverdiyev' : 'Toğrul Allahverdiyev'}
+          </p>
+          <p style={{ fontSize: '0.75rem', letterSpacing: '0.12em', color: '#6b7280', textTransform: 'uppercase', marginTop: '0.125rem', marginBottom: '0.75rem' }}>
+            Founder &amp; Director
+          </p>
+          <div style={{ width: '1.5rem', height: '1px', background: '#9ca3af' }} />
+          <div style={{ clear: 'both' }} />
+        </div>
 
-          <Image
-            src="/signature-transparent.png"
-            alt="İmza"
-            width={180}
-            height={90}
-            className="w-40 h-auto mb-3"
-          />
-
+        {/* Mobile layout */}
+        <div className="lg:hidden">
+          {(language === 'en'
+            ? ((teacher as any)?.experience_en || (teacher as any)?.experience || '')
+            : ((teacher as any)?.experience || '')
+          ).split('\n').filter((l: string) => l.trim() !== '').map((line: string, i: number) => (
+            <p key={i} className={`mb-4 text-lg leading-relaxed text-gray-600 ${line.trim().startsWith('"') ? 'italic' : ''}`}>{line}</p>
+          ))}
+          <p className="text-xl text-gray-700 leading-relaxed italic mb-8">
+            {language === 'en'
+              ? 'Drawing on years of practical experience in finance and accounting, I founded Finmaster Academy with the goal of making learning simpler, more systematic, and more effective.'
+              : 'Maliyyə və mühasibat sahəsində uzun illərin praktik təcrübəsinə əsaslanaraq, öyrənməyi daha sadə, daha sistemli və daha effektiv etmək məqsədilə Finmaster Academy-ni yaratdım.'}
+          </p>
+          <Image src="/signature-transparent.png" alt="İmza" width={180} height={90} className="w-40 h-auto mb-3" />
           <p className="text-sm font-bold tracking-[0.15em] text-[#1D1D1F] uppercase">
             {language === 'en' ? 'Toghrul Allahverdiyev' : 'Toğrul Allahverdiyev'}
           </p>
-          <p className="text-xs tracking-[0.12em] text-gray-500 uppercase mt-0.5 mb-3">
-            Founder &amp; Director
-          </p>
+          <p className="text-xs tracking-[0.12em] text-gray-500 uppercase mt-0.5 mb-3">Founder &amp; Director</p>
           <div className="w-6 h-px bg-gray-400" />
-
-          <div style={{ clear: 'both' }} />
         </div>
       </div>
     </section>
