@@ -85,7 +85,7 @@ export default function Hero({ data, contacts = [] }: HeroProps) {
 
           {/* Mətn */}
           <div className="text-gray-600 leading-relaxed text-xl">
-            {lines.map((line, i) => {
+            {lines.map((line: string, i: number) => {
               if (line === '') return <div key={i} className="h-5" />;
               const isBullet = line.startsWith('—');
               return (
