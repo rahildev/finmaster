@@ -43,7 +43,7 @@ export default function Footer({ contacts }: FooterProps) {
     e.preventDefault();
   };
 
-  const socialContacts = contacts.filter(c => ['instagram', 'linkedin', 'youtube'].includes(c.type));
+  const socialContacts = contacts.filter(c => ['instagram', 'linkedin', 'youtube', 'tiktok'].includes(c.type));
   const infoContacts = contacts.filter(c => ['phone', 'whatsapp', 'email'].includes(c.type));
 
   const getSocialHref = (c: Contact) => {
@@ -128,7 +128,7 @@ export default function Footer({ contacts }: FooterProps) {
             <h4 className="text-[11px] font-bold tracking-[0.15em] uppercase text-gray-400 mb-4">
               {language === 'en' ? 'Follow Us' : 'Bizi İzləyin'}
             </h4>
-            <div className="flex flex-row gap-4">
+            <div className="flex flex-col gap-3">
               {socialContacts.length > 0
                 ? socialContacts.map(c => (
                   <a
@@ -136,7 +136,7 @@ export default function Footer({ contacts }: FooterProps) {
                     href={getSocialHref(c)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`text-gray-500 transition-colors
+                    className={`flex items-center gap-2.5 text-gray-500 transition-colors text-sm
                       ${c.type === 'instagram' ? 'hover:text-[#E1306C]' : ''}
                       ${c.type === 'linkedin'  ? 'hover:text-[#0077B5]' : ''}
                       ${c.type === 'youtube'   ? 'hover:text-[#FF0000]' : ''}
@@ -144,11 +144,17 @@ export default function Footer({ contacts }: FooterProps) {
                     `}
                   >
                     <SocialIcon type={c.type} />
+                    <span className="font-inter capitalize">
+                      {c.type === 'youtube' ? 'YouTube' : c.type === 'tiktok' ? 'TikTok' : c.type.charAt(0).toUpperCase() + c.type.slice(1)}
+                    </span>
                   </a>
                 ))
-                : ['instagram', 'linkedin', 'youtube'].map(type => (
-                  <span key={type} className="text-gray-300">
+                : ['instagram', 'youtube', 'tiktok'].map(type => (
+                  <span key={type} className="flex items-center gap-2.5 text-gray-300 text-sm">
                     <SocialIcon type={type} />
+                    <span className="font-inter">
+                      {type === 'youtube' ? 'YouTube' : type === 'tiktok' ? 'TikTok' : type.charAt(0).toUpperCase() + type.slice(1)}
+                    </span>
                   </span>
                 ))
               }
