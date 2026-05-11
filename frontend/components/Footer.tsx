@@ -98,7 +98,7 @@ export default function Footer({ contacts }: FooterProps) {
             <div className="-mt-14 ml-6 flex flex-col gap-0.5">
               {(language === 'en'
                 ? ['Systematic.', 'Simple.', 'Logical.']
-                : ['Sadə.', 'Sistemli.', 'Lojik.']
+                : ['Sadə.', 'Sistemli.', 'Məntiqi.']
               ).map(word => (
                 <span key={word} className="font-inter text-[13px] font-semibold text-gray-600 leading-snug">– {word}</span>
               ))}
