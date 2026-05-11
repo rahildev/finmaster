@@ -160,7 +160,7 @@ export default function AboutSection({ teacher }: Props) {
               alt="Qurucu"
               width={700}
               height={560}
-              className="w-full h-auto mix-blend-multiply"
+              className="w-full h-auto"
               unoptimized
             />
           </div>
@@ -172,7 +172,7 @@ export default function AboutSection({ teacher }: Props) {
               alt="Qurucu"
               width={480}
               height={640}
-              className="w-full h-auto mix-blend-multiply"
+              className="w-full h-auto"
               unoptimized
             />
           </div>
