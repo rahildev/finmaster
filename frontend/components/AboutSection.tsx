@@ -152,13 +152,21 @@ export default function AboutSection({ teacher }: Props) {
             </h2>
             <div className="w-6 h-px bg-gray-400 mb-6" />
 
-            {(language === 'en' ? (teacher as any)?.experience_en || (teacher as any)?.experience : (teacher as any)?.experience) && (
-              <p className="text-gray-600 text-lg leading-relaxed mb-6">
-                {language === 'en'
-                  ? ((teacher as any)?.experience_en || (teacher as any)?.experience)
-                  : (teacher as any)?.experience}
-              </p>
-            )}
+            {(() => {
+              const expRaw = language === 'en'
+                ? ((teacher as any)?.experience_en || (teacher as any)?.experience || '')
+                : ((teacher as any)?.experience || '');
+              if (!expRaw) return null;
+              return (
+                <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-4">
+                  {expRaw.split('\n').map((line: string, i: number) =>
+                    line.trim() === ''
+                      ? null
+                      : <p key={i}>{line}</p>
+                  )}
+                </div>
+              );
+            })()}
 
             <p className="text-[1.2rem] sm:text-xl text-gray-700 leading-relaxed italic mb-8">
               {language === 'en'
