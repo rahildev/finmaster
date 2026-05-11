@@ -40,12 +40,48 @@ function parseContent(raw: string) {
   return { mainLines: lines.slice(0, lastIndex), lastParagraph };
 }
 
+const FOUNDER_FALLBACK_AZ =
+`Finmaster Akademiyasının təsisçisindən, bu təhsil platformasını, mühasibat uçotu və maliyyə sistemlərindəki təcrübəmi daha sistemli, başa düşülən və peşəkar təlim strukturuna çevirmək məqsədi ilə yaratdım.
+
+Çoxillik mühasibat təcrübəm boyunca, hesab edirdim ki, mühasibat uçotunu yalnız nəzəri biliklərlə deyil, eyni zamanda nizam-intizamlı yanaşma, düzgün sistem və praktik tətbiqlər vasitəsilə daha uzunmüddətli və yadda qalan tərzdə öyrənmək və öyrətmək olar.
+
+Bu anlayışa uyğun olaraq qurmuş olduğum Finmaster Akademiyası, tələbələrinə müasir iş dünyasının gözləntilərinə cavab verən sadə, lakin güclü öyrənmə təcrübəsi təqdim etməyi qarşısına məqsəd qoymuşdur.
+
+Proqramlar və məzmunlar təkcə bilik vermək üçün deyil, həm də tələbələrin analitik təfəkkürünü, maliyyə şərhini və peşəkar inkişaf bacarıqlarını gücləndirmək üçün nəzərdə tutulmaqdadır.
+
+"Uğur təsadüfi deyildir — Düzgün qurulmuş disiplinli sistemin və fədakar xarakterin nəticəsidir."
+
+— Toğrul Allahverdiyev | Təsisçi, Finmaster Akademiyası`;
+
+function parseFounderContent(raw: string) {
+  const paragraphs: string[] = [];
+  let current = '';
+  for (const line of raw.split('\n').map(cleanLine)) {
+    if (line === '') {
+      if (current) { paragraphs.push(current); current = ''; }
+    } else {
+      current += (current ? ' ' : '') + line;
+    }
+  }
+  if (current) paragraphs.push(current);
+
+  const quote = paragraphs.find(p => p.startsWith('"') || p.startsWith('“')) ?? null;
+  const signature = paragraphs.find(p => p.startsWith('—') && p.includes('|')) ?? null;
+  const mainParas = paragraphs.filter(p => p !== quote && p !== signature);
+  return { mainParas, quote, signature };
+}
+
 interface Props {
   teacher?: TeacherInfo | null;
 }
 
 export default function AboutSection({ teacher }: Props) {
   const { language } = useLanguage();
+
+  const founderRaw = language === 'en'
+    ? ((teacher as any)?.experience_en || teacher?.experience || FOUNDER_FALLBACK_AZ)
+    : (teacher?.experience || FOUNDER_FALLBACK_AZ);
+  const { mainParas, quote, signature } = parseFounderContent(founderRaw);
 
   const raw = language === 'en'
     ? ((teacher as any)?.bio_en || teacher?.bio || FALLBACK_EN)
@@ -146,34 +182,36 @@ export default function AboutSection({ teacher }: Props) {
             — FinMaster Akademiyanın Təsisçisi haqqında —
           </p>
           <div className="text-gray-600 leading-relaxed text-xl">
-            <p className="mb-4" style={{ textIndent: '2em' }}>
-              Finmaster Akademiyasının təsisçisindən, bu təhsil platformasını, mühasibat uçotu və maliyyə sistemlərindəki təcrübəmi daha sistemli, başa düşülən və peşəkar təlim strukturuna çevirmək məqsədi ilə yaratdım.
-            </p>
-            <p className="mb-4" style={{ textIndent: '2em' }}>
-              Çoxillik mühasibat təcrübəm boyunca, hesab edirdim ki, mühasibat uçotunu yalnız nəzəri biliklərlə deyil, eyni zamanda nizam-intizamlı yanaşma, düzgün sistem və praktik tətbiqlər vasitəsilə daha uzunmüddətli və yadda qalan tərzdə öyrənmək və öyrətmək olar.
-            </p>
-            <p style={{ textIndent: '2em' }}>
-              Bu anlayışa uyğun olaraq qurmuş olduğum Finmaster Akademiyası, tələbələrinə müasir iş dünyasının gözləntilərinə cavab verən sadə, lakin güclü öyrənmə təcrübəsi təqdim etməyi qarşısına məqsəd qoymuşdur.
-            </p>
+            {mainParas.slice(0, -1).map((para, i) => (
+              <p key={i} className={i < mainParas.length - 2 ? 'mb-4' : ''} style={{ textIndent: '2em' }}>
+                {para}
+              </p>
+            ))}
           </div>
 
           <div className="clear-both" />
 
           {/* Şəkilin altına uzanan hissə */}
-          <div className="text-gray-600 leading-relaxed text-xl mt-4">
-            <p style={{ textIndent: '2em' }}>
-              Proqramlar və məzmunlar təkcə bilik vermək üçün deyil, həm də tələbələrin analitik təfəkkürünü, maliyyə şərhini və peşəkar inkişaf bacarıqlarını gücləndirmək üçün nəzərdə tutulmaqdadır.
-            </p>
-          </div>
+          {mainParas.length > 0 && (
+            <div className="text-gray-600 leading-relaxed text-xl mt-4">
+              <p style={{ textIndent: '2em' }}>{mainParas[mainParas.length - 1]}</p>
+            </div>
+          )}
 
-          <div className="mt-6 text-gray-600 leading-relaxed">
-            <p className="italic text-[#0A4D2C] mb-3 text-xl" style={{ textIndent: '2em' }}>
-              "Uğur təsadüfi deyildir — Düzgün qurulmuş disiplinli sistemin və fədakar xarakterin nəticəsidir."
-            </p>
-            <p className="text-base font-semibold text-gray-500 tracking-wide">
-              — Toğrul Allahverdiyev | Təsisçi, Finmaster Akademiyası
-            </p>
-          </div>
+          {(quote || signature) && (
+            <div className="mt-6 text-gray-600 leading-relaxed">
+              {quote && (
+                <p className="italic text-[#0A4D2C] mb-3 text-xl" style={{ textIndent: '2em' }}>
+                  {quote}
+                </p>
+              )}
+              {signature && (
+                <p className="text-base font-semibold text-gray-500 tracking-wide">
+                  {signature}
+                </p>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
