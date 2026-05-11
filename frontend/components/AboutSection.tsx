@@ -112,33 +112,9 @@ export default function AboutSection({ teacher }: Props) {
 
       {/* Qurucu bölməsi */}
       <div className="max-w-7xl mx-auto px-6 lg:px-10 mt-6 pb-10">
-        <div className="overflow-hidden">
+        <div className="lg:grid lg:grid-cols-[45fr_55fr] lg:gap-12 items-start">
 
-          {/* Desktop: şəkil sağa float */}
-          <div className="hidden lg:block float-right ml-10 mb-4 w-[52%]">
-            <Image
-              src="/qurucu-desktop-t.webp"
-              alt="Qurucu"
-              width={700}
-              height={560}
-              className="w-full h-auto"
-              unoptimized
-            />
-          </div>
-
-          {/* Mobile: şəkil üstdə */}
-          <div className="lg:hidden mb-6">
-            <Image
-              src="/qurucu-mobile-t.webp"
-              alt="Qurucu"
-              width={480}
-              height={640}
-              className="w-full h-auto"
-              unoptimized
-            />
-          </div>
-
-          {/* Mətn — şəkilin solunda axır, altına uzanır */}
+          {/* Sol: mətn */}
           <div>
 
             {(() => {
@@ -180,7 +156,30 @@ export default function AboutSection({ teacher }: Props) {
             <div className="w-6 h-px bg-gray-400" />
           </div>
 
-          <div className="clear-both" />
+          {/* Sağ: qurucu şəkli */}
+          <div className="hidden lg:block">
+            <Image
+              src="/qurucu-desktop-t.webp"
+              alt="Qurucu"
+              width={700}
+              height={560}
+              className="w-full h-auto"
+              unoptimized
+            />
+          </div>
+
+          {/* Mobile: şəkil altda */}
+          <div className="lg:hidden mt-6">
+            <Image
+              src="/qurucu-mobile-t.webp"
+              alt="Qurucu"
+              width={480}
+              height={640}
+              className="w-full h-auto"
+              unoptimized
+            />
+          </div>
+
         </div>
       </div>
     </section>
