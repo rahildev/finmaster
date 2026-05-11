@@ -140,17 +140,6 @@ export default function AboutSection({ teacher }: Props) {
 
           {/* Mətn — şəkilin solunda axır, altına uzanır */}
           <div>
-            <p className="text-[13px] font-bold tracking-[0.25em] text-gray-500 uppercase mb-2 text-center">
-              Founder
-            </p>
-            <div className="w-6 h-px bg-gray-400 mb-5 mx-auto" />
-
-            <h2 className="text-3xl sm:text-4xl font-bold text-[#1D1D1F] leading-tight mb-4">
-              {language === 'en'
-                ? 'Founder of Finmaster Academy'
-                : 'Finmaster Akademiyasının təsisçisi'}
-            </h2>
-            <div className="w-6 h-px bg-gray-400 mb-6" />
 
             {(() => {
               const expRaw = language === 'en'
