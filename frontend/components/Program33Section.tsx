@@ -78,18 +78,6 @@ export default function Program33Section({ courseId, headingAz, headingEn, descr
             <p className="mt-1 text-gray-600 leading-relaxed text-xl" style={{ textIndent: '2em' }}>{renderBold(lastParagraph)}</p>
           )}
 
-          {/* Düymə — sağa */}
-          <div className="flex justify-end mt-6">
-            <Link
-              href={`/videos#course-${courseId}`}
-              className="font-inter inline-flex items-center gap-1.5 text-sm border border-[#0A4D2C] text-[#0A4D2C] font-semibold px-4 py-2 rounded-lg hover:bg-[#0A4D2C] hover:text-white transition-colors"
-            >
-              <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-              {language === 'en' ? 'Go to videos' : 'Videolara keçid'}
-            </Link>
-          </div>
 
         </div>
       </div>
