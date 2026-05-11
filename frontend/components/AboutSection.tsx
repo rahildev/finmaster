@@ -86,7 +86,7 @@ export default function AboutSection({ teacher }: Props) {
           </div>
 
           {/* Başlıq — sağ tərəf mətninin üstündə, mərkəzdə */}
-          <p className="text-center text-[13px] font-bold tracking-[0.2em] text-[#0A4D2C] uppercase mb-5">
+          <p className="text-center text-[15px] font-bold tracking-[0.2em] text-[#0A4D2C] uppercase mb-5">
             {language === 'en' ? '— About FinMaster Academy —' : '— FinMaster Akademiya haqqında —'}
           </p>
 
@@ -142,12 +142,12 @@ export default function AboutSection({ teacher }: Props) {
           </div>
 
           {/* Sol: mətn */}
+          <p className="text-center text-[15px] font-bold tracking-[0.2em] text-[#0A4D2C] uppercase mb-5">
+            — FinMaster Akademiyanın Təsisçisi haqqında —
+          </p>
           <div className="text-gray-600 leading-relaxed text-xl">
-            <p className="text-[13px] font-bold tracking-[0.2em] text-[#0A4D2C] uppercase mb-5">
-              Finmaster Akademiyasının təsisçisindən,
-            </p>
             <p className="mb-4" style={{ textIndent: '2em' }}>
-              Bu təhsil platformasını, mühasibat uçotu və maliyyə sistemlərindəki təcrübəmi daha sistemli, başa düşülən və peşəkar təlim strukturuna çevirmək məqsədi ilə yaratdım.
+              Finmaster Akademiyasının təsisçisindən, bu təhsil platformasını, mühasibat uçotu və maliyyə sistemlərindəki təcrübəmi daha sistemli, başa düşülən və peşəkar təlim strukturuna çevirmək məqsədi ilə yaratdım.
             </p>
             <p className="mb-4" style={{ textIndent: '2em' }}>
               Çoxillik mühasibat təcrübəm boyunca, hesab edirdim ki, mühasibat uçotunu yalnız nəzəri biliklərlə deyil, eyni zamanda nizam-intizamlı yanaşma, düzgün sistem və praktik tətbiqlər vasitəsilə daha uzunmüddətli və yadda qalan tərzdə öyrənmək və öyrətmək olar.
