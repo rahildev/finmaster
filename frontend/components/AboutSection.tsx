@@ -212,7 +212,7 @@ export default function AboutSection({ teacher }: Props) {
                   </p>
                 )}
               </div>
-              <div className="flex-shrink-0 mr-28 mt-3">
+              <div className="flex-shrink-0 mr-28">
                 <Image
                   src="/signature-transparent.png"
                   alt="İmza"
