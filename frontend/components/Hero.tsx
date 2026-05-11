@@ -128,6 +128,9 @@ export default function Hero({ data, contacts = [] }: HeroProps) {
               </p>
             );
           })}
+          {lastParagraph && (
+            <p className="mt-3" style={{ textIndent: '2em' }}>{lastParagraph}</p>
+          )}
         </div>
       </div>
 
