@@ -152,23 +152,28 @@ export default function AboutSection({ teacher }: Props) {
             <p className="mb-4" style={{ textIndent: '2em' }}>
               Çoxillik mühasibat təcrübəm boyunca, hesab edirdim ki, mühasibat uçotunu yalnız nəzəri biliklərlə deyil, eyni zamanda nizam-intizamlı yanaşma, düzgün sistem və praktik tətbiqlər vasitəsilə daha uzunmüddətli və yadda qalan tərzdə öyrənmək və öyrətmək olar.
             </p>
-            <p className="mb-4" style={{ textIndent: '2em' }}>
-              Bu anlayışa uyğun olaraq qurmuş olduğum Finmaster Akademiyası, tələbələrinə müasir iş dünyasının gözləntilərinə cavab verən sadə, lakin güclü öyrənmə təcrübəsi təqdim etməyi qarşısına məqsəd qoymuşdur.
-            </p>
             <p style={{ textIndent: '2em' }}>
-              Proqramlar və məzmunlar təkcə bilik vermək üçün deyil, həm də tələbələrin analitik təfəkkürünü, maliyyə şərhini və peşəkar inkişaf bacarıqlarını gücləndirmək üçün nəzərdə tutulmaqdadır.
+              Bu anlayışa uyğun olaraq qurmuş olduğum Finmaster Akademiyası, tələbələrinə müasir iş dünyasının gözləntilərinə cavab verən sadə, lakin güclü öyrənmə təcrübəsi təqdim etməyi qarşısına məqsəd qoymuşdur.
             </p>
           </div>
 
           <div className="clear-both" />
 
-          {/* Şəkilin altına davam edən hissə */}
-          <p className="italic text-[#0A4D2C] mt-6 mb-3 text-xl" style={{ textIndent: '2em' }}>
-            "Uğur təsadüfi deyildir — Düzgün qurulmuş disiplinli sistemin və fədakar xarakterin nəticəsidir."
-          </p>
-          <p className="text-base font-semibold text-gray-500 tracking-wide">
-            — Toğrul Allahverdiyev | Təsisçi, Finmaster Akademiyası
-          </p>
+          {/* Şəkilin altına uzanan hissə */}
+          <div className="text-gray-600 leading-relaxed text-xl mt-4">
+            <p style={{ textIndent: '2em' }}>
+              Proqramlar və məzmunlar təkcə bilik vermək üçün deyil, həm də tələbələrin analitik təfəkkürünü, maliyyə şərhini və peşəkar inkişaf bacarıqlarını gücləndirmək üçün nəzərdə tutulmaqdadır.
+            </p>
+          </div>
+
+          <div className="mt-6 text-gray-600 leading-relaxed">
+            <p className="italic text-[#0A4D2C] mb-3 text-xl" style={{ textIndent: '2em' }}>
+              "Uğur təsadüfi deyildir — Düzgün qurulmuş disiplinli sistemin və fədakar xarakterin nəticəsidir."
+            </p>
+            <p className="text-base font-semibold text-gray-500 tracking-wide">
+              — Toğrul Allahverdiyev | Təsisçi, Finmaster Akademiyası
+            </p>
+          </div>
         </div>
       </div>
 
