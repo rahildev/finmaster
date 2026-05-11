@@ -156,9 +156,9 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
             )}
 
             {showVideos && (
-            <Link href="/videos" className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('videos') ? activeClass : ''}`}>
+            <span className="px-3 py-2 text-[13px] font-medium text-gray-700 cursor-default select-none">
               {language === 'en' ? 'Videos' : 'Video'}
-            </Link>
+            </span>
             )}
 
             {showBlog && (
@@ -298,9 +298,9 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
             )}
 
             {showVideos && (
-            <Link href="/videos" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
+            <span className="block px-2 py-2.5 text-sm font-medium text-gray-700 cursor-default select-none">
               {language === 'en' ? 'Videos' : 'Video'}
-            </Link>
+            </span>
             )}
 
             {showBlog && (
