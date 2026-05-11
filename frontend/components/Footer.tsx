@@ -100,7 +100,7 @@ export default function Footer({ contacts }: FooterProps) {
                 ? ['Systematic', 'Simple', 'Logical']
                 : ['Sadə', 'Sistemli', 'Məntiqi']
               ).map(word => (
-                <span key={word} className="font-inter text-[13px] font-semibold text-gray-600 leading-snug">– {word}</span>
+                <span key={word} className="font-inter text-[13px] font-medium text-gray-700 leading-snug">– {word}</span>
               ))}
             </div>
           </div>
