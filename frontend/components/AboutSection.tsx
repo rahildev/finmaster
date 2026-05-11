@@ -125,51 +125,13 @@ export default function AboutSection({ teacher }: Props) {
           />
         </div>
 
-        <div className="lg:grid lg:grid-cols-[45fr_55fr] lg:gap-12 items-start">
+        {/* Desktop: float layout — şəkil sağa, mətn yanından axır və altına uzanır */}
+        <div style={{ overflow: 'hidden' }}>
 
-          {/* Sol: mətn */}
-          <div>
-            {(() => {
-              const expRaw = language === 'en'
-                ? ((teacher as any)?.experience_en || (teacher as any)?.experience || '')
-                : ((teacher as any)?.experience || '');
-              if (!expRaw) return null;
-              return (
-                <div className="text-gray-600 text-lg leading-relaxed mb-6 space-y-4">
-                  {expRaw.split('\n').map((line: string, i: number) =>
-                    line.trim() === ''
-                      ? null
-                      : <p key={i} className={line.trim().startsWith('"') ? 'italic' : ''}>{line}</p>
-                  )}
-                </div>
-              );
-            })()}
-
-            <p className="text-[1.2rem] sm:text-xl text-gray-700 leading-relaxed italic mb-8">
-              {language === 'en'
-                ? 'Drawing on years of practical experience in finance and accounting, I founded Finmaster Academy with the goal of making learning simpler, more systematic, and more effective.'
-                : 'Maliyyə və mühasibat sahəsində uzun illərin praktik təcrübəsinə əsaslanaraq, öyrənməyi daha sadə, daha sistemli və daha effektiv etmək məqsədilə Finmaster Academy-ni yaratdım.'}
-            </p>
-
-            <Image
-              src="/signature-transparent.png"
-              alt="İmza"
-              width={180}
-              height={90}
-              className="w-40 h-auto mb-3"
-            />
-
-            <p className="text-sm font-bold tracking-[0.15em] text-[#1D1D1F] uppercase">
-              {language === 'en' ? 'Toghrul Allahverdiyev' : 'Toğrul Allahverdiyev'}
-            </p>
-            <p className="text-xs tracking-[0.12em] text-gray-500 uppercase mt-0.5 mb-3">
-              Founder &amp; Director
-            </p>
-            <div className="w-6 h-px bg-gray-400" />
-          </div>
-
-          {/* Sağ: qurucu şəkli — sol mətnlə eyni sıradan başlayır */}
-          <div className="hidden lg:block">
+          <div
+            className="hidden lg:block"
+            style={{ float: 'right', marginLeft: '2.5rem', marginBottom: '1rem', width: '52%' }}
+          >
             <Image
               src="/qurucu-desktop-t.webp"
               alt="Qurucu"
@@ -180,6 +142,39 @@ export default function AboutSection({ teacher }: Props) {
             />
           </div>
 
+          {/* Mətn birbaşa — float-un yanında axır */}
+          <div className="text-gray-600 text-lg leading-relaxed space-y-4 mb-6">
+            {(language === 'en'
+              ? ((teacher as any)?.experience_en || (teacher as any)?.experience || '')
+              : ((teacher as any)?.experience || '')
+            ).split('\n').filter((l: string) => l.trim() !== '').map((line: string, i: number) => (
+              <p key={i} className={line.trim().startsWith('"') ? 'italic' : ''}>{line}</p>
+            ))}
+          </div>
+
+          <p className="text-[1.2rem] sm:text-xl text-gray-700 leading-relaxed italic mb-8">
+            {language === 'en'
+              ? 'Drawing on years of practical experience in finance and accounting, I founded Finmaster Academy with the goal of making learning simpler, more systematic, and more effective.'
+              : 'Maliyyə və mühasibat sahəsində uzun illərin praktik təcrübəsinə əsaslanaraq, öyrənməyi daha sadə, daha sistemli və daha effektiv etmək məqsədilə Finmaster Academy-ni yaratdım.'}
+          </p>
+
+          <Image
+            src="/signature-transparent.png"
+            alt="İmza"
+            width={180}
+            height={90}
+            className="w-40 h-auto mb-3"
+          />
+
+          <p className="text-sm font-bold tracking-[0.15em] text-[#1D1D1F] uppercase">
+            {language === 'en' ? 'Toghrul Allahverdiyev' : 'Toğrul Allahverdiyev'}
+          </p>
+          <p className="text-xs tracking-[0.12em] text-gray-500 uppercase mt-0.5 mb-3">
+            Founder &amp; Director
+          </p>
+          <div className="w-6 h-px bg-gray-400" />
+
+          <div style={{ clear: 'both' }} />
         </div>
       </div>
     </section>
