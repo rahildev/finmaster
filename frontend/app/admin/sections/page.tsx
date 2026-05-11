@@ -69,6 +69,7 @@ export default function SectionsPage() {
       videos: '🎥',
       faq: '❓',
       contact: '📞',
+      certification: '🎓',
     };
     return icons[key] || '📄';
   };

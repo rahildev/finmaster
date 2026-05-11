@@ -15,11 +15,12 @@ interface NavbarProps {
 
 export default function Navbar({ sectionVisibility = {}, courses = [], contacts = [] }: NavbarProps) {
   const sv = sectionVisibility;
-  const showCourses = sv.courses !== false;
-  const showVideos  = sv.videos  !== false;
-  const showFaq     = sv.faq     !== false;
-  const showAbout   = sv.teacher !== false;
-  const showContact = sv.contact !== false;
+  const showCourses       = sv.courses       !== false;
+  const showVideos        = sv.videos        !== false;
+  const showFaq           = sv.faq           !== false;
+  const showAbout         = sv.teacher       !== false;
+  const showContact       = sv.contact       !== false;
+  const showCertification = sv.certification !== false;
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
@@ -163,9 +164,11 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               Blog
             </span>
 
-            <Link href="/certification" className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('certification') ? activeClass : ''}`}>
-              {language === 'en' ? 'Certification' : 'Sertifikasiya'}
-            </Link>
+            {showCertification && (
+              <Link href="/certification" className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('certification') ? activeClass : ''}`}>
+                {language === 'en' ? 'Certification' : 'Sertifikasiya'}
+              </Link>
+            )}
 
             {showAbout && (
             <Link href="/about" className={`px-3 py-2 text-[13px] font-medium text-gray-700 hover:text-[#0A4D2C] transition-colors ${isActive('about') ? activeClass : ''}`}>
@@ -301,9 +304,11 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
               Blog
             </span>
 
-            <Link href="/certification" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
-              {language === 'en' ? 'Certification' : 'Sertifikasiya'}
-            </Link>
+            {showCertification && (
+              <Link href="/certification" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
+                {language === 'en' ? 'Certification' : 'Sertifikasiya'}
+              </Link>
+            )}
 
             {showAbout && (
             <Link href="/about" onClick={closeMobileMenu} className="block px-2 py-2.5 text-sm font-medium text-gray-700 hover:text-[#0A4D2C] rounded-lg">
