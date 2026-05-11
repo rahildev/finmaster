@@ -130,7 +130,7 @@ export default function AboutSection({ teacher }: Props) {
 
             {/* Son cümlə — şəkilin arxasında davam edir, uzun olduqda altına keçir */}
             {lastParagraph && (
-              <p className="mt-1">{lastParagraph}</p>
+              <p className="mt-1" style={{ textIndent: '2em' }}>{lastParagraph}</p>
             )}
           </div>
 
