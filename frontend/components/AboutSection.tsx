@@ -85,6 +85,11 @@ export default function AboutSection({ teacher }: Props) {
             />
           </div>
 
+          {/* Başlıq — sağ tərəf mətninin üstündə, mərkəzdə */}
+          <p className="text-center text-[11px] font-bold tracking-[0.2em] text-[#0A4D2C] uppercase mb-5">
+            {language === 'en' ? 'About FinMaster Academy' : 'FinMaster Akademiya haqqında'}
+          </p>
+
           {/* Əsas mətn */}
           <div className="text-gray-600 leading-relaxed text-xl">
             {mainLines.map((line, i) => {
@@ -96,16 +101,14 @@ export default function AboutSection({ teacher }: Props) {
                 </p>
               );
             })}
+
+            {/* Son cümlə — şəkilin arxasında davam edir, uzun olduqda altına keçir */}
+            {lastParagraph && (
+              <p className="mt-1">{lastParagraph}</p>
+            )}
           </div>
 
           <div className="clear-both" />
-
-          {/* Son cümlə — şəkilin altından, tam genişlikdə, abzassız */}
-          {lastParagraph && (
-            <p className="mt-1 text-gray-600 leading-relaxed text-xl">
-              {lastParagraph}
-            </p>
-          )}
 
         </div>
       </div>
