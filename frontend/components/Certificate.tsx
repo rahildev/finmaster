@@ -22,7 +22,7 @@ export default function Certificate() {
   const t = language === 'en' ? EN : AZ;
 
   return (
-    <section className="py-16 bg-[#f6f6f5]">
+    <section className="pt-4 pb-16 lg:py-16 bg-[#f6f6f5]">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="overflow-hidden">
 
@@ -51,7 +51,7 @@ export default function Certificate() {
           </div>
 
           {/* Mətn */}
-          <div className="text-gray-600 leading-relaxed text-xl space-y-5 mt-10">
+          <div className="text-gray-600 leading-relaxed text-xl space-y-5 mt-4 lg:mt-10">
             <p style={{ textIndent: '2em' }}>{t.p1}</p>
             <p style={{ textIndent: '2em' }}>{t.p2}</p>
             <p style={{ textIndent: '2em' }}>{t.p3}</p>
