@@ -131,12 +131,14 @@ export default function AboutSection({ teacher }: Props) {
             </h2>
             <div className="w-6 h-px bg-gray-400 mb-6" />
 
-            {/* Alt başlıq mətni */}
-            <p className="text-gray-600 text-lg leading-relaxed mb-6">
-              {language === 'en'
-                ? 'My goal is to bring together knowledge and experience in accounting, creating an educational environment that generates real value for students and serves as a reliable guide on their career path.'
-                : 'Mənim məqsədim – mühasibat sahəsində bilik və təcrübəni birləşdirərək, tələbələrə real dəyər yaradan bir təhsil mühiti qurmaq, onların karyera yolunda etibarlı bir bələdçi olmaq üçün yaradılıb.'}
-            </p>
+            {/* Alt başlıq mətni — admin-dən idarə olunur */}
+            {(language === 'en' ? (teacher as any)?.experience_en || (teacher as any)?.experience : (teacher as any)?.experience) && (
+              <p className="text-gray-600 text-lg leading-relaxed mb-6">
+                {language === 'en'
+                  ? ((teacher as any)?.experience_en || (teacher as any)?.experience)
+                  : (teacher as any)?.experience}
+              </p>
+            )}
 
             {/* Əsas sitat */}
             <p className="text-[1.2rem] sm:text-xl text-gray-700 leading-relaxed italic mb-8">
