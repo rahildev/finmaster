@@ -55,7 +55,7 @@ Proqramlar və məzmunlar təkcə bilik vermək üçün deyil, həm də tələb�
 
 function parseFounderContent(raw: string) {
   const lines = raw.split('\n').map(cleanLine).filter(Boolean);
-  const quote = lines.find(l => l.startsWith('”') || l.startsWith('“') || l.startsWith('”') || l.startsWith(“'”)) ?? null;
+  const quote = lines.find(l => /^[“'“”‘’]/.test(l)) ?? null;
   const signature = lines.find(l => l.startsWith('—') && l.includes('|')) ?? null;
   const mainParas = lines.filter(l => l !== quote && l !== signature);
   return { mainParas, quote, signature };
