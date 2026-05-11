@@ -62,7 +62,7 @@ export default function AboutSection({ teacher }: Props) {
         <div className="overflow-hidden">
 
           {/* Desktop şəkil — sola float */}
-          <div className="hidden lg:block float-left mr-10 mb-6 -mt-2 w-[46%] rounded-2xl overflow-hidden">
+          <div className="hidden lg:block float-left mr-10 mb-6 -mt-2 w-[38%] rounded-2xl overflow-hidden">
             <Image
               src={desktopSrc}
               alt="Finmaster Akademiyası"
