@@ -162,7 +162,7 @@ export default function AboutSection({ teacher }: Props) {
                   {expRaw.split('\n').map((line: string, i: number) =>
                     line.trim() === ''
                       ? null
-                      : <p key={i}>{line}</p>
+                      : <p key={i} className={line.trim().startsWith('"') ? 'italic' : ''}>{line}</p>
                   )}
                 </div>
               );
