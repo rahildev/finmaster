@@ -199,17 +199,28 @@ export default function AboutSection({ teacher }: Props) {
           )}
 
           {(quote || signature) && (
-            <div className="mt-6 text-gray-600 leading-relaxed">
-              {quote && (
-                <p className="italic text-[#0A4D2C] mb-3 text-xl" style={{ textIndent: '2em' }}>
-                  {quote}
-                </p>
-              )}
-              {signature && (
-                <p className="text-xl font-semibold text-gray-500 tracking-wide">
-                  {signature}
-                </p>
-              )}
+            <div className="mt-6 flex items-end justify-between gap-6">
+              <div className="text-gray-600 leading-relaxed">
+                {quote && (
+                  <p className="italic text-[#0A4D2C] mb-3 text-xl" style={{ textIndent: '2em' }}>
+                    {quote}
+                  </p>
+                )}
+                {signature && (
+                  <p className="text-xl font-semibold text-gray-500 tracking-wide">
+                    {signature}
+                  </p>
+                )}
+              </div>
+              <div className="flex-shrink-0">
+                <Image
+                  src="/signature-transparent.png"
+                  alt="İmza"
+                  width={220}
+                  height={110}
+                  className="w-48 h-auto"
+                />
+              </div>
             </div>
           )}
         </div>
