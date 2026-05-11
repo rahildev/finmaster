@@ -42,11 +42,6 @@ export default function Program33Section({ courseId, headingAz, headingEn, descr
     <section className="py-16 bg-[#f6f6f5]">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
 
-        {/* Başlıq — tam genişlik */}
-        <h2 className="font-[family-name:var(--font-cormorant)] text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-snug mb-10">
-          {heading}
-        </h2>
-
         {/* Float layout: şəkil sağa float olur, mətn yanından axır */}
         <div className="overflow-hidden">
 
