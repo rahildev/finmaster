@@ -49,7 +49,7 @@ export default function Footer({ contacts }: FooterProps) {
   const getSocialHref = (c: Contact) => {
     if (c.value.startsWith('http')) return c.value;
     if (c.type === 'instagram') return `https://instagram.com/${c.value.replace('@', '')}`;
-    if (c.type === 'linkedin')  return `https://linkedin.com/company/${c.value}`;
+    if (c.type === 'linkedin')  return `https://linkedin.com/in/${c.value}`;
     if (c.type === 'youtube')   return `https://youtube.com/@${c.value}`;
     if (c.type === 'tiktok')    return `https://tiktok.com/@${c.value}`;
     return '#';
