@@ -140,7 +140,7 @@ export default function AboutSection({ teacher }: Props) {
       </div>
 
       {/* İkinci bölmə — mətn sol, şəkil sağ */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 mt-28 pb-10">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 mt-10 pb-10">
         <div className="overflow-hidden">
 
           {/* Desktop: şəkil sağa float */}
