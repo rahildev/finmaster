@@ -127,26 +127,22 @@ export default function AboutSection({ teacher }: Props) {
 
         <div className="overflow-hidden">
 
-          {/* Desktop: şəkil sağa float — birinci bölmə ilə eyni struktur */}
-          <div className="hidden lg:block float-right ml-10 mb-6 -mt-2 w-[50%] rounded-2xl overflow-hidden">
+          {/* Şəkil: mobil — tam genişlik, desktop — sağa float */}
+          <div className="mb-6 rounded-2xl overflow-hidden lg:float-right lg:ml-10 lg:mb-4 lg:-mt-2 lg:w-[50%]">
             <Image
               src="/qurucu-desktop-t.webp"
               alt="Qurucu"
               width={700}
               height={560}
-              className="w-full h-auto"
+              className="hidden lg:block w-full h-auto"
               unoptimized
             />
-          </div>
-
-          {/* Mobile: şəkil üstdə */}
-          <div className="lg:hidden mb-6 rounded-2xl overflow-hidden">
             <Image
               src="/qurucu-mobile-t.webp"
               alt="Qurucu"
               width={480}
               height={640}
-              className="w-full h-auto"
+              className="lg:hidden w-full h-auto"
               unoptimized
             />
           </div>
