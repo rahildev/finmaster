@@ -114,7 +114,7 @@ export default function AboutSection({ teacher }: Props) {
 
           {/* Başlıq — sağ tərəf mətninin üstündə, mərkəzdə */}
           <p className="text-center text-[15px] font-bold tracking-[0.2em] text-[#0A4D2C] uppercase mb-5">
-            {language === 'en' ? '— About FinMaster Academy —' : '— FinMaster Akademiya haqqında —'}
+            {language === 'en' ? '— About FinMaster Academy —' : '— FinMaster Akademiyası haqqında —'}
           </p>
 
           {/* Əsas mətn */}
