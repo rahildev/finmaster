@@ -33,6 +33,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://finmasteracademy.az",
   },
+  verification: {
+    google: "uP4ydLfT40sgDMkvXBk7R4rpEajK1geC3xDJtlLssrA",
+  },
   openGraph: {
     title: "Finmaster Academy - Mühasibatlıq və Maliyyə Təhsili",
     description: "Peşəkar mühasib olmaq üçün lazım olan bütün biliklər bir platformada",
