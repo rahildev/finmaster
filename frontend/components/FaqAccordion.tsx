@@ -63,7 +63,7 @@ const faqIcons = [
 
 export default function FaqAccordion({ faqs }: { faqs: Faq[] }) {
   const { language } = useLanguage();
-  const [open, setOpen] = useState<number | null>(faqs[0]?.id ?? null);
+  const [open, setOpen] = useState<number | null>(null);
 
   if (!faqs.length) {
     return (
