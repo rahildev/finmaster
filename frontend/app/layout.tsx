@@ -29,10 +29,16 @@ export const metadata: Metadata = {
   description: "Peşəkar mühasib olmaq üçün lazım olan bütün biliklər bir platformada. Mühasibatlıq, maliyyə, audit və vergi kursları.",
   keywords: ["mühasibatlıq", "maliyyə", "təhsil", "kurs", "Azərbaycan", "audit", "vergi"],
   authors: [{ name: "Finmaster Academy" }],
+  metadataBase: new URL("https://finmasteracademy.az"),
+  alternates: {
+    canonical: "https://finmasteracademy.az",
+  },
   openGraph: {
     title: "Finmaster Academy - Mühasibatlıq və Maliyyə Təhsili",
     description: "Peşəkar mühasib olmaq üçün lazım olan bütün biliklər bir platformada",
     type: "website",
+    url: "https://finmasteracademy.az",
+    siteName: "Finmaster Academy",
   },
 };
 
