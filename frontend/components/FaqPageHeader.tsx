@@ -10,7 +10,7 @@ export default function FaqPageHeader() {
       <p className="text-lg text-gray-500 leading-relaxed max-w-sm mx-auto">
         {language === 'en'
           ? 'Find answers to the most frequently asked questions about Finmaster Academy.'
-          : 'Finmaster Academy ilə bağlı ən çox maraqlandırılan sualların cavablarını burada tapa bilərsiniz.'}
+          : 'Finmaster Akademiyası ilə bağlı ən çox maraqlandırılan sualların cavablarını burada tapa bilərsiniz.'}
       </p>
     </div>
   );
