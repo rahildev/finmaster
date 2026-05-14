@@ -10,6 +10,8 @@ import {
   type AdminUser,
   type Permission,
 } from '@/lib/admin-api';
+import { toast } from 'sonner';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 export default function UsersAdminPage() {
   const [users, setUsers] = useState<AdminUser[]>([]);
@@ -19,9 +21,7 @@ export default function UsersAdminPage() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [formKey, setFormKey] = useState(0);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -80,7 +80,6 @@ export default function UsersAdminPage() {
     e.stopPropagation();
 
     setSaving(true);
-    setMessage(null);
 
     try {
       const data: any = {
@@ -96,15 +95,15 @@ export default function UsersAdminPage() {
 
       if (editingId) {
         await updateUser(editingId, data);
-        setMessage({ type: 'success', text: 'İstifadəçi uğurla yeniləndi!' });
+        toast.success('İstifadəçi uğurla yeniləndi!');
       } else {
         if (!formData.password) {
-          setMessage({ type: 'error', text: 'Şifrə tələb olunur!' });
+          toast.error('Şifrə tələb olunur!');
           setSaving(false);
           return;
         }
         await createUser(data);
-        setMessage({ type: 'success', text: 'İstifadəçi uğurla əlavə edildi!' });
+        toast.success('İstifadəçi uğurla əlavə edildi!');
       }
 
       resetForm();
@@ -114,24 +113,24 @@ export default function UsersAdminPage() {
       const errorMessage = errors
         ? Object.values(errors).flat().join(' | ')
         : error?.response?.data?.message || error?.message || 'Xəta baş verdi!';
-      setMessage({ type: 'error', text: errorMessage });
+      toast.error(errorMessage);
     } finally {
       setSaving(false);
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
     try {
-      await deleteUser(id);
-      setMessage({ type: 'success', text: 'İstifadəçi silindi!' });
-      setShowDeleteModal(false);
-      setDeleteTargetId(null);
+      await deleteUser(deleteTarget);
+      toast.success('İstifadəçi silindi!');
       resetForm();
       await fetchData();
     } catch (error) {
       console.error('Xəta:', error);
-      setMessage({ type: 'error', text: 'Silinmədi!' });
-      setShowDeleteModal(false);
+      toast.error('Silinmədi!');
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -169,18 +168,6 @@ export default function UsersAdminPage() {
           + Yeni İstifadəçi
         </button>
       </div>
-
-      {message && (
-        <div
-          className={`mb-6 p-4 rounded-lg ${
-            message.type === 'success'
-              ? 'bg-green-50 text-green-800 border border-green-200'
-              : 'bg-red-50 text-red-800 border border-red-200'
-          }`}
-        >
-          {message.text}
-        </div>
-      )}
 
       {showForm && (
         <div className="mb-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -301,10 +288,7 @@ export default function UsersAdminPage() {
               {editingId && (
                 <button
                   type="button"
-                  onClick={() => {
-                    setDeleteTargetId(editingId);
-                    setShowDeleteModal(true);
-                  }}
+                  onClick={() => setDeleteTarget(editingId)}
                   disabled={saving}
                   className="px-6 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors disabled:opacity-50"
                 >
@@ -367,47 +351,13 @@ export default function UsersAdminPage() {
         </div>
       )}
 
-      {/* Delete Confirmation Modal */}
-      {showDeleteModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden">
-            <div className="p-6">
-              <div className="flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mx-auto mb-4">
-                <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-gray-dark text-center mb-2">
-                İstifadəçini silmək istədiyinizə əminsiniz?
-              </h3>
-              <p className="text-gray-600 text-center mb-6">
-                Bu əməliyyat geri qaytarıla bilməz.
-              </p>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => {
-                    setShowDeleteModal(false);
-                    setDeleteTargetId(null);
-                  }}
-                  className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-                >
-                  Ləğv Et
-                </button>
-                <button
-                  onClick={() => {
-                    if (deleteTargetId) {
-                      handleDelete(deleteTargetId);
-                    }
-                  }}
-                  className="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
-                >
-                  Sil
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmDialog
+        open={deleteTarget !== null}
+        title="İstifadəçi silinsin?"
+        message="Bu əməliyyat geri qaytarıla bilməz."
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

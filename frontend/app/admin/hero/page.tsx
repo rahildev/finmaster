@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { getHeroSections, createHeroSection, updateHeroSection, deleteHeroSection, purgeAllCaches } from '@/lib/admin-api';
 import type { HeroSection } from '@/types/landing';
 import { getImageUrl } from '@/lib/api';
+import { toast } from 'sonner';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 function ImageUploadBox({
   id,
@@ -82,9 +84,7 @@ export default function HeroAdminPage() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [formKey, setFormKey] = useState(0);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -160,7 +160,6 @@ export default function HeroAdminPage() {
     e.preventDefault();
     e.stopPropagation();
     setSaving(true);
-    setMessage(null);
 
     try {
       const data = new FormData();
@@ -188,34 +187,34 @@ export default function HeroAdminPage() {
 
       if (editingId) {
         await updateHeroSection(editingId, data);
-        setMessage({ type: 'success', text: 'Hero section uğurla yeniləndi!' });
+        toast.success('Hero section uğurla yeniləndi!');
       } else {
         await createHeroSection(data);
-        setMessage({ type: 'success', text: 'Hero section uğurla əlavə edildi!' });
+        toast.success('Hero section uğurla əlavə edildi!');
       }
 
       resetForm();
       await fetchHeroes();
       await purgeAllCaches();
     } catch (error: any) {
-      setMessage({ type: 'error', text: error?.response?.data?.message || error?.message || 'Xəta baş verdi!' });
+      toast.error(error?.response?.data?.message || error?.message || 'Xəta baş verdi!');
     } finally {
       setSaving(false);
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
     try {
-      await deleteHeroSection(id);
-      setMessage({ type: 'success', text: 'Hero section silindi!' });
-      setShowDeleteModal(false);
-      setDeleteTargetId(null);
+      await deleteHeroSection(deleteTarget);
+      toast.success('Hero section silindi!');
       resetForm();
       await fetchHeroes();
       await purgeAllCaches();
     } catch {
-      setMessage({ type: 'error', text: 'Silinmədi!' });
-      setShowDeleteModal(false);
+      toast.error('Silinmədi!');
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -241,12 +240,6 @@ export default function HeroAdminPage() {
           + Yeni Hero
         </button>
       </div>
-
-      {message && (
-        <div className={`mb-6 p-4 rounded-lg ${message.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'}`}>
-          {message.text}
-        </div>
-      )}
 
       {showForm && (
         <div className="mb-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -373,7 +366,7 @@ export default function HeroAdminPage() {
               {editingId && (
                 <button
                   type="button"
-                  onClick={() => { setDeleteTargetId(editingId); setShowDeleteModal(true); }}
+                  onClick={() => setDeleteTarget(editingId)}
                   disabled={saving}
                   className="px-6 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors disabled:opacity-50"
                 >
@@ -424,35 +417,13 @@ export default function HeroAdminPage() {
         </div>
       )}
 
-      {showDeleteModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden">
-            <div className="p-6">
-              <div className="flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mx-auto mb-4">
-                <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                </svg>
-              </div>
-              <h3 className="text-xl font-bold text-gray-dark text-center mb-2">Hero section silmək istədiyinizə əminsiniz?</h3>
-              <p className="text-gray-600 text-center mb-6">Bu əməliyyat geri qaytarıla bilməz.</p>
-              <div className="flex gap-3">
-                <button
-                  onClick={() => { setShowDeleteModal(false); setDeleteTargetId(null); }}
-                  className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
-                >
-                  Ləğv Et
-                </button>
-                <button
-                  onClick={() => { if (deleteTargetId) handleDelete(deleteTargetId); }}
-                  className="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
-                >
-                  Sil
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmDialog
+        open={deleteTarget !== null}
+        title="Hero section silinsin?"
+        message="Bu əməliyyat geri qaytarıla bilməz."
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

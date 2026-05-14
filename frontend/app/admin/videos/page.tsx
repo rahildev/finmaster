@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef } from 'react';
 import { getVideos, createVideo, updateVideo, deleteVideo, getCourses, purgeAllCaches } from '@/lib/admin-api';
 import type { Video, Course } from '@/types/landing';
+import { toast } from 'sonner';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 export default function VideosAdminPage() {
   const [videos, setVideos] = useState<Video[]>([]);
@@ -12,7 +14,7 @@ export default function VideosAdminPage() {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [formKey, setFormKey] = useState(0);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
   const formRef = useRef<HTMLDivElement>(null);
 
   const [formData, setFormData] = useState({
@@ -89,7 +91,6 @@ export default function VideosAdminPage() {
     e.stopPropagation();
 
     setSaving(true);
-    setMessage(null);
 
     try {
       // YouTube URL-i embed formatına çevir və növünü müəyyən et
@@ -136,33 +137,33 @@ export default function VideosAdminPage() {
 
       if (editingId) {
         await updateVideo(editingId, data);
-        setMessage({ type: 'success', text: 'Video uğurla yeniləndi!' });
+        toast.success('Video uğurla yeniləndi!');
       } else {
         await createVideo(data);
-        setMessage({ type: 'success', text: 'Video uğurla yaradıldı!' });
+        toast.success('Video uğurla yaradıldı!');
       }
 
       resetForm();
       await fetchVideos();
       await purgeAllCaches();
     } catch (error: any) {
-      const errorMessage = error?.response?.data?.message || error?.message || 'Xəta baş verdi!';
-      setMessage({ type: 'error', text: errorMessage });
+      toast.error(error?.response?.data?.message || error?.message || 'Xəta baş verdi!');
     } finally {
       setSaving(false);
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Bu videonu silmək istədiyinizə əminsiniz?')) return;
-
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
     try {
-      await deleteVideo(id);
-      setMessage({ type: 'success', text: 'Video silindi!' });
+      await deleteVideo(deleteTarget);
+      toast.success('Video silindi!');
       await fetchVideos();
     } catch (error) {
       console.error('Xəta:', error);
-      setMessage({ type: 'error', text: 'Silinmədi!' });
+      toast.error('Silinmədi!');
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -191,18 +192,6 @@ export default function VideosAdminPage() {
           + Yeni Video
         </button>
       </div>
-
-      {message && (
-        <div
-          className={`mb-6 p-4 rounded-lg ${
-            message.type === 'success'
-              ? 'bg-green-50 text-green-800 border border-green-200'
-              : 'bg-red-50 text-red-800 border border-red-200'
-          }`}
-        >
-          {message.text}
-        </div>
-      )}
 
       {showForm && (
         <div ref={formRef} className="mb-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -404,7 +393,7 @@ export default function VideosAdminPage() {
                 Redaktə
               </button>
               <button
-                onClick={() => handleDelete(video.id)}
+                onClick={() => setDeleteTarget(video.id)}
                 className="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
               >
                 Sil
@@ -419,6 +408,14 @@ export default function VideosAdminPage() {
           </div>
         )}
       </div>
+
+      <ConfirmDialog
+        open={deleteTarget !== null}
+        title="Video silinsin?"
+        message="Bu əməliyyat geri qaytarıla bilməz."
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

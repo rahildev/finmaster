@@ -2,6 +2,7 @@
 
 import { LanguageProvider, useLanguage } from '@/contexts/LanguageContext';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { Toaster } from 'sonner';
 import { ReactNode, useEffect } from 'react';
 
 function ScrollToTop() {
@@ -33,6 +34,15 @@ export function Providers({ children, initialLanguage = 'az' }: { children: Reac
         <LanguageTransition>
           {children}
         </LanguageTransition>
+        <Toaster
+          position="top-right"
+          richColors
+          closeButton
+          duration={3000}
+          toastOptions={{
+            style: { fontFamily: 'var(--font-inter), system-ui, sans-serif' },
+          }}
+        />
       </LanguageProvider>
     </AuthProvider>
   );

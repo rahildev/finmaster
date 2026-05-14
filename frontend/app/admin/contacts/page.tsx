@@ -3,13 +3,15 @@
 import { useEffect, useState } from 'react';
 import { getContacts, createContact, updateContact, deleteContact, purgeAllCaches } from '@/lib/admin-api';
 import type { Contact } from '@/types/landing';
+import { toast } from 'sonner';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 export default function ContactsAdminPage() {
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
 
   const [formData, setFormData] = useState({
     type: 'phone',
@@ -63,15 +65,14 @@ export default function ContactsAdminPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMessage(null);
 
     try {
       if (editingId) {
         await updateContact(editingId, formData);
-        setMessage({ type: 'success', text: 'Əlaqə uğurla yeniləndi!' });
+        toast.success('Əlaqə uğurla yeniləndi!');
       } else {
         await createContact(formData);
-        setMessage({ type: 'success', text: 'Əlaqə uğurla yaradıldı!' });
+        toast.success('Əlaqə uğurla yaradıldı!');
       }
 
       resetForm();
@@ -79,20 +80,21 @@ export default function ContactsAdminPage() {
       await purgeAllCaches();
     } catch (error) {
       console.error('Xəta:', error);
-      setMessage({ type: 'error', text: 'Xəta baş verdi!' });
+      toast.error('Xəta baş verdi!');
     }
   };
 
-  const handleDelete = async (id: number) => {
-    if (!confirm('Bu əlaqəni silmək istədiyinizə əminsiniz?')) return;
-
+  const handleDeleteConfirm = async () => {
+    if (!deleteTarget) return;
     try {
-      await deleteContact(id);
-      setMessage({ type: 'success', text: 'Əlaqə silindi!' });
+      await deleteContact(deleteTarget);
+      toast.success('Əlaqə silindi!');
       await fetchContacts();
     } catch (error) {
       console.error('Xəta:', error);
-      setMessage({ type: 'error', text: 'Silinmədi!' });
+      toast.error('Silinmədi!');
+    } finally {
+      setDeleteTarget(null);
     }
   };
 
@@ -132,18 +134,6 @@ export default function ContactsAdminPage() {
           + Yeni Əlaqə
         </button>
       </div>
-
-      {message && (
-        <div
-          className={`mb-6 p-4 rounded-lg ${
-            message.type === 'success'
-              ? 'bg-green-50 text-green-800 border border-green-200'
-              : 'bg-red-50 text-red-800 border border-red-200'
-          }`}
-        >
-          {message.text}
-        </div>
-      )}
 
       {showForm && (
         <div className="mb-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -284,7 +274,7 @@ export default function ContactsAdminPage() {
                 Redaktə
               </button>
               <button
-                onClick={() => handleDelete(contact.id)}
+                onClick={() => setDeleteTarget(contact.id)}
                 className="px-4 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
               >
                 Sil
@@ -299,6 +289,14 @@ export default function ContactsAdminPage() {
           </div>
         )}
       </div>
+
+      <ConfirmDialog
+        open={deleteTarget !== null}
+        title="Əlaqə silinsin?"
+        message="Bu əməliyyat geri qaytarıla bilməz."
+        onConfirm={handleDeleteConfirm}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }

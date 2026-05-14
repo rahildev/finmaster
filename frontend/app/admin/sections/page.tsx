@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { toast } from 'sonner';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -16,7 +17,6 @@ interface SectionSetting {
 export default function SectionsPage() {
   const [sections, setSections] = useState<SectionSetting[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
 
   useEffect(() => {
     fetchSections();
@@ -31,7 +31,7 @@ export default function SectionsPage() {
       setSections(response.data);
     } catch (err: any) {
       console.error('Error fetching sections:', err);
-      setError('Section məlumatları yüklənə bilmədi');
+      toast.error('Section məlumatları yüklənə bilmədi');
     } finally {
       setLoading(false);
     }
@@ -57,7 +57,7 @@ export default function SectionsPage() {
       );
     } catch (err: any) {
       console.error('Error toggling visibility:', err);
-      setError('Görünürlük dəyişdirilə bilmədi');
+      toast.error('Görünürlük dəyişdirilə bilmədi');
     }
   };
 
@@ -93,12 +93,6 @@ export default function SectionsPage() {
           Main page-də hansı section-ların görünəcəyini idarə edin
         </p>
       </div>
-
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
-          {error}
-        </div>
-      )}
 
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="divide-y divide-gray-200">

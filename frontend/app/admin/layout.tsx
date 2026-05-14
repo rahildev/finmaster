@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { ReactNode, useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { toast } from 'sonner';
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -26,22 +27,23 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter();
   const { user, loading, logout, isSuperAdmin, hasPermission } = useAuth();
   const [purging, setPurging] = useState(false);
-  const [purgeMsg, setPurgeMsg] = useState('');
 
   const handlePurgeCache = async () => {
     setPurging(true);
-    setPurgeMsg('');
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/admin/purge-cache`, {
         method: 'POST',
         credentials: 'include',
       });
-      setPurgeMsg(res.ok ? '✓ Keş təmizləndi' : '✗ Xəta baş verdi');
+      if (res.ok) {
+        toast.success('Keş uğurla təmizləndi');
+      } else {
+        toast.error('Keş təmizlənərkən xəta baş verdi');
+      }
     } catch {
-      setPurgeMsg('✗ Xəta baş verdi');
+      toast.error('Xəta baş verdi');
     } finally {
       setPurging(false);
-      setTimeout(() => setPurgeMsg(''), 3000);
     }
   };
 
@@ -143,7 +145,6 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                 >
                   {purging ? 'Təmizlənir...' : '🗑 Keşi Təmizlə'}
                 </button>
-                {purgeMsg && <span className="text-xs font-medium text-green-600">{purgeMsg}</span>}
               </div>
               <div className="text-right">
                 <p className="text-sm font-medium text-gray-dark">{user.name}</p>
