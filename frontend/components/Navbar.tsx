@@ -110,15 +110,6 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
     return null;
   };
 
-  const navSocialHoverColor = (type: string) => {
-    if (type === 'instagram') return 'hover:text-[#E1306C]';
-    if (type === 'youtube')   return 'hover:text-[#FF0000]';
-    if (type === 'tiktok')    return 'hover:text-[#010101]';
-    if (type === 'facebook')  return 'hover:text-[#1877F2]';
-    if (type === 'linkedin')  return 'hover:text-[#0077B5]';
-    return '';
-  };
-
   const openMobileMenu = () => {
     setMobileMenuVisible(true);
     requestAnimationFrame(() => setMobileMenuOpen(true));
@@ -250,7 +241,13 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
                             href={getNavSocialHref(c)}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className={`text-gray-400 transition-colors ${navSocialHoverColor(c.type)}`}
+                            className={`text-gray-400 transition-colors
+                              ${c.type === 'instagram' ? 'hover:text-[#E1306C]' : ''}
+                              ${c.type === 'youtube'   ? 'hover:text-[#FF0000]' : ''}
+                              ${c.type === 'tiktok'    ? 'hover:text-[#010101]' : ''}
+                              ${c.type === 'facebook'  ? 'hover:text-[#1877F2]' : ''}
+                              ${c.type === 'linkedin'  ? 'hover:text-[#0077B5]' : ''}
+                            `}
                             title={c.type.charAt(0).toUpperCase() + c.type.slice(1)}
                           >
                             <NavSocialIcon type={c.type} />
@@ -418,7 +415,13 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
                           href={getNavSocialHref(c)}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className={`text-gray-400 transition-colors ${navSocialHoverColor(c.type)}`}
+                          className={`text-gray-400 transition-colors
+                            ${c.type === 'instagram' ? 'hover:text-[#E1306C]' : ''}
+                            ${c.type === 'youtube'   ? 'hover:text-[#FF0000]' : ''}
+                            ${c.type === 'tiktok'    ? 'hover:text-[#010101]' : ''}
+                            ${c.type === 'facebook'  ? 'hover:text-[#1877F2]' : ''}
+                            ${c.type === 'linkedin'  ? 'hover:text-[#0077B5]' : ''}
+                          `}
                         >
                           <NavSocialIcon type={c.type} />
                         </a>
