@@ -1,9 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { getHeroSections, createHeroSection, updateHeroSection, deleteHeroSection, purgeAllCaches } from '@/lib/admin-api';
 import type { HeroSection } from '@/types/landing';
 import { getImageUrl } from '@/lib/api';
+import { heroSchema, type HeroFormData } from '@/lib/validations';
 import { toast } from 'sonner';
 import ConfirmDialog from '@/components/ConfirmDialog';
 
@@ -85,30 +88,52 @@ export default function HeroAdminPage() {
   const [showForm, setShowForm] = useState(false);
   const [formKey, setFormKey] = useState(0);
   const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
-
-  const [formData, setFormData] = useState({
-    title: '',
-    title_en: '',
-    subtitle: '',
-    subtitle_en: '',
-    btn_text: '',
-    btn_text_en: '',
-    btn_link: '',
-    sort_order: 0,
-    is_active: true,
-  });
+  const formContainerRef = useRef<HTMLDivElement>(null);
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [shouldDeleteImage, setShouldDeleteImage] = useState(false);
-
   const [imageMobileFile, setImageMobileFile] = useState<File | null>(null);
   const [imageMobilePreview, setImageMobilePreview] = useState<string | null>(null);
   const [shouldDeleteImageMobile, setShouldDeleteImageMobile] = useState(false);
 
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({
+    resolver: zodResolver(heroSchema),
+    defaultValues: {
+      title: '',
+      title_en: '',
+      subtitle: '',
+      subtitle_en: '',
+      btn_text: '',
+      btn_text_en: '',
+      btn_link: '',
+      sort_order: 0,
+      is_active: true,
+    },
+  });
+
   useEffect(() => {
     fetchHeroes();
   }, []);
+
+  useEffect(() => {
+    const isOpen = showForm || editingId !== null;
+    if (!isOpen) return;
+
+    const handler = (e: MouseEvent) => {
+      if (deleteTarget !== null) return;
+      if (formContainerRef.current && !formContainerRef.current.contains(e.target as Node)) {
+        reset();
+        setImageFile(null); setImagePreview(null); setShouldDeleteImage(false);
+        setImageMobileFile(null); setImageMobilePreview(null); setShouldDeleteImageMobile(false);
+        setEditingId(null);
+        setShowForm(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [showForm, editingId, deleteTarget, reset]);
 
   const fetchHeroes = async () => {
     try {
@@ -121,20 +146,20 @@ export default function HeroAdminPage() {
     }
   };
 
+  const clearFileStates = () => {
+    setImageFile(null); setImagePreview(null); setShouldDeleteImage(false);
+    setImageMobileFile(null); setImageMobilePreview(null); setShouldDeleteImageMobile(false);
+  };
+
   const resetForm = () => {
-    setFormData({ title: '', title_en: '', subtitle: '', subtitle_en: '', btn_text: '', btn_text_en: '', btn_link: '', sort_order: 0, is_active: true });
-    setImageFile(null);
-    setImagePreview(null);
-    setShouldDeleteImage(false);
-    setImageMobileFile(null);
-    setImageMobilePreview(null);
-    setShouldDeleteImageMobile(false);
+    reset();
+    clearFileStates();
     setEditingId(null);
     setShowForm(false);
   };
 
   const handleEdit = (hero: HeroSection) => {
-    setFormData({
+    reset({
       title: hero.title || '',
       title_en: (hero as any).title_en || '',
       subtitle: hero.subtitle || '',
@@ -151,45 +176,35 @@ export default function HeroAdminPage() {
     setShouldDeleteImageMobile(false);
     setImageFile(null);
     setImageMobileFile(null);
-    setEditingId(hero.id);
     setFormKey(prev => prev + 1);
-    setShowForm(true);
+    setShowForm(false);
+    setEditingId(hero.id);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const onSubmit = async (data: HeroFormData) => {
     setSaving(true);
-
     try {
-      const data = new FormData();
-      data.append('title', formData.title || 'hero');
-      data.append('title_en', formData.title_en || 'hero');
-      data.append('subtitle', formData.subtitle);
-      data.append('subtitle_en', formData.subtitle_en);
-      data.append('btn_text', formData.btn_text);
-      data.append('btn_text_en', formData.btn_text_en);
-      data.append('btn_link', formData.btn_link);
-      data.append('sort_order', formData.sort_order.toString());
-      data.append('is_active', formData.is_active ? '1' : '0');
+      const formData = new FormData();
+      formData.append('title', data.title || 'hero');
+      formData.append('title_en', data.title_en || 'hero');
+      formData.append('subtitle', data.subtitle || '');
+      formData.append('subtitle_en', data.subtitle_en || '');
+      formData.append('btn_text', data.btn_text || '');
+      formData.append('btn_text_en', data.btn_text_en || '');
+      formData.append('btn_link', data.btn_link || '');
+      formData.append('sort_order', data.sort_order.toString());
+      formData.append('is_active', data.is_active ? '1' : '0');
 
-      if (imageFile) {
-        data.append('image', imageFile);
-      } else if (shouldDeleteImage) {
-        data.append('delete_image', '1');
-      }
-
-      if (imageMobileFile) {
-        data.append('image_mobile', imageMobileFile);
-      } else if (shouldDeleteImageMobile) {
-        data.append('delete_image_mobile', '1');
-      }
+      if (imageFile) { formData.append('image', imageFile); }
+      else if (shouldDeleteImage) { formData.append('delete_image', '1'); }
+      if (imageMobileFile) { formData.append('image_mobile', imageMobileFile); }
+      else if (shouldDeleteImageMobile) { formData.append('delete_image_mobile', '1'); }
 
       if (editingId) {
-        await updateHeroSection(editingId, data);
+        await updateHeroSection(editingId, formData);
         toast.success('Hero section uğurla yeniləndi!');
       } else {
-        await createHeroSection(data);
+        await createHeroSection(formData);
         toast.success('Hero section uğurla əlavə edildi!');
       }
 
@@ -218,6 +233,92 @@ export default function HeroAdminPage() {
     }
   };
 
+  const renderForm = (isNew = false) => (
+    <form key={formKey} onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ImageUploadBox
+          id={`hero-image-desktop-${isNew ? 'new' : editingId}`}
+          label="Şəkil — Desktop"
+          preview={imagePreview}
+          onFile={(file, prev) => { setImageFile(file); setImagePreview(prev); setShouldDeleteImage(false); }}
+          onClear={() => { setShouldDeleteImage(true); setImageFile(null); setImagePreview(null); }}
+          aspect="aspect-video"
+        />
+        <ImageUploadBox
+          id={`hero-image-mobile-${isNew ? 'new' : editingId}`}
+          label="Şəkil — Mobile"
+          preview={imageMobilePreview}
+          onFile={(file, prev) => { setImageMobileFile(file); setImageMobilePreview(prev); setShouldDeleteImageMobile(false); }}
+          onClear={() => { setShouldDeleteImageMobile(true); setImageMobileFile(null); setImageMobilePreview(null); }}
+          aspect="aspect-[9/16]"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">Başlıq (AZ) *</label>
+        <input {...register('title')} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="FinMaster Academy" />
+        {errors.title && <p className="text-sm text-red-600 mt-1">{errors.title.message}</p>}
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">Başlıq (EN)</label>
+        <input {...register('title_en')} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="FinMaster Academy" />
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">Təsvir (AZ)</label>
+        <textarea {...register('subtitle')} rows={8} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Mühasibat və maliyyə sahəsində..." />
+      </div>
+
+      <div>
+        <label className="block text-sm font-semibold text-gray-700 mb-2">Təsvir (EN)</label>
+        <textarea {...register('subtitle_en')} rows={8} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="A premium education platform..." />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">Button Mətni (AZ)</label>
+          <input {...register('btn_text')} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="Kursları İncələ" />
+        </div>
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">Button Mətni (EN)</label>
+          <input {...register('btn_text_en')} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Explore Courses" />
+        </div>
+        <div>
+          <label className="block text-sm font-semibold text-gray-700 mb-2">Button Linki</label>
+          <input {...register('btn_link')} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent" placeholder="#courses" />
+        </div>
+      </div>
+
+      <div className="flex items-center gap-4">
+        <label className="flex items-center gap-2">
+          <input type="checkbox" {...register('is_active')} className="w-4 h-4 text-primary focus:ring-primary border-gray-300 rounded" />
+          <span className="text-sm font-medium text-gray-700">Aktiv</span>
+        </label>
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium text-gray-700">Sıra:</label>
+          <input type="number" {...register('sort_order', { valueAsNumber: true })} className="w-20 px-2 py-1 border border-gray-300 rounded" />
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center">
+        <div className="flex gap-4">
+          <button type="submit" disabled={saving} className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            {saving ? 'Yadda saxlanılır...' : editingId ? 'Yenilə' : 'Yadda Saxla'}
+          </button>
+          <button type="button" onClick={resetForm} disabled={saving} className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50">
+            Ləğv Et
+          </button>
+        </div>
+        {editingId && (
+          <button type="button" onClick={() => setDeleteTarget(editingId)} disabled={saving} className="px-6 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors disabled:opacity-50">
+            Sil
+          </button>
+        )}
+      </div>
+    </form>
+  );
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -234,153 +335,28 @@ export default function HeroAdminPage() {
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold text-gray-dark">Hero Section</h1>
         <button
-          onClick={() => { setFormKey(prev => prev + 1); setShowForm(true); }}
+          onClick={() => { clearFileStates(); reset(); setFormKey(prev => prev + 1); setEditingId(null); setShowForm(true); }}
           className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
         >
           + Yeni Hero
         </button>
       </div>
 
-      {showForm && (
-        <div className="mb-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-xl font-bold mb-4">
-            {editingId ? 'Hero Section Redaktə Et' : 'Yeni Hero Section Əlavə Et'}
-          </h2>
-          <form key={formKey} onSubmit={handleSubmit} className="space-y-4">
-
-            {/* Images row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <ImageUploadBox
-                id="hero-image-desktop"
-                label="Şəkil — Desktop"
-                preview={imagePreview}
-                onFile={(file, prev) => { setImageFile(file); setImagePreview(prev); setShouldDeleteImage(false); }}
-                onClear={() => { setShouldDeleteImage(true); setImageFile(null); setImagePreview(null); }}
-                aspect="aspect-video"
-              />
-              <ImageUploadBox
-                id="hero-image-mobile"
-                label="Şəkil — Mobile"
-                preview={imageMobilePreview}
-                onFile={(file, prev) => { setImageMobileFile(file); setImageMobilePreview(prev); setShouldDeleteImageMobile(false); }}
-                onClear={() => { setShouldDeleteImageMobile(true); setImageMobileFile(null); setImageMobilePreview(null); }}
-                aspect="aspect-[9/16]"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Təsvir (AZ)</label>
-              <textarea
-                rows={8}
-                value={formData.subtitle}
-                onChange={(e) => setFormData({ ...formData, subtitle: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                placeholder="Mühasibat və maliyyə sahəsində..."
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Təsvir (EN)</label>
-              <textarea
-                rows={8}
-                value={formData.subtitle_en}
-                onChange={(e) => setFormData({ ...formData, subtitle_en: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                placeholder="A premium education platform..."
-              />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Button Mətni (AZ)</label>
-                <input
-                  type="text"
-                  value={formData.btn_text}
-                  onChange={(e) => setFormData({ ...formData, btn_text: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="Kursları İncələ"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Button Mətni (EN)</label>
-                <input
-                  type="text"
-                  value={formData.btn_text_en}
-                  onChange={(e) => setFormData({ ...formData, btn_text_en: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                  placeholder="Explore Courses"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Button Linki</label>
-                <input
-                  type="text"
-                  value={formData.btn_link}
-                  onChange={(e) => setFormData({ ...formData, btn_link: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                  placeholder="#courses"
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4">
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={formData.is_active}
-                  onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-                  className="w-4 h-4 text-primary focus:ring-primary border-gray-300 rounded"
-                />
-                <span className="text-sm font-medium text-gray-700">Aktiv</span>
-              </label>
-              <div className="flex items-center gap-2">
-                <label className="text-sm font-medium text-gray-700">Sıra:</label>
-                <input
-                  type="number"
-                  value={formData.sort_order}
-                  onChange={(e) => setFormData({ ...formData, sort_order: parseInt(e.target.value) || 0 })}
-                  className="w-20 px-2 py-1 border border-gray-300 rounded"
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <div className="flex gap-4">
-                <button
-                  type="button"
-                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSubmit(e as any); }}
-                  disabled={saving}
-                  className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {saving ? 'Yadda saxlanılır...' : 'Yadda Saxla'}
-                </button>
-                <button
-                  type="button"
-                  onClick={resetForm}
-                  disabled={saving}
-                  className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
-                >
-                  Ləğv Et
-                </button>
-              </div>
-              {editingId && (
-                <button
-                  type="button"
-                  onClick={() => setDeleteTarget(editingId)}
-                  disabled={saving}
-                  className="px-6 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors disabled:opacity-50"
-                >
-                  Sil
-                </button>
-              )}
-            </div>
-          </form>
+      {showForm && editingId === null && (
+        <div ref={formContainerRef} className="mb-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h2 className="text-xl font-bold mb-4">Yeni Hero Section Əlavə Et</h2>
+          {renderForm(true)}
         </div>
       )}
 
-      {!showForm && (
-        <div className="grid gap-4">
-          {heroes.map((hero) => (
+      <div className="grid gap-4">
+        {heroes.map((hero) =>
+          editingId === hero.id ? (
+            <div key={hero.id} ref={formContainerRef} className="bg-white rounded-lg shadow-sm border border-primary/40 p-6">
+              <h2 className="text-xl font-bold mb-4">Hero Section Redaktə Et</h2>
+              {renderForm()}
+            </div>
+          ) : (
             <div key={hero.id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex justify-between items-start">
               <div className="flex gap-4 flex-1">
                 {hero.image_url && (
@@ -408,14 +384,14 @@ export default function HeroAdminPage() {
                 Redaktə
               </button>
             </div>
-          ))}
-          {heroes.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
-              Heç bir hero section yoxdur. Yeni hero section əlavə edin.
-            </div>
-          )}
-        </div>
-      )}
+          )
+        )}
+        {heroes.length === 0 && (
+          <div className="text-center py-12 text-gray-500">
+            Heç bir hero section yoxdur. Yeni hero section əlavə edin.
+          </div>
+        )}
+      </div>
 
       <ConfirmDialog
         open={deleteTarget !== null}

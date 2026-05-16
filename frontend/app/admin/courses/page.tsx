@@ -1,9 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { getCourses, createCourse, updateCourse, deleteCourse, purgeAllCaches } from '@/lib/admin-api';
 import type { Course } from '@/types/landing';
 import { getImageUrl } from '@/lib/api';
+import { courseSchema, type CourseFormData } from '@/lib/validations';
 import { toast } from 'sonner';
 import ConfirmDialog from '@/components/ConfirmDialog';
 
@@ -15,34 +18,54 @@ export default function CoursesAdminPage() {
   const [showForm, setShowForm] = useState(false);
   const [formKey, setFormKey] = useState(0);
   const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
-
-  const [formData, setFormData] = useState({
-    name: '',
-    name_en: '',
-    heading: '',
-    heading_en: '',
-    description: '',
-    description_en: '',
-    duration: '',
-    duration_en: '',
-    price: '',
-    sort_order: 0,
-    is_active: true,
-  });
-
+  const formContainerRef = useRef<HTMLDivElement>(null);
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [originalImageUrl, setOriginalImageUrl] = useState<string | null>(null);
   const [shouldDeleteImage, setShouldDeleteImage] = useState(false);
 
   const [imageMobileFile, setImageMobileFile] = useState<File | null>(null);
   const [imageMobilePreview, setImageMobilePreview] = useState<string | null>(null);
   const [shouldDeleteImageMobile, setShouldDeleteImageMobile] = useState(false);
 
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({
+    resolver: zodResolver(courseSchema),
+    defaultValues: {
+      name: '',
+      name_en: '',
+      heading: '',
+      heading_en: '',
+      description: '',
+      description_en: '',
+      duration: '',
+      duration_en: '',
+      price: '',
+      sort_order: 0,
+      is_active: true,
+    },
+  });
+
   useEffect(() => {
     fetchCourses();
   }, []);
+
+  useEffect(() => {
+    const isOpen = showForm || editingId !== null;
+    if (!isOpen) return;
+
+    const handler = (e: MouseEvent) => {
+      if (deleteTarget !== null) return;
+      if (formContainerRef.current && !formContainerRef.current.contains(e.target as Node)) {
+        reset();
+        clearFileStates();
+        setEditingId(null);
+        setShowForm(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [showForm, editingId, deleteTarget, reset]);
 
   const fetchCourses = async () => {
     try {
@@ -55,33 +78,20 @@ export default function CoursesAdminPage() {
     }
   };
 
-  const resetForm = () => {
-    setFormData({
-      name: '',
-      name_en: '',
-      heading: '',
-      heading_en: '',
-      description: '',
-      description_en: '',
-      duration: '',
-      duration_en: '',
-      price: '',
-      sort_order: 0,
-      is_active: true,
-    });
+  const clearFileStates = () => {
     setImageFile(null);
     setImagePreview(null);
-    setOriginalImageUrl(null);
     setShouldDeleteImage(false);
     setImageMobileFile(null);
     setImageMobilePreview(null);
     setShouldDeleteImageMobile(false);
-    setEditingId(null);
-    setShowForm(false);
   };
 
-  const handleCancel = () => {
-    resetForm();
+  const resetForm = () => {
+    reset();
+    clearFileStates();
+    setEditingId(null);
+    setShowForm(false);
   };
 
   const handleEdit = (course: Course) => {
@@ -112,7 +122,7 @@ During the "Accounting in 33 Steps" program, you will:
 
 Throughout the program consisting of 33 (thirty-three) lesson days, i.e. 66 (sixty-six) hours, students are provided with specially prepared lesson materials and selected review questions (including correct answers) to enhance their level of comprehension.`;
 
-    setFormData({
+    reset({
       name: course.name || '',
       name_en: (course as any).name_en || '',
       heading: (course as any).heading || (is33 ? defaultHeadingAz : ''),
@@ -127,53 +137,50 @@ Throughout the program consisting of 33 (thirty-three) lesson days, i.e. 66 (six
     });
     const imgMobileUrl = (course as any).image_url_mobile ? getImageUrl((course as any).image_url_mobile) : null;
     setImagePreview(imgUrl);
-    setOriginalImageUrl(imgUrl);
     setShouldDeleteImage(false);
     setImageMobilePreview(imgMobileUrl);
     setShouldDeleteImageMobile(false);
+    setImageFile(null);
     setImageMobileFile(null);
-    setEditingId(course.id);
     setFormKey(prev => prev + 1);
-    setShowForm(true);
+    setShowForm(false);
+    setEditingId(course.id);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
+  const onSubmit = async (data: CourseFormData) => {
     setSaving(true);
 
     try {
-      const data = new FormData();
-      data.append('name', formData.name);
-      data.append('name_en', formData.name_en);
-      data.append('heading', formData.heading);
-      data.append('heading_en', formData.heading_en);
-      data.append('description', formData.description);
-      data.append('description_en', formData.description_en);
-      data.append('duration', formData.duration);
-      data.append('duration_en', formData.duration_en);
-      data.append('price', formData.price);
-      data.append('sort_order', formData.sort_order.toString());
-      data.append('is_active', formData.is_active ? '1' : '0');
+      const formData = new FormData();
+      formData.append('name', data.name);
+      formData.append('name_en', data.name_en || '');
+      formData.append('heading', data.heading || '');
+      formData.append('heading_en', data.heading_en || '');
+      formData.append('description', data.description || '');
+      formData.append('description_en', data.description_en || '');
+      formData.append('duration', data.duration || '');
+      formData.append('duration_en', data.duration_en || '');
+      formData.append('price', data.price || '');
+      formData.append('sort_order', data.sort_order.toString());
+      formData.append('is_active', data.is_active ? '1' : '0');
 
       if (imageFile) {
-        data.append('image', imageFile);
+        formData.append('image', imageFile);
       } else if (shouldDeleteImage) {
-        data.append('delete_image', '1');
+        formData.append('delete_image', '1');
       }
 
       if (imageMobileFile) {
-        data.append('image_mobile', imageMobileFile);
+        formData.append('image_mobile', imageMobileFile);
       } else if (shouldDeleteImageMobile) {
-        data.append('delete_image_mobile', '1');
+        formData.append('delete_image_mobile', '1');
       }
 
       if (editingId) {
-        await updateCourse(editingId, data);
+        await updateCourse(editingId, formData);
         toast.success('Kurs uğurla yeniləndi!');
       } else {
-        await createCourse(data);
+        await createCourse(formData);
         toast.success('Kurs uğurla əlavə edildi!');
       }
 
@@ -214,6 +221,269 @@ Throughout the program consisting of 33 (thirty-three) lesson days, i.e. 66 (six
     setImageMobilePreview(null);
   };
 
+  const renderForm = (isNew = false) => {
+    const imageInputId = `course-image-${isNew ? 'new' : editingId}`;
+    const imageMobileInputId = `course-image-mobile-${isNew ? 'new' : editingId}`;
+
+    return (
+      <form key={formKey} onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Sol tərəf - Şəkillər */}
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Kurs Şəkli — Desktop</label>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                {imagePreview ? (
+                  <div className="relative w-full aspect-video max-w-md mx-auto mb-4 rounded-lg overflow-hidden">
+                    <img src={imagePreview} alt="Kurs" className="w-full h-full object-cover" />
+                  </div>
+                ) : (
+                  <div className="w-full aspect-video max-w-md mx-auto bg-gray-100 rounded-lg flex items-center justify-center mb-4">
+                    <span className="text-5xl text-gray-300">📚</span>
+                  </div>
+                )}
+                <div className="space-y-2">
+                  <input
+                    type="file"
+                    id={imageInputId}
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setImageFile(file);
+                        setShouldDeleteImage(false);
+                        const reader = new FileReader();
+                        reader.onloadend = () => setImagePreview(reader.result as string);
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor={imageInputId}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors cursor-pointer"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    {imagePreview ? 'Şəkili Dəyiş' : 'Şəkil Seç'}
+                  </label>
+                  {imagePreview && (
+                    <button
+                      type="button"
+                      onClick={handleClearImage}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                      Şəkili Sil
+                    </button>
+                  )}
+                  <p className="text-xs text-gray-500 text-center">PNG, JPG, WEBP (max 5MB)</p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Kurs Şəkli — Mobile</label>
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                {imageMobilePreview ? (
+                  <div className="relative w-full aspect-[9/16] max-w-[120px] mx-auto mb-4 rounded-lg overflow-hidden">
+                    <img src={imageMobilePreview} alt="Mobile" className="w-full h-full object-cover" />
+                  </div>
+                ) : (
+                  <div className="w-full aspect-[9/16] max-w-[120px] mx-auto bg-gray-100 rounded-lg flex items-center justify-center mb-4">
+                    <span className="text-3xl text-gray-300">📱</span>
+                  </div>
+                )}
+                <div className="space-y-2">
+                  <input
+                    type="file"
+                    id={imageMobileInputId}
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        setImageMobileFile(file);
+                        setShouldDeleteImageMobile(false);
+                        const reader = new FileReader();
+                        reader.onloadend = () => setImageMobilePreview(reader.result as string);
+                        reader.readAsDataURL(file);
+                      }
+                    }}
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor={imageMobileInputId}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors cursor-pointer"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    {imageMobilePreview ? 'Şəkili Dəyiş' : 'Şəkil Seç'}
+                  </label>
+                  {imageMobilePreview && (
+                    <button
+                      type="button"
+                      onClick={handleClearImageMobile}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                      Şəkili Sil
+                    </button>
+                  )}
+                  <p className="text-xs text-gray-500 text-center">PNG, JPG, WEBP (max 5MB)</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Sağ tərəf - Məlumatlar */}
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Kurs Adı (AZ) *</label>
+              <input
+                {...register('name')}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="Mühasibatlıq Əsasları"
+              />
+              {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name.message}</p>}
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Kurs Adı (EN)</label>
+              <input
+                {...register('name_en')}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                placeholder="Accounting Basics"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Başlıq (AZ)</label>
+              <input
+                {...register('heading')}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="Güclü karyera, doğru sistemlə başlayır."
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Başlıq (EN)</label>
+              <input
+                {...register('heading_en')}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                placeholder="A strong career begins with the right system."
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Təsvir (AZ)</label>
+              <textarea
+                {...register('description')}
+                rows={8}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="Kurs haqqında məlumat..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Təsvir (EN)</label>
+              <textarea
+                {...register('description_en')}
+                rows={8}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                placeholder="Course description..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Müddət (AZ)</label>
+              <input
+                {...register('duration')}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="3 ay"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Müddət (EN)</label>
+              <input
+                {...register('duration_en')}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                placeholder="3 months"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Qiymət</label>
+              <input
+                {...register('price')}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                placeholder="500"
+              />
+              {errors.price && <p className="text-sm text-red-600 mt-1">{errors.price.message}</p>}
+            </div>
+
+            <div className="flex items-center gap-4">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  {...register('is_active')}
+                  className="w-4 h-4 text-primary focus:ring-primary border-gray-300 rounded"
+                />
+                <span className="text-sm font-medium text-gray-700">Aktiv</span>
+              </label>
+
+              <div className="flex items-center gap-2">
+                <label className="text-sm font-medium text-gray-700">Sıra:</label>
+                <input
+                  type="number"
+                  {...register('sort_order', { valueAsNumber: true })}
+                  className="w-20 px-2 py-1 border border-gray-300 rounded"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-between items-center">
+          <div className="flex gap-4">
+            <button
+              type="submit"
+              disabled={saving}
+              className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {saving ? 'Yadda saxlanılır...' : editingId ? 'Yenilə' : 'Yadda Saxla'}
+            </button>
+            <button
+              type="button"
+              onClick={resetForm}
+              disabled={saving}
+              className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
+            >
+              Ləğv Et
+            </button>
+          </div>
+
+          {editingId && (
+            <button
+              type="button"
+              onClick={() => setDeleteTarget(editingId)}
+              disabled={saving}
+              className="px-6 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors disabled:opacity-50"
+            >
+              Sil
+            </button>
+          )}
+        </div>
+      </form>
+    );
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -230,314 +500,28 @@ Throughout the program consisting of 33 (thirty-three) lesson days, i.e. 66 (six
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold text-gray-dark">Kurslar</h1>
         <button
-          onClick={() => {
-            setFormKey(prev => prev + 1);
-            setShowForm(true);
-          }}
+          onClick={() => { reset(); clearFileStates(); setFormKey(prev => prev + 1); setEditingId(null); setShowForm(true); }}
           className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors"
         >
           + Yeni Kurs
         </button>
       </div>
 
-      {showForm && (
-        <div className="mb-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-xl font-bold mb-4">
-            {editingId ? 'Kursu Redaktə Et' : 'Yeni Kurs Əlavə Et'}
-          </h2>
-          <form key={formKey} onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {/* Sol tərəf - Şəkillər */}
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Kurs Şəkli — Desktop
-                  </label>
-                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                  {imagePreview ? (
-                    <div className="relative w-full aspect-video max-w-md mx-auto mb-4 rounded-lg overflow-hidden">
-                      <img
-                        src={imagePreview}
-                        alt="Kurs"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  ) : (
-                    <div className="w-full aspect-video max-w-md mx-auto bg-gray-100 rounded-lg flex items-center justify-center mb-4">
-                      <span className="text-5xl text-gray-300">📚</span>
-                    </div>
-                  )}
-
-                  <div className="space-y-2">
-                    <input
-                      type="file"
-                      id="image-upload"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          setImageFile(file);
-                          const reader = new FileReader();
-                          reader.onloadend = () => {
-                            setImagePreview(reader.result as string);
-                          };
-                          reader.readAsDataURL(file);
-                        }
-                      }}
-                      className="hidden"
-                    />
-
-                    <label
-                      htmlFor="image-upload"
-                      className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors cursor-pointer"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      {imagePreview ? 'Şəkili Dəyiş' : 'Şəkil Seç'}
-                    </label>
-
-                    {imagePreview && (
-                      <button
-                        type="button"
-                        onClick={handleClearImage}
-                        className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                        Şəkili Sil
-                      </button>
-                    )}
-
-                    <p className="text-xs text-gray-500 text-center">PNG, JPG, WEBP (max 5MB)</p>
-                  </div>
-                </div>
-                </div>
-
-                {/* Mobile image */}
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Kurs Şəkli — Mobile
-                  </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                    {imageMobilePreview ? (
-                      <div className="relative w-full aspect-[9/16] max-w-[120px] mx-auto mb-4 rounded-lg overflow-hidden">
-                        <img src={imageMobilePreview} alt="Mobile" className="w-full h-full object-cover" />
-                      </div>
-                    ) : (
-                      <div className="w-full aspect-[9/16] max-w-[120px] mx-auto bg-gray-100 rounded-lg flex items-center justify-center mb-4">
-                        <span className="text-3xl text-gray-300">📱</span>
-                      </div>
-                    )}
-                    <div className="space-y-2">
-                      <input
-                        type="file"
-                        id="image-mobile-upload"
-                        accept="image/*"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (file) {
-                            setImageMobileFile(file);
-                            setShouldDeleteImageMobile(false);
-                            const reader = new FileReader();
-                            reader.onloadend = () => setImageMobilePreview(reader.result as string);
-                            reader.readAsDataURL(file);
-                          }
-                        }}
-                        className="hidden"
-                      />
-                      <label
-                        htmlFor="image-mobile-upload"
-                        className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors cursor-pointer"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        {imageMobilePreview ? 'Şəkili Dəyiş' : 'Şəkil Seç'}
-                      </label>
-                      {imageMobilePreview && (
-                        <button
-                          type="button"
-                          onClick={handleClearImageMobile}
-                          className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors"
-                        >
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                          </svg>
-                          Şəkili Sil
-                        </button>
-                      )}
-                      <p className="text-xs text-gray-500 text-center">PNG, JPG, WEBP (max 5MB)</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Sağ tərəf - Məlumatlar */}
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Kurs Adı (AZ) *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="Mühasibatlıq Əsasları"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Kurs Adı (EN) *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name_en}
-                    onChange={(e) => setFormData({ ...formData, name_en: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    placeholder="Accounting Basics"
-                  />
-                </div>
-
-
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Təsvir (AZ)
-                  </label>
-                  <textarea
-                    rows={8}
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="Kurs haqqında məlumat..."
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Təsvir (EN)
-                  </label>
-                  <textarea
-                    rows={8}
-                    value={formData.description_en}
-                    onChange={(e) => setFormData({ ...formData, description_en: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    placeholder="Course description..."
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Müddət (AZ)
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.duration}
-                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="3 ay"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Müddət (EN)
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.duration_en}
-                    onChange={(e) => setFormData({ ...formData, duration_en: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    placeholder="3 months"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Qiymət *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.price}
-                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    placeholder="500"
-                  />
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={formData.is_active}
-                      onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-                      className="w-4 h-4 text-primary focus:ring-primary border-gray-300 rounded"
-                    />
-                    <span className="text-sm font-medium text-gray-700">Aktiv</span>
-                  </label>
-
-                  <div className="flex items-center gap-2">
-                    <label className="text-sm font-medium text-gray-700">Sıra:</label>
-                    <input
-                      type="number"
-                      value={formData.sort_order}
-                      onChange={(e) => setFormData({ ...formData, sort_order: parseInt(e.target.value) || 0 })}
-                      className="w-20 px-2 py-1 border border-gray-300 rounded"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-between items-center">
-              <div className="flex gap-4">
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    handleSubmit(e as any);
-                  }}
-                  disabled={saving}
-                  style={{ position: 'relative', zIndex: 10 }}
-                  className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {saving ? 'Yadda saxlanılır...' : 'Yadda Saxla'}
-                </button>
-                <button
-                  type="button"
-                  onClick={handleCancel}
-                  disabled={saving}
-                  className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
-                >
-                  Ləğv Et
-                </button>
-              </div>
-
-              {editingId && (
-                <button
-                  type="button"
-                  onClick={() => setDeleteTarget(editingId)}
-                  disabled={saving}
-                  className="px-6 py-2 bg-red-50 text-red-600 rounded-lg hover:bg-red-100 transition-colors disabled:opacity-50"
-                >
-                  Sil
-                </button>
-              )}
-            </div>
-          </form>
+      {showForm && editingId === null && (
+        <div ref={formContainerRef} className="mb-8 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <h2 className="text-xl font-bold mb-4">Yeni Kurs Əlavə Et</h2>
+          {renderForm(true)}
         </div>
       )}
 
-      {!showForm && (
-        <div className="grid gap-4">
-          {courses.map((course) => (
+      <div className="grid gap-4">
+        {courses.map((course) =>
+          editingId === course.id ? (
+            <div key={course.id} ref={formContainerRef} className="bg-white rounded-lg shadow-sm border border-primary/40 p-6">
+              <h2 className="text-xl font-bold mb-4">Kursu Redaktə Et</h2>
+              {renderForm(false)}
+            </div>
+          ) : (
             <div
               key={course.id}
               className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 flex justify-between items-start"
@@ -576,15 +560,15 @@ Throughout the program consisting of 33 (thirty-three) lesson days, i.e. 66 (six
                 </button>
               </div>
             </div>
-          ))}
+          )
+        )}
 
-          {courses.length === 0 && (
-            <div className="text-center py-12 text-gray-500">
-              Heç bir kurs yoxdur. Yeni kurs əlavə edin.
-            </div>
-          )}
-        </div>
-      )}
+        {courses.length === 0 && (
+          <div className="text-center py-12 text-gray-500">
+            Heç bir kurs yoxdur. Yeni kurs əlavə edin.
+          </div>
+        )}
+      </div>
 
       <ConfirmDialog
         open={deleteTarget !== null}
