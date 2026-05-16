@@ -233,29 +233,29 @@ export default function Navbar({ sectionVisibility = {}, courses = [], contacts 
                       </svg>
                       <span className="truncate">{language === 'en' ? 'Baku, Azerbaijan' : 'Bakı, Azərbaycan'}</span>
                     </div>
-                    {socialContacts.length > 0 && (
-                      <div className="flex items-center gap-3 pt-1 pb-1 border-t border-gray-100 mt-1">
-                        {socialContacts.map(c => (
-                          <a
-                            key={c.id}
-                            href={getNavSocialHref(c)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={`text-gray-400 transition-colors
-                              ${c.type === 'instagram' ? 'hover:text-[#E1306C]' : ''}
-                              ${c.type === 'youtube'   ? 'hover:text-[#FF0000]' : ''}
-                              ${c.type === 'tiktok'    ? 'hover:text-[#010101]' : ''}
-                              ${c.type === 'facebook'  ? 'hover:text-[#1877F2]' : ''}
-                              ${c.type === 'linkedin'  ? 'hover:text-[#0077B5]' : ''}
-                            `}
-                            title={c.type.charAt(0).toUpperCase() + c.type.slice(1)}
-                          >
-                            <NavSocialIcon type={c.type} />
-                          </a>
-                        ))}
-                      </div>
-                    )}
                   </div>
+                  {socialContacts.length > 0 && (
+                    <div className="flex items-center gap-3 px-4 py-2.5 border-t border-gray-100">
+                      {socialContacts.map(c => (
+                        <a
+                          key={c.id}
+                          href={getNavSocialHref(c)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={`text-gray-400 transition-colors
+                            ${c.type === 'instagram' ? 'hover:text-[#E1306C]' : ''}
+                            ${c.type === 'youtube'   ? 'hover:text-[#FF0000]' : ''}
+                            ${c.type === 'tiktok'    ? 'hover:text-[#010101]' : ''}
+                            ${c.type === 'facebook'  ? 'hover:text-[#1877F2]' : ''}
+                            ${c.type === 'linkedin'  ? 'hover:text-[#0077B5]' : ''}
+                          `}
+                          title={c.type.charAt(0).toUpperCase() + c.type.slice(1)}
+                        >
+                          <NavSocialIcon type={c.type} />
+                        </a>
+                      ))}
+                    </div>
+                  )}
               </div>
             </div>
             )}
