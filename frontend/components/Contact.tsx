@@ -49,7 +49,11 @@ const getIcon = (type: string) => {
 export default function Contact({ data }: ContactProps) {
   const { language } = useLanguage();
 
-  if (!data || data.length === 0) return null;
+  const displayContacts = data.filter(c =>
+    !['instagram', 'youtube', 'tiktok', 'facebook', 'linkedin'].includes(c.type)
+  );
+
+  if (!displayContacts || displayContacts.length === 0) return null;
 
   return (
     <section id="contact" className="py-20 bg-gray-50 border-t border-gray-100">
@@ -75,7 +79,7 @@ export default function Contact({ data }: ContactProps) {
         </motion.div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-          {data.map((contact, i) => (
+          {displayContacts.map((contact, i) => (
             <motion.a
               key={contact.id}
               href={getHref(contact)}
